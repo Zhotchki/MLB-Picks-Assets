@@ -1,14 +1,15 @@
 {
   "name": "MLB Picks & Props",
   "short_name": "MLB Picks",
-  "start_url": "./",
+  "id": "./?pwa=3",
+  "start_url": "./?pwa=3",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f4f7fb",
   "theme_color": "#142033",
   "icons": [
     {
-      "src": "./mlb-picks-icon-180.png",
+      "src": "./apple-touch-icon.png?v=3",
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"
