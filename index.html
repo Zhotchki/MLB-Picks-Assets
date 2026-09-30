@@ -6,9 +6,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="MLB Picks">
-  <link rel="manifest" href="./manifest.webmanifest?v=4">
-  <link rel="apple-touch-icon" href="./apple-touch-icon.png?v=4">
-  <link rel="icon" type="image/png" href="./apple-touch-icon.png?v=4">
+  <link rel="manifest" href="./manifest.webmanifest?v=5">
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png?v=5">
+  <link rel="icon" type="image/png" href="./apple-touch-icon.png?v=5">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -211,8 +211,8 @@
         <div class="badges"><span class="badge value">Shrinkage protected</span><span class="badge high">Future snapshots on</span></div>
       </article>
       <article class="card">
-        <div class="name">Historical Sleeper lines</div>
-        <div class="why">Older Sleeper board lines cannot be recreated where they were never saved. From v21 onward, projections and entered Sleeper lines are stored automatically for exact future evaluation.</div>
+        <div class="name">Historical model learning</div>
+        <div class="why">Probabilities are learned from historical projections versus actual MLB results and do not require manual Sleeper lines.</div>
       </article>
     </div>
   </section>
@@ -344,9 +344,8 @@
     });
     const rankPick=r=>{
       const p=Number(r['Probability']);
-      if(Number.isFinite(p) && p>0) return 1000+p*100+Number(r['Pick Score']||0);
-      const edge=Number(r['Edge %']);
-      return Number(r['Pick Score']||0)+(Number.isFinite(edge)?Math.max(-25,Math.min(25,edge*100)):0);
+      if(Number.isFinite(p) && p>0) return 1000+p*100+Number(r['Pick Score']||0)*0.01;
+      return Number(r['Pick Score']||0);
     };
     const players=[...groups.entries()].map(([player,props])=>{
       props.sort((a,b)=>rankPick(b)-rankPick(a));
@@ -357,15 +356,19 @@
     $('#picksList').innerHTML=players.length ? players.slice(0,100).map((g,gi)=>{
       const r=g.best;
       const other=g.props.slice(1);
-      const propCard=(x,compact=false)=>`
+      const propCard=(x,compact=false)=>{
+        const threshold=x['Probability Threshold'];
+        const target=threshold!=='' && threshold!=null ? threshold+'+ '+x.Prop : x.Prop;
+        return `
         <div class="${compact?'why':'metricgrid'}" style="${compact?'margin-top:10px':''}">
-          ${compact?`<div class="cardtop"><div><strong>${esc(x.Prop)}</strong> · ${esc(x.Direction)} ${x['Reference Line']===''?'—':num(x['Reference Line'])}<div class="sub">Proj ${num(x['Model Projection'])} · Edge ${pct(x['Edge %'])} · ${x['Probability']===''?'Probability calibrating':pct(x['Probability'])+' probability'}</div></div></div>`:`
+          ${compact?`<div class="cardtop"><div><strong>${esc(x.Prop)}</strong><div class="sub">Proj ${num(x['Model Projection'])} · ${threshold!==''?'Chance of '+esc(target)+': ':''}${x['Probability']===''?'Calibrating':pct(x['Probability'])}</div></div></div>`:`
           <div class="metric"><div class="k">Projection</div><div class="v">${num(x['Model Projection'])}</div></div>
-          <div class="metric"><div class="k">Sleeper line</div><div class="v">${x['Reference Line']===''?'—':num(x['Reference Line'])}</div></div>
-          <div class="metric"><div class="k">Edge</div><div class="v">${pct(x['Edge %'])}</div></div>
+          <div class="metric"><div class="k">Target</div><div class="v">${threshold!==''?esc(target):'—'}</div></div>
           <div class="metric"><div class="k">Probability</div><div class="v">${x['Probability']===''?'Calibrating':pct(x['Probability'])}</div></div>
-          <div class="metric"><div class="k">Pick score</div><div class="v">${num(x['Pick Score'],0)}</div></div>`}
+          <div class="metric"><div class="k">Matchup</div><div class="v">${num(x['Matchup Score'],0)}</div></div>
+          <div class="metric"><div class="k">Model score</div><div class="v">${num(x['Pick Score'],0)}</div></div>`}
         </div>`;
+      };
       return `
       <article class="card">
         <div class="cardtop">
@@ -377,10 +380,6 @@
           <span class="badge ${r.Direction==='MORE'?'high':'low'}">${esc(r.Prop)} · ${esc(r.Direction)}</span>
         </div>
         ${propCard(r)}
-        <div class="lineedit">
-          <div><label>Sleeper line · ${esc(r.Prop)}</label><input inputmode="decimal" type="number" min="0" step="0.5" value="${r['Reference Line']===''?'':esc(r['Reference Line'])}" data-line></div>
-          <button class="savebtn" type="button" data-save data-player="${esc(r.Player)}" data-prop="${esc(r.Prop)}">Save line</button>
-        </div>
         <div class="why">${esc(r.Why || '')}</div>
         ${other.length?`<button class="savebtn" type="button" data-expand="${gi}" style="margin-top:12px;width:100%">Show ${other.length} other prop${other.length===1?'':'s'}</button><div data-other="${gi}" hidden>${other.map(x=>propCard(x,true)).join('')}</div>`:''}
       </article>`;
@@ -511,6 +510,6 @@
   load(false);
 })();
 </script>
-<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js?v=4').catch(()=>{});}</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js?v=5').catch(()=>{});}</script>
 </body>
 </html>
