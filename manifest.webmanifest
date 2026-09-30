@@ -1,0 +1,17 @@
+{
+  "name": "MLB Picks & Props",
+  "short_name": "MLB Picks",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f7fb",
+  "theme_color": "#142033",
+  "icons": [
+    {
+      "src": "./mlb-picks-icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
