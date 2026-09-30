@@ -1,17 +1,516 @@
-<!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#142033">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="MLB Picks">
-<title>MLB Picks & Props</title>
-<link rel="manifest" href="./manifest.webmanifest">
-<link rel="apple-touch-icon" href="./apple-touch-icon.png?v=2">
-<link rel="icon" type="image/png" href="./mlb-picks-icon-180.png">
-<style>html,body,iframe{width:100%;height:100%;margin:0;border:0}body{background:#f4f7fb;overflow:hidden}iframe{display:block}</style>
-</head><body>
-<iframe src="https://script.google.com/macros/s/AKfycbw1_xLZM-fAaBm9c4hmvwrvdlWxbV-3S3gW3e8GCZ8DKsfpNf-FVlwHb4lhwMECXNoiAA/exec" title="MLB Picks & Props" allow="clipboard-read; clipboard-write" referrerpolicy="no-referrer-when-downgrade"></iframe>
-<script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script>
-</body></html>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="theme-color" content="#142033">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="MLB Picks">
+  <link rel="manifest" href="./manifest.webmanifest?v=3">
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png?v=3">
+  <link rel="icon" type="image/png" href="./apple-touch-icon.png?v=3">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="MLB Picks">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://zhotchki.github.io/MLB-Picks-Assets/mlb-picks-icon-180.png">
+  <link rel="icon" type="image/png" href="https://zhotchki.github.io/MLB-Picks-Assets/mlb-picks-icon-180.png">
+  <base target="_top">
+  <style>
+    :root {
+      --bg:#f4f7fb;
+      --card:#ffffff;
+      --text:#142033;
+      --muted:#657087;
+      --line:#dfe5ee;
+      --blue:#1d428a;
+      --blue2:#002d72;
+      --green:#0b7a3e;
+      --greenbg:#e6f6ed;
+      --yellow:#8a6200;
+      --yellowbg:#fff4c7;
+      --red:#a11824;
+      --redbg:#fde8ea;
+      --value:#214f86;
+      --valuebg:#e6eff9;
+      --shadow:0 2px 10px rgba(20,32,51,.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      -webkit-text-size-adjust:100%;
+    }
+    button,input,select{font:inherit}
+    .app{max-width:760px;margin:0 auto;padding-bottom:92px}
+    .topbar{
+      position:sticky;top:0;z-index:20;
+      background:rgba(244,247,251,.96);
+      backdrop-filter:blur(12px);
+      padding:12px 14px 10px;
+      border-bottom:1px solid var(--line);
+    }
+    .toprow{display:flex;align-items:center;gap:10px}
+    .brand{min-width:0;flex:1}
+    .brand h1{font-size:19px;line-height:1.15;margin:0;font-weight:800}
+    .brand p{font-size:12px;color:var(--muted);margin:4px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .iconbtn{
+      width:44px;height:44px;border:1px solid var(--line);border-radius:13px;background:var(--card);
+      display:grid;place-items:center;font-size:20px;box-shadow:var(--shadow)
+    }
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+    .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+    .stat .k{font-size:11px;color:var(--muted)}
+    .stat .v{font-size:18px;font-weight:800;margin-top:2px}
+    .screen{display:none;padding:12px 12px 4px}
+    .screen.active{display:block}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+    .search,.select{
+      min-height:44px;border:1px solid var(--line);border-radius:12px;background:var(--card);
+      padding:0 12px;color:var(--text)
+    }
+    .search{flex:1;min-width:170px}
+    .select{min-width:120px;flex:1}
+    .sectionhead{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:8px 2px 9px}
+    .sectionhead h2{font-size:17px;margin:0}
+    .sectionhead span{font-size:12px;color:var(--muted)}
+    .list{display:grid;gap:9px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:12px;box-shadow:var(--shadow)}
+    .cardtop{display:flex;gap:8px;align-items:flex-start}
+    .grow{min-width:0;flex:1}
+    .name{font-size:16px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .sub{font-size:12px;color:var(--muted);margin-top:3px}
+    .badges{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+    .badge{display:inline-flex;align-items:center;min-height:24px;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:800;background:#eef2f7;color:#445065}
+    .high,.hot,.sharp,.active{background:var(--greenbg);color:var(--green)}
+    .medium,.heating,.warning{background:var(--yellowbg);color:var(--yellow)}
+    .low,.cold,.struggling,.injured{background:var(--redbg);color:var(--red)}
+    .value{background:var(--valuebg);color:var(--value)}
+    .metricgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:10px}
+    .metric{background:#f7f9fc;border-radius:10px;padding:7px}
+    .metric .k{font-size:10px;color:var(--muted)}
+    .metric .v{font-size:14px;font-weight:800;margin-top:2px;white-space:nowrap}
+    .lineedit{display:flex;align-items:end;gap:7px;margin-top:10px;padding-top:9px;border-top:1px solid var(--line)}
+    .lineedit label{font-size:11px;color:var(--muted);display:block;margin-bottom:4px}
+    .lineedit input{width:92px;height:42px;border:1px solid var(--line);border-radius:10px;padding:0 9px;font-size:16px}
+    .savebtn{height:42px;border:0;border-radius:10px;padding:0 14px;background:var(--blue);color:#fff;font-weight:800}
+    .why{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.35}
+    .empty{padding:30px 18px;text-align:center;color:var(--muted)}
+    .loading{padding:32px 18px;text-align:center;color:var(--muted)}
+    .spinner{width:24px;height:24px;margin:0 auto 10px;border:3px solid #d9e1ec;border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .bottom{
+      position:fixed;left:0;right:0;bottom:0;z-index:30;
+      background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
+      border-top:1px solid var(--line);
+      padding:7px max(8px,env(safe-area-inset-right)) calc(7px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));
+    }
+    .nav{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr);gap:3px}
+    .navbtn{border:0;background:transparent;min-height:52px;border-radius:12px;color:var(--muted);font-size:10px;font-weight:700}
+    .navbtn .ico{display:block;font-size:20px;margin-bottom:2px}
+    .navbtn.active{background:#edf3fb;color:var(--blue2)}
+    .toast{
+      position:fixed;left:50%;bottom:82px;z-index:50;transform:translateX(-50%);
+      background:#172033;color:#fff;border-radius:12px;padding:10px 14px;font-size:13px;
+      max-width:88%;display:none;box-shadow:var(--shadow)
+    }
+    .toast.show{display:block}
+    .toggle{
+      display:flex;align-items:center;gap:8px;min-height:44px;
+      background:var(--card);border:1px solid var(--line);border-radius:12px;
+      padding:0 11px;color:var(--text);font-size:13px;font-weight:700;
+      white-space:nowrap;
+    }
+    .toggle input{width:20px;height:20px;accent-color:var(--blue)}
+    .game-live{background:var(--redbg);color:var(--red)}
+    .game-final{background:#eef0f3;color:#596273}
+    .game-preview{background:var(--greenbg);color:var(--green)}
+    @media(min-width:600px){
+      .list.twocol{grid-template-columns:1fr 1fr}
+      .screen{padding-left:16px;padding-right:16px}
+    }
+  </style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="topbar">
+    <div class="toprow">
+      <div class="brand">
+        <h1>MLB Sleeper Edge</h1>
+        <p id="lastRefresh">Loading spreadsheet…</p><p id="refreshStatus" style="margin-top:2px"></p>
+      </div>
+      <button class="iconbtn" id="refreshBtn" aria-label="Refresh all MLB data">↻</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="k">VALUE picks</div><div class="v" id="valueCount">—</div></div>
+      <div class="stat"><div class="k">HIGH picks</div><div class="v" id="highCount">—</div></div>
+      <div class="stat"><div class="k">Hot hitters</div><div class="v" id="hotCount">—</div></div>
+    </div>
+  </div>
+
+  <section class="screen active" data-screen="picks">
+    <div class="sectionhead"><h2>Sleeper Picks</h2><span id="pickCount"></span></div>
+    <div class="toolbar">
+      <input class="search" id="pickSearch" placeholder="Search player…" aria-label="Search Sleeper picks">
+      <label class="toggle"><input type="checkbox" id="hideStarted" checked> Hide started</label>
+      <select class="select" id="teamFilter" aria-label="Team filter"><option value="">All teams</option></select>
+      <select class="select" id="propFilter" aria-label="Prop filter"><option value="">All props</option></select>
+      <select class="select" id="statusFilter" aria-label="Lineup status filter"><option value="">All status</option></select>
+      <select class="select" id="confFilter" aria-label="Confidence filter">
+        <option value="">All confidence</option><option>VALUE</option><option>HIGH</option><option>MEDIUM</option><option>LOW</option>
+      </select>
+    </div>
+    <div class="list" id="picksList"><div class="loading"><div class="spinner"></div>Loading picks…</div></div>
+  </section>
+
+  <section class="screen" data-screen="matchups">
+    <div class="sectionhead"><h2>Favorable Matchups</h2><span id="matchupCount"></span></div>
+    <div class="toolbar">
+      <input class="search" id="matchSearch" placeholder="Search batter…" aria-label="Search matchups">
+      <label class="toggle"><input type="checkbox" id="hideStartedMatchups" checked> Hide started</label>
+      <select class="select" id="matchTeamFilter" aria-label="Matchup team filter"><option value="">All teams</option></select>
+      <select class="select" id="formFilter" aria-label="Batter form filter">
+        <option value="">All forms</option><option>HOT</option><option>HEATING UP</option><option>STEADY</option><option>COLD</option>
+      </select>
+      <select class="select" id="matchStatusFilter" aria-label="Matchup lineup status filter"><option value="">All status</option></select>
+    </div>
+    <div class="list twocol" id="matchupsList"></div>
+  </section>
+
+  <section class="screen" data-screen="pitchers">
+    <div class="sectionhead"><h2>Starting Pitchers</h2><span id="pitcherCount"></span></div>
+    <div class="list twocol" id="pitchersList"></div>
+  </section>
+
+  <section class="screen" data-screen="batters">
+    <div class="sectionhead"><h2>MLB Batters</h2><span id="batterCount"></span></div>
+    <div class="toolbar">
+      <input class="search" id="batterSearch" placeholder="Search player or team…" aria-label="Search batters">
+    </div>
+    <div class="list twocol" id="battersList"></div>
+  </section>
+
+  <section class="screen" data-screen="lineups">
+    <div class="sectionhead"><h2>Today's Lineups</h2><span id="lineupCount"></span></div>
+    <div class="toolbar">
+      <input class="search" id="lineupSearch" placeholder="Search player or team…" aria-label="Search lineups">
+      <select class="select" id="lineupTeamFilter" aria-label="Lineup team filter"><option value="">All teams</option></select>
+      <select class="select" id="lineupStatusFilter" aria-label="Lineup status filter"><option value="">All status</option></select>
+    </div>
+    <div class="list twocol" id="lineupsList"></div>
+  </section>
+
+  <section class="screen" data-screen="model">
+    <div class="sectionhead"><h2>Model Learning</h2><span>backtest + calibration</span></div>
+    <div class="list">
+      <article class="card">
+        <div class="name">Season backtest</div>
+        <div class="why">The spreadsheet can replay the season using prior-day information, compare projections with actual MLB results, and learn conservative calibration adjustments.</div>
+        <div class="badges"><span class="badge value">Shrinkage protected</span><span class="badge high">Future snapshots on</span></div>
+      </article>
+      <article class="card">
+        <div class="name">Historical Sleeper lines</div>
+        <div class="why">Older Sleeper board lines cannot be recreated where they were never saved. From v21 onward, projections and entered Sleeper lines are stored automatically for exact future evaluation.</div>
+      </article>
+    </div>
+  </section>
+</div>
+
+<div class="bottom">
+  <div class="nav">
+    <button class="navbtn active" data-target="picks"><span class="ico">★</span>Picks</button>
+    <button class="navbtn" data-target="matchups"><span class="ico">↗</span>Matchups</button>
+    <button class="navbtn" data-target="pitchers"><span class="ico">⚾</span>Pitchers</button>
+    <button class="navbtn" data-target="batters"><span class="ico">▤</span>Batters</button>
+    <button class="navbtn" data-target="lineups"><span class="ico">☷</span>Lineups</button>
+    <button class="navbtn" data-target="model"><span class="ico">◎</span>Model</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+  const state = { data:null, screen:'picks' };
+  const $ = s => document.querySelector(s);
+  const $$ = s => [...document.querySelectorAll(s)];
+
+  const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const num = (v,d=2) => {
+    const n = Number(v); return Number.isFinite(n) ? n.toFixed(d) : '—';
+  };
+  const pct = v => {
+    if (v === '' || v === null || v === undefined) return '—';
+    const n = Number(v); return Number.isFinite(n) ? (n*100).toFixed(1)+'%' : '—';
+  };
+  const badgeClass = text => {
+    const t = String(text || '').toUpperCase();
+    if (t === 'VALUE') return 'value';
+    if (['HIGH','HOT','SHARP','ACTIVE','CONFIRMED'].includes(t)) return 'high';
+    if (['MEDIUM','HEATING UP','WARNING','STEADY','LINEUP NOT POSTED'].includes(t)) return 'medium';
+    if (['LOW','COLD','STRUGGLING','NOT CONFIRMED'].includes(t) || t.includes('INJURED') || t.includes('IL')) return 'low';
+    return '';
+  };
+  const badge = text => text ? `<span class="badge ${badgeClass(text)}">${esc(text)}</span>` : '';
+  const gameBadge = (state,status) => {
+    const s=String(state||'UNKNOWN').toUpperCase();
+    const cls=s==='LIVE'?'game-live':s==='FINAL'?'game-final':s==='PREVIEW'?'game-preview':'';
+    return `<span class="badge ${cls}">${esc(status || state || 'Unknown')}</span>`;
+  };
+
+  function toast(msg) {
+    const el = $('#toast'); el.textContent = msg; el.classList.add('show');
+    clearTimeout(toast.t); toast.t=setTimeout(()=>el.classList.remove('show'),2600);
+  }
+
+  function setLoading(isLoading) {
+    $('#refreshBtn').disabled = isLoading;
+    $('#refreshBtn').textContent = isLoading ? '…' : '↻';
+  }
+
+  const API_URL='https://script.google.com/macros/s/AKfycbw1_xLZM-fAaBm9c4hmvwrvdlWxbV-3S3gW3e8GCZ8DKsfpNf-FVlwHb4lhwMECXNoiAA/exec';
+  function load(refresh=false) {
+    setLoading(true);
+    const cb='__mlbPwaData_'+Date.now();
+    const script=document.createElement('script');
+    const cleanup=()=>{try{delete window[cb]}catch(e){};script.remove();};
+    window[cb]=data=>{cleanup();state.data=data;setLoading(false);renderAll();};
+    script.onerror=()=>{cleanup();setLoading(false);toast('Could not load MLB data');};
+    script.src=API_URL+'?api=mobile&callback='+encodeURIComponent(cb)+'&_='+Date.now();
+    document.head.appendChild(script);
+    if(refresh) toast('Loading latest published MLB data');
+  }
+
+  function fillSelect(selector, values, allLabel) {
+    const el=$(selector);
+    if (!el) return;
+    const old=el.value;
+    const unique=[...new Set((values||[]).map(v=>String(v||'')).filter(Boolean))].sort();
+    el.innerHTML=`<option value="">${esc(allLabel)}</option>`+
+      unique.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');
+    if (unique.includes(old)) el.value=old;
+  }
+
+  function renderAll() {
+    const d=state.data || {};
+    $('#lastRefresh').textContent = d.lastRefresh ? `Last refresh: ${d.lastRefresh}` : 'Refresh time unavailable';
+    const rs=d.refreshStatus||{};
+    const label=rs.status ? String(rs.status) : 'UNKNOWN';
+    $('#refreshStatus').textContent = label==='SUCCESS' ? 'Refresh status: ✓ Current' :
+      label==='RUNNING' ? 'Refresh status: Refreshing…' :
+      label==='PARTIAL' ? 'Refresh status: Partial — some sources failed' :
+      label==='BUSY' ? 'Refresh status: Another refresh is already running' :
+      label==='ERROR' ? 'Refresh status: Error — tap refresh to retry' :
+      'Refresh status: '+label;
+    $('#valueCount').textContent = (d.picks||[]).filter(x=>x.Confidence==='VALUE').length;
+    $('#highCount').textContent = (d.picks||[]).filter(x=>x.Confidence==='HIGH').length;
+    $('#hotCount').textContent = (d.matchups||[]).filter(x=>x['Batter Form']==='HOT').length;
+
+    fillSelect('#teamFilter', (d.picks||[]).map(x=>x.Team), 'All teams');
+    fillSelect('#propFilter', (d.picks||[]).map(x=>x.Prop), 'All props');
+    fillSelect('#statusFilter', (d.picks||[]).map(x=>x['Lineup Status']), 'All status');
+
+    fillSelect('#matchTeamFilter', (d.matchups||[]).map(x=>x.Team), 'All teams');
+    fillSelect('#matchStatusFilter', (d.matchups||[]).map(x=>x['Lineup Status']), 'All status');
+
+    fillSelect('#lineupTeamFilter', (d.lineups||[]).map(x=>x.Team), 'All teams');
+    fillSelect('#lineupStatusFilter', (d.lineups||[]).map(x=>x['Lineup Status']), 'All status');
+
+    renderPicks(); renderMatchups(); renderPitchers(); renderBatters(); renderLineups();
+  }
+  function renderPicks() {
+    const q=$('#pickSearch').value.trim().toLowerCase();
+    const conf=$('#confFilter').value;
+    const prop=$('#propFilter').value;
+    const team=$('#teamFilter').value;
+    const status=$('#statusFilter').value;
+    const hideStarted=$('#hideStarted').checked;
+
+    const rows=(state.data?.picks||[]).filter(r =>
+      (!q || String(r.Player).toLowerCase().includes(q)) &&
+      (!team || String(r.Team)===team) &&
+      (!prop || String(r.Prop)===prop) &&
+      (!status || String(r['Lineup Status'])===status) &&
+      (!conf || String(r.Confidence)===conf) &&
+      (!hideStarted || String(r['Game State'])==='PREVIEW')
+    );
+
+    const groups=new Map();
+    rows.forEach(r=>{
+      const key=String(r.Player||'');
+      if(!groups.has(key)) groups.set(key,[]);
+      groups.get(key).push(r);
+    });
+    const rankPick=r=>{
+      const p=Number(r['Probability']);
+      if(Number.isFinite(p) && p>0) return 1000+p*100+Number(r['Pick Score']||0);
+      const edge=Number(r['Edge %']);
+      return Number(r['Pick Score']||0)+(Number.isFinite(edge)?Math.max(-25,Math.min(25,edge*100)):0);
+    };
+    const players=[...groups.entries()].map(([player,props])=>{
+      props.sort((a,b)=>rankPick(b)-rankPick(a));
+      return {player,props,best:props[0]};
+    }).sort((a,b)=>rankPick(b.best)-rankPick(a.best));
+
+    $('#pickCount').textContent=`${players.length} players · ${rows.length} props`;
+    $('#picksList').innerHTML=players.length ? players.slice(0,100).map((g,gi)=>{
+      const r=g.best;
+      const other=g.props.slice(1);
+      const propCard=(x,compact=false)=>`
+        <div class="${compact?'why':'metricgrid'}" style="${compact?'margin-top:10px':''}">
+          ${compact?`<div class="cardtop"><div><strong>${esc(x.Prop)}</strong> · ${esc(x.Direction)} ${x['Reference Line']===''?'—':num(x['Reference Line'])}<div class="sub">Proj ${num(x['Model Projection'])} · Edge ${pct(x['Edge %'])} · ${x['Probability']===''?'Probability calibrating':pct(x['Probability'])+' probability'}</div></div></div>`:`
+          <div class="metric"><div class="k">Projection</div><div class="v">${num(x['Model Projection'])}</div></div>
+          <div class="metric"><div class="k">Sleeper line</div><div class="v">${x['Reference Line']===''?'—':num(x['Reference Line'])}</div></div>
+          <div class="metric"><div class="k">Edge</div><div class="v">${pct(x['Edge %'])}</div></div>
+          <div class="metric"><div class="k">Probability</div><div class="v">${x['Probability']===''?'Calibrating':pct(x['Probability'])}</div></div>
+          <div class="metric"><div class="k">Pick score</div><div class="v">${num(x['Pick Score'],0)}</div></div>`}
+        </div>`;
+      return `
+      <article class="card">
+        <div class="cardtop">
+          <div class="grow">
+            <div class="name">${esc(r.Player)}</div>
+            <div class="sub">${esc(r.Team)} vs ${esc(r.Opponent)} · ${esc(r['Game Time'])}</div>
+            <div class="badges">${r['Probability']!==''?badge(pct(r['Probability'])+' · n='+r['Probability Samples']):badge('PROB CALIBRATING')}${badge(r['Batter Form'])}${badge(r['Pitcher Form'])}${badge(r['Lineup Status'])}${badge(r['Injury Status'])}${gameBadge(r['Game State'],r['Game Status'])}</div>
+          </div>
+          <span class="badge ${r.Direction==='MORE'?'high':'low'}">${esc(r.Prop)} · ${esc(r.Direction)}</span>
+        </div>
+        ${propCard(r)}
+        <div class="lineedit">
+          <div><label>Sleeper line · ${esc(r.Prop)}</label><input inputmode="decimal" type="number" min="0" step="0.5" value="${r['Reference Line']===''?'':esc(r['Reference Line'])}" data-line></div>
+          <button class="savebtn" type="button" data-save data-player="${esc(r.Player)}" data-prop="${esc(r.Prop)}">Save line</button>
+        </div>
+        <div class="why">${esc(r.Why || '')}</div>
+        ${other.length?`<button class="savebtn" type="button" data-expand="${gi}" style="margin-top:12px;width:100%">Show ${other.length} other prop${other.length===1?'':'s'}</button><div data-other="${gi}" hidden>${other.map(x=>propCard(x,true)).join('')}</div>`:''}
+      </article>`;
+    }).join('') : '<div class="empty">No picks match these filters.</div>';
+
+    $$('#picksList [data-expand]').forEach(btn=>btn.addEventListener('click',()=>{
+      const box=$(`[data-other="${btn.dataset.expand}"]`);
+      box.hidden=!box.hidden;
+      btn.textContent=box.hidden?`Show ${box.children.length} other prop${box.children.length===1?'':'s'}`:'Hide other props';
+    }));
+  }
+
+  function renderMatchups() {
+    const q=$('#matchSearch').value.trim().toLowerCase();
+    const form=$('#formFilter').value;
+    const team=$('#matchTeamFilter').value;
+    const status=$('#matchStatusFilter').value;
+    const hideStarted=$('#hideStartedMatchups').checked;
+
+    const rows=(state.data?.matchups||[]).filter(r=>
+      (!q || String(r.Batter).toLowerCase().includes(q)) &&
+      (!form || String(r['Batter Form'])===form) &&
+      (!team || String(r.Team)===team) &&
+      (!status || String(r['Lineup Status'])===status) &&
+      (!hideStarted || String(r['Game State'])==='PREVIEW')
+    );
+
+    $('#matchupCount').textContent=`${rows.length} shown`;
+    $('#matchupsList').innerHTML=rows.slice(0,180).map(r=>`
+      <article class="card">
+        <div class="name">${esc(r.Batter)}</div>
+        <div class="sub">${esc(r.Team)} vs ${esc(r.Opponent)} · ${esc(r['Opp Starter'])}</div>
+        <div class="badges">${badge(r['Batter Form'])}${badge(r['Pitcher Form'])}${badge(r['Lineup Status'])}${badge(r['Injury Status'])}${gameBadge(r['Game State'],r['Game Status'])}</div>
+        <div class="metricgrid">
+          <div class="metric"><div class="k">Matchup</div><div class="v">${num(r['Matchup Score'],0)}</div></div>
+          <div class="metric"><div class="k">HR fav.</div><div class="v">${num(r['HR Favorability'],0)}</div></div>
+          <div class="metric"><div class="k">Exp hits</div><div class="v">${num(r['Exp Hits'])}</div></div>
+          <div class="metric"><div class="k">Exp bases</div><div class="v">${num(r['Exp Bases'])}</div></div>
+        </div>
+        <div class="why">${esc(r.Reason || '')}</div>
+      </article>`).join('') || '<div class="empty">No matchups match these filters.</div>';
+  }
+  function renderPitchers() {
+    const rows=state.data?.pitchers||[];
+    $('#pitcherCount').textContent=`${rows.length} starters`;
+    $('#pitchersList').innerHTML=rows.map(r=>`
+      <article class="card">
+        <div class="name">${esc(r.Pitcher)}</div>
+        <div class="sub">${esc(r.Team)} vs ${esc(r.Opponent)} · ${esc(r['Game Time'])}</div>
+        <div class="badges">${badge(r['Recent Form'])}${badge(r['Game Status'])}</div>
+        <div class="metricgrid">
+          <div class="metric"><div class="k">L10 ERA</div><div class="v">${num(r['L10 ERA'])}</div></div>
+          <div class="metric"><div class="k">L10 WHIP</div><div class="v">${num(r['L10 WHIP'])}</div></div>
+          <div class="metric"><div class="k">L10 K-BB%</div><div class="v">${pct(r['L10 K-BB%'])}</div></div>
+          <div class="metric"><div class="k">Season ERA</div><div class="v">${num(r['Season ERA'])}</div></div>
+        </div>
+      </article>`).join('') || '<div class="empty">No probable starters found.</div>';
+  }
+
+  function renderBatters() {
+    const q=$('#batterSearch').value.trim().toLowerCase();
+    const rows=(state.data?.batters||[]).filter(r=>!q ||
+      String(r.Player).toLowerCase().includes(q) || String(r.Team).toLowerCase().includes(q)
+    ).slice(0,160);
+    $('#batterCount').textContent=`${rows.length} shown`;
+    $('#battersList').innerHTML=rows.map(r=>`
+      <article class="card">
+        <div class="name">${esc(r.Player)}</div>
+        <div class="sub">${esc(r.Team)}</div>
+        <div class="badges">${badge(r['Recent Form'])}</div>
+        <div class="metricgrid">
+          <div class="metric"><div class="k">L10 AVG</div><div class="v">${num(r['L10 AVG'],3)}</div></div>
+          <div class="metric"><div class="k">L10 OPS</div><div class="v">${num(r['L10 OPS'],3)}</div></div>
+          <div class="metric"><div class="k">L10 HR</div><div class="v">${num(r['L10 HR'],0)}</div></div>
+          <div class="metric"><div class="k">Season OPS</div><div class="v">${num(r['Season OPS'],3)}</div></div>
+        </div>
+      </article>`).join('') || '<div class="empty">No batters match your search.</div>';
+  }
+
+  function renderLineups() {
+    const q=$('#lineupSearch').value.trim().toLowerCase();
+    const team=$('#lineupTeamFilter').value;
+    const status=$('#lineupStatusFilter').value;
+
+    const rows=(state.data?.lineups||[]).filter(r=>
+      (!q || String(r.Player).toLowerCase().includes(q) || String(r.Team).toLowerCase().includes(q)) &&
+      (!team || String(r.Team)===team) &&
+      (!status || String(r['Lineup Status'])===status)
+    );
+
+    $('#lineupCount').textContent=`${rows.length} hitters`;
+    $('#lineupsList').innerHTML=rows.map(r=>`
+      <article class="card">
+        <div class="cardtop">
+          <div class="grow">
+            <div class="name">#${esc(r['Batting Order'])} ${esc(r.Player)}</div>
+            <div class="sub">${esc(r.Team)} vs ${esc(r.Opponent)} · ${esc(r.Position)} · ${esc(r['Game Time'])}</div>
+          </div>
+          ${badge(r['Lineup Status'])}
+        </div>
+      </article>`).join('') || '<div class="empty">No lineups match these filters.</div>';
+  }
+  function switchScreen(name) {
+    state.screen=name;
+    $$('.screen').forEach(s=>s.classList.toggle('active',s.dataset.screen===name));
+    $$('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.target===name));
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  $$('.navbtn').forEach(b=>b.addEventListener('click',()=>switchScreen(b.dataset.target)));
+  $('#refreshBtn').addEventListener('click',()=>load(true));
+  $('#pickSearch').addEventListener('input',renderPicks);
+  $('#hideStarted').addEventListener('change',renderPicks);
+  $('#confFilter').addEventListener('change',renderPicks);
+  $('#teamFilter').addEventListener('change',renderPicks);
+  $('#propFilter').addEventListener('change',renderPicks);
+  $('#statusFilter').addEventListener('change',renderPicks);
+  $('#matchSearch').addEventListener('input',renderMatchups);
+  $('#hideStartedMatchups').addEventListener('change',renderMatchups);
+  $('#matchTeamFilter').addEventListener('change',renderMatchups);
+  $('#formFilter').addEventListener('change',renderMatchups);
+  $('#matchStatusFilter').addEventListener('change',renderMatchups);
+  $('#batterSearch').addEventListener('input',renderBatters);
+  $('#lineupSearch').addEventListener('input',renderLineups);
+  $('#lineupTeamFilter').addEventListener('change',renderLineups);
+  $('#lineupStatusFilter').addEventListener('change',renderLineups);
+
+  load(false);
+})();
+</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js?v=3').catch(()=>{});}</script>
+</body>
+</html>
