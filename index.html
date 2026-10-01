@@ -6,9 +6,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="MLB Picks">
-  <link rel="manifest" href="./manifest.webmanifest?v=13">
-  <link rel="apple-touch-icon" href="./apple-touch-icon.png?v=13">
-  <link rel="icon" type="image/png" href="./apple-touch-icon.png?v=13">
+  <link rel="manifest" href="./manifest.webmanifest?v=14">
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png?v=14">
+  <link rel="icon" type="image/png" href="./apple-touch-icon.png?v=14">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -159,7 +159,7 @@
       <div class="brand">
         <h1>MLB Sleeper Edge</h1>
         <p id="lastRefresh">Loading spreadsheet…</p><p id="refreshStatus" style="margin-top:2px"></p>
-      <div id="appVersion" class="appversion">v13</div></div>
+      <div id="appVersion" class="appversion">v14</div></div>
       <button class="iconbtn" id="refreshBtn" aria-label="Refresh all MLB data">↻</button>
     </div>
     <div class="stats">
@@ -302,65 +302,47 @@
   }
 
   const API_URL='https://script.google.com/macros/s/AKfycbw1_xLZM-fAaBm9c4hmvwrvdlWxbV-3S3gW3e8GCZ8DKsfpNf-FVlwHb4lhwMECXNoiAA/exec'; // PWA data API v4
-  function load(refresh=false) {
+  async function load(refresh=false) {
     setLoading(true);
-    const cb='__mlbPwaData_'+Date.now();
-    const script=document.createElement('script');
-    let finished=false;
-    const timer=setTimeout(()=>{
-      if(finished) return;
-      finished=true;
-      cleanup();
-      setLoading(false);
-      $('#lastRefresh').textContent='Data load timed out — tap refresh to retry';
-      $('#picksList').innerHTML='<div class="empty">The MLB data service did not respond in time. Tap refresh to try again.</div>';
-      toast('MLB data request timed out');
-    },20000);
-    const cleanup=()=>{clearTimeout(timer);try{delete window[cb]}catch(e){};script.remove();};
-    window[cb]=data=>{
-      if(finished) return;
-      finished=true;
-      cleanup();
+    try {
+      const url='./mobile-data.json?ts='+Date.now();
+      const resp=await fetch(url,{cache:'no-store'});
+      if(!resp.ok) throw new Error('HTTP '+resp.status);
+      const data=await resp.json();
       state.data=data;
       setLoading(false);
       renderAll();
-    };
-    script.onerror=()=>{
-      if(finished) return;
-      finished=true;
-      cleanup();
+      if(refresh) toast('Loaded latest synced MLB data');
+    } catch(err) {
       setLoading(false);
-      $('#lastRefresh').textContent='Could not load MLB data';
-      $('#picksList').innerHTML='<div class="empty">Could not reach the MLB data service. Tap refresh to retry.</div>';
+      $('#lastRefresh').textContent='Could not load synced MLB data';
+      $('#picksList').innerHTML='<div class="empty">Could not load the synced MLB data file. Tap refresh to retry.</div>';
       toast('Could not load MLB data');
-    };
-    script.src=API_URL+'?api=mobile&callback='+encodeURIComponent(cb)+'&_='+Date.now();
-    document.head.appendChild(script);
-    if(refresh) toast('Loading latest published MLB data');
+    }
   }
 
-  function loadSection(name) {
+  async function loadSection(name) {
     if (!name || ['picks','slips','model'].includes(name)) return;
     const d=state.data||{};
     if (Array.isArray(d[name]) && d[name].length) return;
-    const cb='__mlbPwaSection_'+name+'_'+Date.now();
-    const script=document.createElement('script');
-    let finished=false;
-    const cleanup=()=>{try{delete window[cb]}catch(e){};script.remove();};
-    const timer=setTimeout(()=>{
-      if(finished)return;
-      finished=true;cleanup();toast('Could not load '+name);
-    },20000);
-    window[cb]=payload=>{
-      if(finished)return;
-      finished=true;clearTimeout(timer);cleanup();
+    const fileMap={
+      matchups:'./mobile-matchups.json',
+      pitchers:'./mobile-pitchers.json',
+      batters:'./mobile-batters.json',
+      lineups:'./mobile-lineups.json'
+    };
+    const file=fileMap[name];
+    if(!file) return;
+    try {
+      const resp=await fetch(file+'?ts='+Date.now(),{cache:'no-store'});
+      if(!resp.ok) throw new Error('HTTP '+resp.status);
+      const payload=await resp.json();
       state.data=state.data||{};
       state.data[name]=Array.isArray(payload&&payload.rows)?payload.rows:[];
       renderAll();
-    };
-    script.onerror=()=>{if(finished)return;finished=true;clearTimeout(timer);cleanup();toast('Could not load '+name);};
-    script.src=API_URL+'?api=mobile-section&section='+encodeURIComponent(name)+'&callback='+encodeURIComponent(cb)+'&_='+Date.now();
-    document.head.appendChild(script);
+    } catch(err) {
+      toast('Could not load '+name);
+    }
   }
 
   function fillSelect(selector, values, allLabel) {
@@ -589,12 +571,13 @@
   $('#lineupTeamFilter').addEventListener('change',renderLineups);
   $('#lineupStatusFilter').addEventListener('change',renderLineups);
 
+  window.mlbLoadSection=loadSection;
   window.MLBApp={getData:()=>state.data,pct:pct,esc:esc};
   load(false);
 })();
 </script>
-<script src="./slip-builder.js?v=13"></script>
-<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js?v=13').catch(()=>{});}</script>
-<script src="./nav-fix.js?v=13"></script>
+<script src="./slip-builder.js?v=14"></script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js?v=14').catch(()=>{});}</script>
+<script src="./nav-fix.js?v=14"></script>
 </body>
 </html>
