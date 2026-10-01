@@ -6,9 +6,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="MLB Picks">
-  <link rel="manifest" href="./manifest.webmanifest?v=6">
-  <link rel="apple-touch-icon" href="./apple-touch-icon.png?v=6">
-  <link rel="icon" type="image/png" href="./apple-touch-icon.png?v=6">
+  <link rel="manifest" href="./manifest.webmanifest?v=7">
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png?v=7">
+  <link rel="icon" type="image/png" href="./apple-touch-icon.png?v=7">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -107,7 +107,7 @@
       border-top:1px solid var(--line);
       padding:7px max(8px,env(safe-area-inset-right)) calc(7px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));
     }
-    .nav{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr);gap:3px}
+    .nav{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
     .navbtn{border:0;background:transparent;min-height:52px;border-radius:12px;color:var(--muted);font-size:10px;font-weight:700}
     .navbtn .ico{display:block;font-size:20px;margin-bottom:2px}
     .navbtn.active{background:#edf3fb;color:var(--blue2)}
@@ -131,6 +131,28 @@
       .list.twocol{grid-template-columns:1fr 1fr}
       .screen{padding-left:16px;padding-right:16px}
     }
+      .slipcontrols{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+    .slipcontrol{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px}
+    .slipcontrol label{display:block;font-size:10px;color:var(--muted);font-weight:700;margin-bottom:4px}
+    .slipcontrol select,.slipcontrol input{width:100%;height:36px;border:1px solid var(--line);border-radius:9px;background:#fff;padding:0 8px;font-size:14px;font-weight:700}
+    .slipbuild{width:100%;height:44px;border:0;border-radius:12px;background:var(--blue);color:#fff;font-weight:800;font-size:14px;margin-bottom:12px}
+    .slipnote{font-size:11px;color:var(--muted);line-height:1.35;margin:0 0 12px}
+    .slipcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:10px;box-shadow:var(--shadow)}
+    .sliphead{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+    .sliptitle{font-weight:900;font-size:15px}
+    .slipmeta{font-size:11px;color:var(--muted);margin-top:3px}
+    .slipmetrics{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0}
+    .slipmetric{background:#f7f9fc;border-radius:10px;padding:8px}
+    .slipmetric .k{font-size:9px;color:var(--muted)}
+    .slipmetric .v{font-size:14px;font-weight:900;margin-top:2px}
+    .slipleg{display:flex;gap:8px;align-items:center;padding:9px 0;border-top:1px solid var(--line)}
+    .legnum{width:24px;height:24px;border-radius:8px;background:#edf3fb;color:var(--blue2);display:grid;place-items:center;font-size:11px;font-weight:900;flex:0 0 auto}
+    .legmain{min-width:0;flex:1}
+    .legplayer{font-weight:800;font-size:13px}
+    .legsub{font-size:11px;color:var(--muted);margin-top:2px}
+    .legprob{font-size:13px;font-weight:900;white-space:nowrap}
+    .slipfooter{font-size:11px;color:var(--muted);margin-top:8px}
+    @media(max-width:420px){.slipcontrols{grid-template-columns:1fr 1fr}.slipcontrol:last-child{grid-column:1/-1}.slipmetrics{grid-template-columns:1fr 1fr}.slipmetrics .slipmetric:last-child{grid-column:1/-1}}
   </style>
 </head>
 <body>
@@ -202,6 +224,19 @@
     <div class="list twocol" id="lineupsList"></div>
   </section>
 
+  <section class="screen" data-screen="slips">
+    <div class="sectionhead"><h2>Slip Builder</h2><span>model-implied</span></div>
+    <div class="slipcontrols">
+      <div class="slipcontrol"><label>LEG SIZE</label><select id="slipSize"><option value="4">4 legs</option><option value="6" selected>6 legs</option><option value="8">8 legs</option></select></div>
+      <div class="slipcontrol"><label>NUMBER OF SLIPS</label><select id="slipCount"><option>1</option><option>2</option><option>3</option><option selected>5</option><option>6</option><option>8</option><option>10</option></select></div>
+      <div class="slipcontrol"><label>BET PER SLIP</label><input id="slipBet" type="number" min="1" max="10" step="1" value="5"></div>
+    </div>
+    <p class="slipnote">Each slip uses a player only once. Probability is the model's chance that every leg reaches its target. Expected multiplier is the model-implied fair multiplier (1 ÷ combined probability), not an actual Sleeper payout.</p>
+    <button class="slipbuild" id="buildSlips">Generate Slips</button>
+    <div id="slipsSummary"></div>
+    <div id="slipsList"><div class="empty">Tap Generate Slips to build 4-, 6-, or 8-leg combinations.</div></div>
+  </section>
+
   <section class="screen" data-screen="model">
     <div class="sectionhead"><h2>Model Learning</h2><span>backtest + calibration</span></div>
     <div class="list">
@@ -225,6 +260,7 @@
     <button class="navbtn" data-target="pitchers"><span class="ico">⚾</span>Pitchers</button>
     <button class="navbtn" data-target="batters"><span class="ico">▤</span>Batters</button>
     <button class="navbtn" data-target="lineups"><span class="ico">☷</span>Lineups</button>
+    <button class="navbtn" data-target="slips"><span class="ico">🎟</span>Slips</button>
     <button class="navbtn" data-target="model"><span class="ico">◎</span>Model</button>
   </div>
 </div>
@@ -482,6 +518,204 @@
         </div>
       </article>`).join('') || '<div class="empty">No lineups match these filters.</div>';
   }
+  function slipProbability(r) {
+    const p=Number(r['Adjusted Probability'] || r['Probability']);
+    return Number.isFinite(p) && p>0 && p<1 ? p : null;
+  }
+
+  function generateSlips() {
+    const size=Number($('#slipSize').value||6);
+    const count=Math.max(1,Math.min(10,Number($('#slipCount').value||5)));
+    const bet=Math.max(1,Math.min(10,Number($('#slipBet').value||5)));
+    const raw=(state.data?.picks||[]).filter(r =>
+      String(r['Game State'])==='PREVIEW' &&
+      slipProbability(r)!==null &&
+      Number(r['Probability Samples']||0)>=25 &&
+      !['CALIBRATING','LOW'].includes(String(r.Confidence||'')) &&
+      !String(r['Injury Status']||'').toUpperCase().match(/IL|INJURED|OUT|SUSPENDED/)
+    );
+
+    const byKey=new Map();
+    raw.forEach(r=>{
+      const key=String(r.Player||'')+'|'+String(r.Prop||'');
+      if(!byKey.has(key) || slipProbability(r)>slipProbability(byKey.get(key))) byKey.set(key,r);
+    });
+    const candidates=[...byKey.values()].sort((a,b)=>slipProbability(b)-slipProbability(a));
+
+    if(candidates.length<size) {
+      $('#slipsSummary').innerHTML='';
+      $('#slipsList').innerHTML='<div class="empty">Not enough eligible players to build a '+size+'-leg slip.</div>';
+      return;
+    }
+
+    const slips=[];
+    const usedAcross={};
+    for(let s=0;s<count;s++){
+      const chosen=[];
+      const usedPlayers=new Set();
+      const offset=(s*Math.max(1,Math.floor(candidates.length/count)))%candidates.length;
+      const pool=candidates.slice(offset).concat(candidates.slice(0,offset));
+      while(chosen.length<size){
+        let best=null,bestScore=-Infinity;
+        for(const r of pool){
+          const player=String(r.Player||'');
+          if(usedPlayers.has(player)) continue;
+          const p=slipProbability(r);
+          if(p===null) continue;
+          const prior=usedAcross[player]||0;
+          const sameTeam=chosen.filter(x=>String(x.Team)===String(r.Team)).length;
+          const score=Math.log(p)-prior*0.012-sameTeam*0.006+(s%2?Math.random()*0.0005:0);
+          if(score>bestScore){bestScore=score;best=r;}
+        }
+        if(!best) break;
+        chosen.push(best);
+        usedPlayers.add(String(best.Player||''));
+        usedAcross[String(best.Player||'')]=(usedAcross[String(best.Player||'')]||0)+1;
+        pool.splice(pool.indexOf(best),1);
+      }
+      if(chosen.length===size){
+        const probability=chosen.reduce((acc,r)=>acc*slipProbability(r),1);
+        const multiplier=1/probability;
+        slips.push({legs:chosen,probability,multiplier,payout:bet*multiplier,profit:bet*multiplier-bet,bet});
+      }
+    }
+
+    const avgP=slips.length?slips.reduce((a,s)=>a+s.probability,0)/slips.length:0;
+    $('#slipsSummary').innerHTML=slips.length?
+      '<div class="card" style="margin-bottom:10px"><div class="name">'+slips.length+' slips · '+size+' legs · 
+    state.screen=name;
+    $$('.screen').forEach(s=>s.classList.toggle('active',s.dataset.screen===name));
+    $$('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.target===name));
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  $$('.navbtn').forEach(b=>b.addEventListener('click',()=>switchScreen(b.dataset.target)));
+  $('#refreshBtn').addEventListener('click',()=>load(true));
+  $('#buildSlips').addEventListener('click',generateSlips);
+  $('#pickSearch').addEventListener('input',renderPicks);
+  $('#hideStarted').addEventListener('change',renderPicks);
+  $('#confFilter').addEventListener('change',renderPicks);
+  $('#teamFilter').addEventListener('change',renderPicks);
+  $('#propFilter').addEventListener('change',renderPicks);
+  $('#statusFilter').addEventListener('change',renderPicks);
+  $('#matchSearch').addEventListener('input',renderMatchups);
+  $('#hideStartedMatchups').addEventListener('change',renderMatchups);
+  $('#matchTeamFilter').addEventListener('change',renderMatchups);
+  $('#formFilter').addEventListener('change',renderMatchups);
+  $('#matchStatusFilter').addEventListener('change',renderMatchups);
+  $('#batterSearch').addEventListener('input',renderBatters);
+  $('#lineupSearch').addEventListener('input',renderLineups);
+  $('#lineupTeamFilter').addEventListener('change',renderLineups);
+  $('#lineupStatusFilter').addEventListener('change',renderLineups);
+
+  load(false);
+})();
+</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js?v=7').catch(()=>{});}</script>
+</body>
+</html>+bet+' each</div><div class="why">Average model probability per slip: <strong>'+pct(avgP)+'</strong> · Total stake: <strong>
+    state.screen=name;
+    $$('.screen').forEach(s=>s.classList.toggle('active',s.dataset.screen===name));
+    $$('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.target===name));
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  $$('.navbtn').forEach(b=>b.addEventListener('click',()=>switchScreen(b.dataset.target)));
+  $('#refreshBtn').addEventListener('click',()=>load(true));
+  $('#pickSearch').addEventListener('input',renderPicks);
+  $('#hideStarted').addEventListener('change',renderPicks);
+  $('#confFilter').addEventListener('change',renderPicks);
+  $('#teamFilter').addEventListener('change',renderPicks);
+  $('#propFilter').addEventListener('change',renderPicks);
+  $('#statusFilter').addEventListener('change',renderPicks);
+  $('#matchSearch').addEventListener('input',renderMatchups);
+  $('#hideStartedMatchups').addEventListener('change',renderMatchups);
+  $('#matchTeamFilter').addEventListener('change',renderMatchups);
+  $('#formFilter').addEventListener('change',renderMatchups);
+  $('#matchStatusFilter').addEventListener('change',renderMatchups);
+  $('#batterSearch').addEventListener('input',renderBatters);
+  $('#lineupSearch').addEventListener('input',renderLineups);
+  $('#lineupTeamFilter').addEventListener('change',renderLineups);
+  $('#lineupStatusFilter').addEventListener('change',renderLineups);
+
+  load(false);
+})();
+</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js?v=7').catch(()=>{});}</script>
+</body>
+</html>+(bet*slips.length).toFixed(2)+'</strong></div></div>':' ';
+
+    $('#slipsList').innerHTML=slips.length?slips.map((s,i)=>
+      '<article class="slipcard"><div class="sliphead"><div><div class="sliptitle">Slip '+(i+1)+' · '+size+' legs</div><div class="slipmeta">
+    state.screen=name;
+    $$('.screen').forEach(s=>s.classList.toggle('active',s.dataset.screen===name));
+    $$('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.target===name));
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  $$('.navbtn').forEach(b=>b.addEventListener('click',()=>switchScreen(b.dataset.target)));
+  $('#refreshBtn').addEventListener('click',()=>load(true));
+  $('#pickSearch').addEventListener('input',renderPicks);
+  $('#hideStarted').addEventListener('change',renderPicks);
+  $('#confFilter').addEventListener('change',renderPicks);
+  $('#teamFilter').addEventListener('change',renderPicks);
+  $('#propFilter').addEventListener('change',renderPicks);
+  $('#statusFilter').addEventListener('change',renderPicks);
+  $('#matchSearch').addEventListener('input',renderMatchups);
+  $('#hideStartedMatchups').addEventListener('change',renderMatchups);
+  $('#matchTeamFilter').addEventListener('change',renderMatchups);
+  $('#formFilter').addEventListener('change',renderMatchups);
+  $('#matchStatusFilter').addEventListener('change',renderMatchups);
+  $('#batterSearch').addEventListener('input',renderBatters);
+  $('#lineupSearch').addEventListener('input',renderLineups);
+  $('#lineupTeamFilter').addEventListener('change',renderLineups);
+  $('#lineupStatusFilter').addEventListener('change',renderLineups);
+
+  load(false);
+})();
+</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js?v=7').catch(()=>{});}</script>
+</body>
+</html>+s.bet+' stake · all legs must hit</div></div><span class="badge high">'+pct(s.probability)+'</span></div>'+
+      '<div class="slipmetrics"><div class="slipmetric"><div class="k">TOTAL PROBABILITY</div><div class="v">'+pct(s.probability)+'</div></div><div class="slipmetric"><div class="k">EXPECTED MULTIPLIER</div><div class="v">'+s.multiplier.toFixed(2)+'×</div></div><div class="slipmetric"><div class="k">MODEL PAYOUT</div><div class="v">
+    state.screen=name;
+    $$('.screen').forEach(s=>s.classList.toggle('active',s.dataset.screen===name));
+    $$('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.target===name));
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  $$('.navbtn').forEach(b=>b.addEventListener('click',()=>switchScreen(b.dataset.target)));
+  $('#refreshBtn').addEventListener('click',()=>load(true));
+  $('#pickSearch').addEventListener('input',renderPicks);
+  $('#hideStarted').addEventListener('change',renderPicks);
+  $('#confFilter').addEventListener('change',renderPicks);
+  $('#teamFilter').addEventListener('change',renderPicks);
+  $('#propFilter').addEventListener('change',renderPicks);
+  $('#statusFilter').addEventListener('change',renderPicks);
+  $('#matchSearch').addEventListener('input',renderMatchups);
+  $('#hideStartedMatchups').addEventListener('change',renderMatchups);
+  $('#matchTeamFilter').addEventListener('change',renderMatchups);
+  $('#formFilter').addEventListener('change',renderMatchups);
+  $('#matchStatusFilter').addEventListener('change',renderMatchups);
+  $('#batterSearch').addEventListener('input',renderBatters);
+  $('#lineupSearch').addEventListener('input',renderLineups);
+  $('#lineupTeamFilter').addEventListener('change',renderLineups);
+  $('#lineupStatusFilter').addEventListener('change',renderLineups);
+
+  load(false);
+})();
+</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js?v=7').catch(()=>{});}</script>
+</body>
+</html>+s.payout.toFixed(2)+'</div></div></div>'+
+      s.legs.map((r,j)=>{
+        const p=slipProbability(r);
+        const threshold=r['Probability Threshold']!==''?String(r['Probability Threshold'])+'+ ':'';
+        return '<div class="slipleg"><div class="legnum">'+(j+1)+'</div><div class="legmain"><div class="legplayer">'+esc(r.Player)+'</div><div class="legsub">'+esc(r.Prop)+' · '+threshold+esc(r.Team)+' vs '+esc(r.Opponent)+'</div></div><div class="legprob">'+pct(p)+'</div></div>';
+      }).join('')+
+      '<div class="slipfooter">Model payout includes the original stake. Actual platform payout may differ because no Sleeper line/payout table is being used.</div></article>'
+    ).join(''):'<div class="empty">No slips could be generated.</div>';
+  }
   function switchScreen(name) {
     state.screen=name;
     $$('.screen').forEach(s=>s.classList.toggle('active',s.dataset.screen===name));
@@ -510,6 +744,6 @@
   load(false);
 })();
 </script>
-<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js?v=6').catch(()=>{});}</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js?v=7').catch(()=>{});}</script>
 </body>
 </html>
