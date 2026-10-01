@@ -1,0 +1,50 @@
+name: Sync MLB mobile data
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/sync-mlb-data.yml'
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch current mobile data
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE="https://script.google.com/macros/s/AKfycbw1_xLZM-fAaBm9c4hmvwrvdlWxbV-3S3gW3e8GCZ8DKsfpNf-FVlwHb4lhwMECXNoiAA/exec"
+          fetch_json() {
+            local url="$1"
+            local out="$2"
+            curl --fail --location --retry 3 --retry-delay 2 --max-time 45 "$url" -o "$out.tmp"
+            jq -e . "$out.tmp" >/dev/null
+            mv "$out.tmp" "$out"
+          }
+          fetch_json "$BASE?api=mobile" mobile-data.json
+          fetch_json "$BASE?api=mobile-section&section=matchups" mobile-matchups.json
+          fetch_json "$BASE?api=mobile-section&section=pitchers" mobile-pitchers.json
+          fetch_json "$BASE?api=mobile-section&section=batters" mobile-batters.json
+          fetch_json "$BASE?api=mobile-section&section=lineups" mobile-lineups.json
+
+      - name: Commit updated snapshots
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add mobile-data.json mobile-matchups.json mobile-pitchers.json mobile-batters.json mobile-lineups.json
+          if git diff --cached --quiet; then
+            echo "No data changes."
+            exit 0
+          fi
+          git commit -m "Sync MLB mobile data [skip ci]"
+          git push
