@@ -6,9 +6,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="MLB Picks">
-  <link rel="manifest" href="./manifest.webmanifest?v=8">
-  <link rel="apple-touch-icon" href="./apple-touch-icon.png?v=8">
-  <link rel="icon" type="image/png" href="./apple-touch-icon.png?v=8">
+  <link rel="manifest" href="./manifest.webmanifest?v=9">
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png?v=9">
+  <link rel="icon" type="image/png" href="./apple-touch-icon.png?v=9">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -305,9 +305,34 @@
     setLoading(true);
     const cb='__mlbPwaData_'+Date.now();
     const script=document.createElement('script');
-    const cleanup=()=>{try{delete window[cb]}catch(e){};script.remove();};
-    window[cb]=data=>{cleanup();state.data=data;setLoading(false);renderAll();};
-    script.onerror=()=>{cleanup();setLoading(false);toast('Could not load MLB data');};
+    let finished=false;
+    const timer=setTimeout(()=>{
+      if(finished) return;
+      finished=true;
+      cleanup();
+      setLoading(false);
+      $('#lastRefresh').textContent='Data load timed out — tap refresh to retry';
+      $('#picksList').innerHTML='<div class="empty">The MLB data service did not respond in time. Tap refresh to try again.</div>';
+      toast('MLB data request timed out');
+    },20000);
+    const cleanup=()=>{clearTimeout(timer);try{delete window[cb]}catch(e){};script.remove();};
+    window[cb]=data=>{
+      if(finished) return;
+      finished=true;
+      cleanup();
+      state.data=data;
+      setLoading(false);
+      renderAll();
+    };
+    script.onerror=()=>{
+      if(finished) return;
+      finished=true;
+      cleanup();
+      setLoading(false);
+      $('#lastRefresh').textContent='Could not load MLB data';
+      $('#picksList').innerHTML='<div class="empty">Could not reach the MLB data service. Tap refresh to retry.</div>';
+      toast('Could not load MLB data');
+    };
     script.src=API_URL+'?api=mobile&callback='+encodeURIComponent(cb)+'&_='+Date.now();
     document.head.appendChild(script);
     if(refresh) toast('Loading latest published MLB data');
@@ -542,7 +567,7 @@
   load(false);
 })();
 </script>
-<script src="./slip-builder.js?v=8"></script>
-<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js?v=8').catch(()=>{});}</script>
+<script src="./slip-builder.js?v=9"></script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js?v=9').catch(()=>{});}</script>
 </body>
 </html>
