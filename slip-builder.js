@@ -8,8 +8,10 @@
     return ((d&&d.picks)||[]).filter(function(r){
       const p=prob(r);
       const injury=String(r['Injury Status']||'').toUpperCase();
-      return String(r['Game State'])==='PREVIEW' && p!==null && Number(r['Probability Samples']||0)>=25 &&
-        String(r.Confidence||'')!=='CALIBRATING' && !/IL|INJURED|OUT|SUSPENDED/.test(injury);
+      const gameState=String(r['Game State']||'').toUpperCase();
+      const confidence=String(r.Confidence||'').toUpperCase();
+      return !['LIVE','FINAL'].includes(gameState) && p!==null && Number(r['Probability Samples']||0)>=25 &&
+        confidence!=='CALIBRATING' && !/IL|INJURED|OUT|SUSPENDED/.test(injury);
     });
   }
   function bestByPlayerProp(rows){
@@ -18,24 +20,22 @@
     return Array.from(m.values()).sort(function(a,b){return prob(b)-prob(a)});
   }
   function buildOne(pool,size,offset,useCount){
-    const chosen=[],players=new Set(),games={};
+    const chosen=[],players=new Set();
     const rotated=pool.slice(offset).concat(pool.slice(0,offset));
     while(chosen.length<size){
       let best=null,bestScore=-1e9;
       for(let i=0;i<rotated.length;i++){
         const r=rotated[i], player=String(r.Player||'');
         if(players.has(player))continue;
-        const gameKey=[r.Team,r.Opponent].sort().join('|');
-        const sameGame=games[gameKey]||0;
-        if(sameGame>=2)continue;
         const p=prob(r); if(p===null)continue;
         const prior=useCount[player]||0;
-        const score=Math.log(p)-prior*0.02-sameGame*0.015;
+        const confidence=String(r.Confidence||'').toUpperCase();
+        const confidenceBonus=confidence==='HIGH'?0.02:confidence==='MEDIUM'?0.01:0;
+        const score=Math.log(p)+confidenceBonus-prior*0.02;
         if(score>bestScore){bestScore=score;best=r}
       }
       if(!best)break;
       chosen.push(best);players.add(String(best.Player||''));
-      const g=[best.Team,best.Opponent].sort().join('|');games[g]=(games[g]||0)+1;
       useCount[String(best.Player||'')]=(useCount[String(best.Player||'')]||0)+1;
       rotated.splice(rotated.indexOf(best),1);
     }
@@ -70,7 +70,7 @@
       }).join('');
       return '<article class="slipcard"><div class="sliphead"><div><div class="sliptitle">Slip '+(idx+1)+' · '+s.size+' legs</div><div class="slipmeta">'+money(s.bet)+' stake · no duplicate players</div></div><span class="badge high">'+pct(s.probability)+'</span></div>'+
         '<div class="slipmetrics"><div class="slipmetric"><div class="k">COMBINED PROBABILITY</div><div class="v">'+pct(s.probability)+'</div></div><div class="slipmetric"><div class="k">EXPECTED MULTIPLIER</div><div class="v">'+s.multiplier.toFixed(2)+'×</div></div><div class="slipmetric"><div class="k">PREDICTED PAYOUT</div><div class="v">'+money(s.payout)+'</div></div></div>'+legs+
-        '<div class="slipnote" style="margin-top:8px">Combined probability assumes leg independence; correlated outcomes can change the true joint probability. Predicted payout is model-implied, not Sleeper’s posted payout.</div></article>';
+        '<div class="slipnote" style="margin-top:8px">Higher-confidence picks are preferred first; lower-confidence valid picks can fill remaining legs. Combined probability assumes leg independence; correlated outcomes can change the true joint probability. Predicted payout is model-implied, not Sleeper’s posted payout.</div></article>';
     }).join('');
   }
   const btn=$('#buildSlips');if(btn)btn.addEventListener('click',render);
