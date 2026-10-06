@@ -8,7 +8,7 @@ from zoneinfo import ZoneInfo
 from collections import Counter, defaultdict
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '0.5.2'
+VERSION = '0.5.3'
 API = 'https://statsapi.mlb.com/api/v1/'
 STAT_KEYS = {'Hits': 'hits', 'Runs': 'runs', 'RBI': 'rbi', 'Bases': 'totalBases', 'Walks': 'baseOnBalls', 'Strikeouts': 'strikeOuts', 'Stolen Bases': 'stolenBases', 'Home Runs': 'homeRuns'}
 
@@ -296,7 +296,7 @@ def run():
     validation = validation_report(ledger)
     graded = [r for r in ledger if r.get('resultStatus')=='GRADED']
     frozen = {'n':len(graded), 'brier':sum((r['probability']-r['outcome'])**2 for r in graded)/len(graded) if graded else None}
-    from platform_feed import fetch as fetch_board,match as match_offers,slips as build_slips
+    from platform_feed import fetch as fetch_board,match as match_offers,slip_sets as build_slip_sets
     published_at = datetime.now(timezone.utc)
     eligible_sports={r['sport'] for r in verified if r.get('platformEligible') is not False}
     board,feed_state=fetch_board(ROOT,published_at,eligible_sports)
@@ -305,7 +305,7 @@ def run():
             'sports':{'MLB':mlb_status, 'NFL':nfl_status,'NBA':nba_status,'NHL':nhl_status},
             'picks':sorted(verified,key=lambda r:-r['probability']),'rejected':dict(rejected),'model':model,'validation':validation,
             'results':{'recorded':len(ledger),'graded':len(graded),'void':sum(r.get('resultStatus')=='VOID' for r in ledger),'frozenPredictionMetrics':frozen},
-            'slipStatus':('REVIEW_REQUIRED' if any(r.get('requiresPlatformReview') for r in offers) else 'READY') if offers else 'WAITING_FOR_VERIFIED_PLATFORM_LINES','platformFeed':{**{k:v for k,v in board.items() if k!='sports'},'sportStatus':{s:{k:v for k,v in entry.items() if k!='rows'} for s,entry in board.get('sports',{}).items()}},'offerCounts':offer_counts,'offers':offers,'slips':{str(size):build_slips(offers,size) for size in (2,3,4,5,6,8)}}
+            'slipStatus':('REVIEW_REQUIRED' if any(r.get('requiresPlatformReview') for r in offers) else 'READY') if offers else 'WAITING_FOR_VERIFIED_PLATFORM_LINES','platformFeed':{**{k:v for k,v in board.items() if k!='sports'},'sportStatus':{s:{k:v for k,v in entry.items() if k!='rows'} for s,entry in board.get('sports',{}).items()}},'offerCounts':offer_counts,'offers':offers,'slips':build_slip_sets(offers)}
     write('feed-state.json',feed_state); write('ledger.json',ledger); write('model.json',model); write('data.json',data)
     print(json.dumps({'verifiedForecasts':len(verified),'rejected':dict(rejected),'ledger':len(ledger),'graded':len(graded)}))
 

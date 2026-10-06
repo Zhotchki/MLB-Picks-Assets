@@ -148,4 +148,8 @@ class PlatformTests(unittest.TestCase):
             self.assertEqual(request.call_count,8)
             self.assertEqual(state['creditsUsed'],24)
             self.assertEqual(board['refreshMinutes'],180)
+    def test_indexed_lookup_still_rejects_ambiguous_player_identity(self):
+        other=dict(self.forecast,playerId=100,id='other-player')
+        rows,_=match([self.forecast,other],self.board(),self.now,norm)
+        self.assertEqual(rows,[])
 if __name__=='__main__':unittest.main()

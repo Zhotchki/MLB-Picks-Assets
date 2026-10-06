@@ -21,6 +21,10 @@ assert(node('#slipCards').innerHTML.includes('Kickoff verified from official sch
 assert(node('#slipCards').innerHTML.includes('&lt;Player'));
 assert(!node('#slipCards').innerHTML.includes('Source-declared standard offer.'));
 assert(node('#slipMessage').textContent.includes('2 have an unreported offer type'));
+context.fixture.slips['2'][0].searchComplete=true;node('#generate').onclick();
+assert(node('#slipCards').innerHTML.includes('Exact ranking of current matched offers'));
+context.fixture.slips['2'][0].searchComplete=false;node('#generate').onclick();
+assert(node('#slipCards').innerHTML.includes('Bounded ranking search'));
 for(const row of legs)row.offerObservedAt=new Date(now-16*60000).toISOString();
 vm.runInContext('expireDisplayedSlips()',context);
 assert.equal(node('#generate').disabled,true);

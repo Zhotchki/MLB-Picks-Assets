@@ -79,8 +79,10 @@ def match(forecasts,board,now,norm):
             return NFL_NAMES.get(r.get('homeTeamAbbr')),NFL_NAMES.get(r.get('awayTeamAbbr'))
         return r.get('homeTeam'),r.get('awayTeam')
     # Resolve a provider's dated fixture only from explicit official-schedule metadata.
-    fixtures={}
+    fixtures={};forecast_index={}
     for r in forecasts:
+        if r.get('platformEligible') is not False:
+            forecast_index.setdefault((r.get('sport'),r.get('prop'),norm(r.get('player'))),[]).append(r)
         home,away=teams(r)
         if not r.get('scheduleVerified') or not r.get('officialGameDate') or not home or not away:continue
         key=(r['sport'],r['officialGameDate'],norm(home),norm(away))
@@ -122,7 +124,7 @@ def match(forecasts,board,now,norm):
             except (ValueError,TypeError,KeyError,AttributeError):continue
             prop=MARKETS.get(line.get('market_key'))
             candidates=[]
-            for r in forecasts:
+            for r in forecast_index.get((sport,prop,norm(line.get('player'))),[]):
                 if r.get('platformEligible') is False:continue
                 if r['sport']!=sport or r['prop']!=prop or norm(r['player'])!=norm(line.get('player')):continue
                 if abs((datetime.fromisoformat(r['startTime'].replace('Z','+00:00'))-start).total_seconds())>300:continue
@@ -145,21 +147,65 @@ def match(forecasts,board,now,norm):
             if not any(x['offerId']==r['offerId'] for x in out):out.append(r);counts['matched']+=1
     return out,counts
 
+def _offer_key(row):
+    return str(row.get('offerId') or row.get('id') or '|'.join(str(row.get(k,'')) for k in ('sport','gameId','playerId','prop','direction','platformLine')))
+
+def _player(row):return str(row['sport'])+':'+str(row['playerId'])
+def _event(row):return str(row['sport'])+':'+str(row['gameId'])
+
+def slip_sets(picks,sizes=(2,3,4,5,6,8),count=5):
+    """Rank all requested sizes once; exact event DP unless players repeat across events."""
+    sizes=sorted(set(sizes))
+    if any(size not in (2,3,4,5,6,8) for size in sizes):raise ValueError('Unsupported slip size')
+    if not sizes:return {}
+    if count<1:return {str(size):[] for size in sizes}
+    pool=[]
+    for row in picks:
+        try:p=float(row['probability'])
+        except (KeyError,ValueError,TypeError):continue
+        if isinstance(row['probability'],bool) or not math.isfinite(p) or not 0<p<=1:continue
+        if row.get('actionable') is not True or row.get('platform')!='Sleeper' or row.get('platformEligible') is False:continue
+        if any(row.get(key) is None for key in ('sport','gameId','playerId')):continue
+        pool.append(dict(row,probability=p))
+    pool.sort(key=lambda row:(-row['probability'],_offer_key(row)))
+    seen=set();unique=[]
+    for row in pool:
+        key=_offer_key(row)
+        if key in seen:continue
+        seen.add(key);unique.append(row)
+    groups={};player_events={}
+    for row in unique:
+        groups.setdefault(_event(row),[]).append(row)
+        player_events.setdefault(_player(row),set()).add(_event(row))
+    maximum=min(max(sizes),len(groups))
+    def rank(item):return -item[0],tuple(sorted(_offer_key(row) for row in item[1]))
+    complete=all(len(events)==1 for events in player_events.values())
+    dp={0:[(1.0,[])]}
+    if complete:
+        # All choices from an event have the same future feasibility. The best K
+        # prefixes per leg count and best K offers per event suffice for the exact top K.
+        for event in sorted(groups):
+            options=groups[event][:count]
+            for length in range(maximum,0,-1):
+                candidates=dp.get(length,[])+[(p*row['probability'],legs+[row]) for p,legs in dp.get(length-1,[]) for row in options]
+                dp[length]=sorted(candidates,key=rank)[:count]
+        method='EXACT_EVENT_DP'
+    else:
+        # Cross-event player conflicts invalidate event-only dominance. Preserve
+        # a bounded player-aware fallback and explicitly label its ranking limit.
+        beam=[(1.0,[],set(),set())]
+        for row in unique:
+            player,event=_player(row),_event(row)
+            added=[(p*row['probability'],legs+[row],players|{player},events|{event})
+                   for p,legs,players,events in beam if len(legs)<maximum and player not in players and event not in events]
+            buckets={}
+            for item in beam+added:buckets.setdefault(len(item[1]),[]).append(item)
+            beam=[item for items in buckets.values() for item in sorted(items,key=rank)[:max(128,count)]]
+        dp={length:sorted([(item[0],item[1]) for item in beam if len(item[1])==length],key=rank)[:count] for length in sizes}
+        method='BOUNDED_PLAYER_BEAM'
+    return {str(size):[{'legs':legs,'probability':p,'method':'INDEPENDENT_EVENTS_ESTIMATE',
+                       'rankingMethod':method,'searchComplete':complete,'payoutMultiplier':None}
+                      for p,legs in dp.get(size,[])] for size in sizes}
+
 def slips(picks,size,count=5):
-    """Bounded beam search; independent-event estimate, no global-optimum claim."""
-    if size not in (2,3,4,5,6,8):raise ValueError('Unsupported slip size')
-    pool=sorted(picks,key=lambda r:-r['probability'])[:200]
-    beam=[(1.0,[],set(),set())]
-    for i,r in enumerate(pool):
-        if not r.get('actionable') or r.get('platform')!='Sleeper':continue
-        player=r['sport']+':'+str(r['playerId']);event=r['sport']+':'+str(r['gameId'])
-        added=[]
-        for p,legs,players,events in beam:
-            if len(legs)<size and player not in players and event not in events:
-                added.append((p*r['probability'],legs+[r],players|{player},events|{event}))
-        buckets={}
-        for item in beam+added:buckets.setdefault(len(item[1]),[]).append(item)
-        beam=[]
-        for length,items in buckets.items():beam.extend(sorted(items,key=lambda v:-v[0])[:128])
-    final=sorted((x for x in beam if len(x[1])==size),key=lambda v:-v[0])[:count]
-    return [{'legs':legs,'probability':p,'method':'INDEPENDENT_EVENTS_ESTIMATE','payoutMultiplier':None} for p,legs,_,_ in final]
+    return slip_sets(picks,(size,),count)[str(size)]
