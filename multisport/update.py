@@ -8,7 +8,7 @@ from zoneinfo import ZoneInfo
 from collections import Counter, defaultdict
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '0.5.4'
+VERSION = '0.5.5'
 API = 'https://statsapi.mlb.com/api/v1/'
 STAT_KEYS = {'Hits': 'hits', 'Runs': 'runs', 'RBI': 'rbi', 'Bases': 'totalBases', 'Walks': 'baseOnBalls', 'Strikeouts': 'strikeOuts', 'Stolen Bases': 'stolenBases', 'Home Runs': 'homeRuns'}
 
@@ -209,7 +209,10 @@ def grade_mlb(ledger, now):
         if status['abstractGameState'] != 'Final': continue
         found = [p for s in box(r['gameId'])['teams'].values() for p in s['players'].values() if p['person']['id']==r['playerId']]
         stats = found[0].get('stats',{}).get('batting',{}) if found else {}
-        if number(stats.get('plateAppearances')) in (None,0):
+        appearances = number(stats.get('plateAppearances'))
+        # Incomplete final boxscores are retried; absence is not proof of DNP.
+        if appearances is None or appearances < 0: continue
+        if appearances == 0:
             r.update(resultStatus='VOID', voidReason='No plate appearance'); continue
         val = actual(r['prop'],stats)
         if val is None: continue

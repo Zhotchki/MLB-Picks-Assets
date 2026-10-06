@@ -1,4 +1,4 @@
-# MultiSport Pick’em v0.5.4
+# MultiSport Pick’em v0.5.5
 
 Dedicated app: https://zhotchki.github.io/MLB-Picks-Assets/multisport/
 
@@ -94,3 +94,7 @@ The existing daily/monthly reservations and provider-account counters remain har
 The slip builder reports fresh exact-line offers, unique sport/player identities and unique sport/game identities. Available options show their computed slip count. Exclusion details distinguish expired boards/individual lines, unvalidated sports, unsupported props/periods, unverified fixture/time/type, missing eligible player/prop forecasts and unmatched model lines. Unavailable-player forecast rows and unvalidated baseline forecast rows are labeled separately from line counts; multiple targets do not inflate unique player/game counts. Exclusion reasons describe the current retained board and source snapshot, not personal wagers or complete platform coverage.
 
 Tests verify no off-hours requests, one read per near-game window, missed-window/started-game exclusion, shared starts, remaining-budget prioritization, UTC-day plan caps, baseline/unverified-start exclusion, explicit interval override, distinct expiry/exclusion counters, support counts and planner timing in the actual page renderer.
+
+## v0.5.5 — incomplete MLB results
+
+Missing players, missing batting data and missing plate-appearance counts in a final boxscore remain pending for a later retry. Only an explicit zero plate-appearance count voids a no-appearance forecast. Missing target stats remain pending. Frozen captures and existing ledger results are preserved. Added regression tests for incomplete boxscores, explicit zero appearances and missing target stats.

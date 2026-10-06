@@ -31,6 +31,42 @@ class AdapterTests(SecretFreeTests):
         r={'sport':'MLB','prop':'Hits','direction':'MORE','sourceProbability':.9}
         self.assertEqual(corrected(r,{'offsets':{'MLB|Hits|MORE':1}}),.99)
 
+class MLBGradingTests(SecretFreeTests):
+    def grade(self, players):
+        import update
+        from datetime import datetime, timezone
+        from unittest.mock import patch
+        row={'sport':'MLB','resultStatus':'PENDING','gameId':10,'playerId':99,
+             'startTime':'2030-01-01T16:00:00Z','prop':'Hits','target':1,
+             'probability':.8,'capturedAt':'2030-01-01T14:00:00Z'}
+        def get(url):
+            if 'schedule?' in url:
+                return {'dates':[{'games':[{'gamePk':10,'status':{'abstractGameState':'Final','codedGameState':'F'}}]}]}
+            return {'teams':{'home':{'players':players},'away':{'players':{}}}}
+        with patch.object(update,'get',get):
+            update.grade_mlb([row],datetime(2030,1,1,19,tzinfo=timezone.utc))
+        self.assertEqual(row['probability'],.8)
+        self.assertEqual(row['capturedAt'],'2030-01-01T14:00:00Z')
+        return row
+
+    def test_incomplete_final_boxscore_stays_pending(self):
+        for players in ({},{'ID99':{'person':{'id':99},'stats':{}}},
+                        {'ID99':{'person':{'id':99},'stats':{'batting':{'hits':0}}}}):
+            with self.subTest(players=players):
+                row=self.grade(players)
+                self.assertEqual(row['resultStatus'],'PENDING')
+                self.assertNotIn('outcome',row)
+
+    def test_explicit_zero_appearances_is_void(self):
+        row=self.grade({'ID99':{'person':{'id':99},'stats':{'batting':{'plateAppearances':0}}}})
+        self.assertEqual(row['resultStatus'],'VOID')
+        self.assertNotIn('outcome',row)
+
+    def test_missing_target_stat_stays_pending(self):
+        row=self.grade({'ID99':{'person':{'id':99},'stats':{'batting':{'plateAppearances':4}}}})
+        self.assertEqual(row['resultStatus'],'PENDING')
+        self.assertNotIn('outcome',row)
+
 class PipelineTests(SecretFreeTests):
     def test_pregame_capture_is_immutable_and_final_result_is_graded(self):
         import update, tempfile, json, io
