@@ -61,6 +61,12 @@ class PipelineTests(unittest.TestCase):
             self.assertEqual(graded['actual'],2);self.assertEqual(graded['probability'],.8)
 
 class OutageTests(unittest.TestCase):
+    def setUp(self):
+        from unittest.mock import patch
+        # Integration fixtures must never consume a real provider key or credits.
+        key=patch.dict('os.environ',{'PARLAY_API_KEY':''})
+        key.start();self.addCleanup(key.stop)
+
     def test_slow_import_cannot_backdate_forecast_after_kickoff(self):
         import update, tempfile, json, io
         from pathlib import Path
