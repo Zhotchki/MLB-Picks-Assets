@@ -34,6 +34,7 @@ jobs:
         run: |
           node multisport/test_eligibility.js
           node multisport/test_validation_view.js
+          node multisport/test_slip_view.js
           python -m unittest discover -s multisport -p 'test_*.py'
           python multisport/update.py
       - name: Preserve predictions and publish current data

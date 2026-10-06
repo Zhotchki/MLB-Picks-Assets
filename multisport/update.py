@@ -8,7 +8,7 @@ from zoneinfo import ZoneInfo
 from collections import Counter, defaultdict
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '0.5.0'
+VERSION = '0.5.1'
 API = 'https://statsapi.mlb.com/api/v1/'
 STAT_KEYS = {'Hits': 'hits', 'Runs': 'runs', 'RBI': 'rbi', 'Bases': 'totalBases', 'Walks': 'baseOnBalls', 'Strikeouts': 'strikeOuts', 'Stolen Bases': 'stolenBases', 'Home Runs': 'homeRuns'}
 
@@ -179,7 +179,7 @@ def collect_mlb(now, today, model):
              'sport':'MLB','gameId':g['gamePk'],'playerId':player['person']['id'],'player':player['person']['fullName'],
              'team':row['Team'],'opponent':row['Opponent'],'homeTeam':team_info[g['teams']['home']['team']['id']]['name'],'awayTeam':team_info[g['teams']['away']['team']['id']]['name'],'prop':row['Prop'],'direction':'MORE',
              'target':target,'projection':number(row.get('Model Projection')), 'sourceProbability':p,
-             'samples':row['Probability Samples'],'startTime':g['gameDate'], 'capturedAt':now.isoformat(),
+             'samples':row['Probability Samples'],'startTime':g['gameDate'],'officialGameDate':g.get('officialDate',today.isoformat()),'scheduleVerified':True, 'capturedAt':now.isoformat(),
              'lineupStatus':row.get('Lineup Status'), 'probabilityStatus':row.get('Probability Status'),
              'platformLine':None,'platform':None,'actionable':False, 'resultStatus':'PENDING'}
         r['probability'] = corrected(r, model)
@@ -304,7 +304,7 @@ def run():
             'sports':{'MLB':mlb_status, 'NFL':nfl_status,'NBA':nba_status,'NHL':nhl_status},
             'picks':sorted(verified,key=lambda r:-r['probability']),'rejected':dict(rejected),'model':model,'validation':validation,
             'results':{'recorded':len(ledger),'graded':len(graded),'void':sum(r.get('resultStatus')=='VOID' for r in ledger),'frozenPredictionMetrics':frozen},
-            'slipStatus':'READY' if offers else 'WAITING_FOR_VERIFIED_PLATFORM_LINES','platformFeed':{k:v for k,v in board.items() if k!='sports'},'offerCounts':offer_counts,'offers':offers,'slips':{str(size):build_slips(offers,size) for size in (2,3,4,5,6,8)}}
+            'slipStatus':('REVIEW_REQUIRED' if any(r.get('requiresPlatformReview') for r in offers) else 'READY') if offers else 'WAITING_FOR_VERIFIED_PLATFORM_LINES','platformFeed':{**{k:v for k,v in board.items() if k!='sports'},'sportStatus':{s:{k:v for k,v in entry.items() if k!='rows'} for s,entry in board.get('sports',{}).items()}},'offerCounts':offer_counts,'offers':offers,'slips':{str(size):build_slips(offers,size) for size in (2,3,4,5,6,8)}}
     write('feed-state.json',feed_state); write('ledger.json',ledger); write('model.json',model); write('data.json',data)
     print(json.dumps({'verifiedForecasts':len(verified),'rejected':dict(rejected),'ledger':len(ledger),'graded':len(graded)}))
 

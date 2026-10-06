@@ -10,6 +10,10 @@ class PlatformTests(unittest.TestCase):
         self.now=datetime(2030,1,1,14,tzinfo=timezone.utc)
         self.forecast={'sport':'MLB','gameId':1,'playerId':99,'player':'Fixture Player','team':'AA','opponent':'BB','homeTeam':'Team A','awayTeam':'Team B','prop':'Hits','direction':'MORE','target':2,'probability':.7,'startTime':'2030-01-01T16:00:00Z'}
         self.row={'bookmaker':'sleeper','player':'Fixture Player','market_key':'player_hits','line':1.5,'home_team':'Team A','away_team':'Team B','commence_time':'2030-01-01T16:00:00Z','commence_time_reported':True,'canonical_event_id':'abc','age_seconds':3,'period':'FULL','odds_type':'standard'}
+    def scheduled(self):
+        self.forecast.update(scheduleVerified=True,officialGameDate='2030-01-01')
+        self.row.update(commence_time=None,commence_time_reported=False,game_date='2030-01-01',is_dfs_flat_payout=True)
+        self.row.pop('odds_type')
     def board(self):return {'sports':{'MLB':{'fetchedAtEpoch':self.now.timestamp(),'rows':[self.row]}}}
     def test_missing_key_makes_no_request(self):
         with tempfile.TemporaryDirectory() as tmp,patch.dict(os.environ,{'PARLAY_API_KEY':''}),patch('urllib.request.urlopen') as request:
@@ -47,4 +51,51 @@ class PlatformTests(unittest.TestCase):
         d=dict(a,playerId=101,gameId=2,probability=.6)
         result=slips([a,b,c,d],2);self.assertTrue(result);self.assertAlmostEqual(result[0]['probability'],.42)
         self.assertEqual(len({r['playerId'] for r in result[0]['legs']}),2)
+    def test_missing_kickoff_resolves_unique_official_fixture_and_flags_unknown_type(self):
+        self.scheduled()
+        rows,_=match([self.forecast],self.board(),self.now,norm)
+        self.assertEqual(len(rows),1)
+        self.assertEqual(rows[0]['kickoffSource'],'OFFICIAL_SCHEDULE')
+        self.assertTrue(rows[0]['requiresPlatformReview'])
+        self.assertEqual(rows[0]['platformOfferType'],'unreported')
+        self.assertIsNone(rows[0]['payoutMultiplier'])
+    def test_ambiguous_fixture_cannot_be_resolved(self):
+        self.scheduled()
+        other=dict(self.forecast,gameId=2,startTime='2030-01-01T19:00:00Z')
+        self.assertEqual(match([self.forecast,other],self.board(),self.now,norm)[0],[])
+    def test_missing_date_unverified_schedule_and_wrong_date_are_rejected(self):
+        self.scheduled()
+        for value in (None,'2030-01-02'):
+            self.row['game_date']=value
+            self.assertEqual(match([self.forecast],self.board(),self.now,norm)[0],[])
+        self.row['game_date']='2030-01-01';self.forecast['scheduleVerified']=False
+        self.assertEqual(match([self.forecast],self.board(),self.now,norm)[0],[])
+    def test_reversed_home_and_away_do_not_resolve(self):
+        self.scheduled();self.row.update(home_team='Team B',away_team='Team A')
+        self.assertEqual(match([self.forecast],self.board(),self.now,norm)[0],[])
+    def test_explicit_special_type_is_excluded_even_with_other_standard_tag(self):
+        for tag in ('demon','boosted','goblin',None):
+            self.row['projection_type']=tag
+            self.assertEqual(match([self.forecast],self.board(),self.now,norm)[0],[])
+    def test_unknown_type_requires_explicit_dfs_evidence(self):
+        self.row.pop('odds_type')
+        self.assertEqual(match([self.forecast],self.board(),self.now,norm)[0],[])
+        self.row['is_dfs_flat_payout']=True
+        self.assertTrue(match([self.forecast],self.board(),self.now,norm)[0][0]['requiresPlatformReview'])
+    def test_started_official_fixture_and_conflicting_timestamp_are_excluded(self):
+        self.scheduled();self.forecast['startTime']='2030-01-01T13:00:00Z'
+        self.assertEqual(match([self.forecast],self.board(),self.now,norm)[0],[])
+        self.forecast['startTime']='2030-01-01T16:00:00Z';self.row['commence_time']='2030-01-01T16:00:00Z'
+        self.assertEqual(match([self.forecast],self.board(),self.now,norm)[0],[])
+    def test_provider_market_alias_preserves_exact_line(self):
+        self.forecast['prop']='Walks';self.row['market_key']='player_bat_walks'
+        self.assertEqual(len(match([self.forecast],self.board(),self.now,norm)[0]),1)
+        self.row['line']=2.5
+        self.assertEqual(match([self.forecast],self.board(),self.now,norm)[0],[])
+    def test_nfl_official_home_away_and_dated_fixture(self):
+        self.scheduled()
+        self.forecast.update(sport='NFL',prop='Rush Yards',team='GB',opponent='CHI',homeTeamAbbr='GB',awayTeamAbbr='CHI')
+        self.row.update(market_key='player_rushing_yards',home_team='Green Bay Packers',away_team='Chicago Bears')
+        board={'sports':{'NFL':{'fetchedAtEpoch':self.now.timestamp(),'rows':[self.row]}}}
+        self.assertEqual(len(match([self.forecast],board,self.now,norm)[0]),1)
 if __name__=='__main__':unittest.main()
