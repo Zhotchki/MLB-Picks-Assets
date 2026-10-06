@@ -213,7 +213,7 @@ def run():
     from nhl_adapter import collect as collect_nhl, grade as grade_nhl
     nhl_status = {'status':'UNAVAILABLE','sourceStatus':'UNAVAILABLE','verifiedRows':0}
     try:
-        nhl_rows,nhl_status,nhl_rejected = collect_nhl(now,ROOT,model,corrected,norm)
+        nhl_rows,nhl_status,nhl_rejected = collect_nhl(datetime.now(timezone.utc),ROOT,model,corrected,norm)
         verified.extend(nhl_rows)
         rejected.update({'NHL:'+k:v for k,v in nhl_rejected.items()})
     except Exception:
@@ -222,7 +222,7 @@ def run():
     from nba_adapter import collect as collect_nba, grade as grade_nba
     nba_status = {'status':'UNAVAILABLE','sourceStatus':'UNAVAILABLE','verifiedRows':0}
     try:
-        nba_rows,nba_status,nba_rejected = collect_nba(now,ROOT,model,corrected,norm)
+        nba_rows,nba_status,nba_rejected = collect_nba(datetime.now(timezone.utc),ROOT,model,corrected,norm)
         verified.extend(nba_rows)
         rejected.update({'NBA:'+k:v for k,v in nba_rejected.items()})
     except Exception:

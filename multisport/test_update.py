@@ -68,9 +68,11 @@ class OutageTests(unittest.TestCase):
         from unittest.mock import patch
         from contextlib import redirect_stdout
         class Clock(datetime):
-            times=iter([datetime(2030,1,1,14,tzinfo=timezone.utc),datetime(2030,1,1,14,10,tzinfo=timezone.utc),datetime(2030,1,1,14,11,tzinfo=timezone.utc)])
+            calls=0
             @classmethod
-            def now(cls,tz=None):return next(cls.times)
+            def now(cls,tz=None):
+                cls.calls+=1
+                return datetime(2030,1,1,14,0 if cls.calls==1 else 10,tzinfo=timezone.utc)
         row={'id':'NFL:late','sport':'NFL','probability':.8,'startTime':'2030-01-01T14:05:00Z'}
         with tempfile.TemporaryDirectory() as tmp, patch.object(update,'ROOT',Path(tmp)),patch.object(update,'datetime',Clock),patch.object(update,'collect_mlb',return_value=([],{'sourceStatus':'CURRENT'}, {},None,None)),patch.object(update,'grade_mlb'),patch('nfl_adapter.collect',return_value=([row],{'sourceStatus':'CURRENT'},{})),patch('nfl_adapter.grade'),patch('nhl_adapter.collect',return_value=([],{'sourceStatus':'CURRENT'},{})),patch('nhl_adapter.grade'),patch('nba_adapter.collect',return_value=([],{'sourceStatus':'CURRENT'},{})),patch('nba_adapter.grade'),redirect_stdout(io.StringIO()):
             update.run()
