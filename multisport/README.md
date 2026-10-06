@@ -1,4 +1,4 @@
-# MultiSport Pick’em v0.2.0
+# MultiSport Pick’em v0.3.0
 
 Dedicated app: https://zhotchki.github.io/MLB-Picks-Assets/multisport/
 
@@ -14,8 +14,20 @@ Mondays: candidate additive calibration offsets (minimum 50 samples per sport/pr
 
 ## Current limits and next implementation
 
-MLB forecasts only. NFL/NBA/NHL intentionally marked NOT_CONNECTED. Current MLB Reference Line values are empty; Probability Threshold is a MODEL TARGET, not a Sleeper/platform line. Therefore no playable slips or payouts are offered. Never turn a target into a fictitious line or describe reciprocal probability as an actual payout.
+MLB and NFL forecast adapters connected. NBA/NHL remain NOT_CONNECTED. Current MLB Reference Line values are empty; Probability Threshold is a MODEL TARGET, not a Sleeper/platform line. Therefore no playable slips or payouts are offered. Never turn a target into a fictitious line or describe reciprocal probability as an actual payout.
 
-Next: connect a permitted automatic platform board/feed; attach exact player/event/prop/direction/line/payout identifiers and recalculate probability at that exact line. Then implement mixed-sport slip optimization with no duplicate player, upcoming verified events, provider restrictions, and explicitly qualified joint probabilities. Build NFL, NBA and NHL data adapters separately using expected snaps/minutes/TOI. Until fitted joint dependencies exist, exclude same-event legs rather than inventing correlation coefficients. Do not claim the globally highest win probability from a heuristic search.
+Next: activate and verify the prepared platform feed; attach exact player/event/prop/direction/line/payout identifiers and recalculate probability at that exact line. Then implement mixed-sport slip optimization with no duplicate player, upcoming verified events, provider restrictions, and explicitly qualified joint probabilities. Build NFL, NBA and NHL data adapters separately using expected snaps/minutes/TOI. Until fitted joint dependencies exist, exclude same-event legs rather than inventing correlation coefficients. Do not claim the globally highest win probability from a heuristic search.
 
 Run checks: `python -m unittest discover -s multisport -p 'test_*.py'`; update: `python multisport/update.py`. Runtime uses Python 3.12 stdlib, no credentials or paid dependencies.
+
+## v0.3: NFL adapter and optional platform feed
+
+NFL reads the existing app's JSON endpoint automatically. It imports automatic model targets only, verifies season/week, Eastern-time kickoffs against nflverse, stable GSIS player ID/team against Sleeper roster, availability, expected snaps, and at least four historical games. Four games is a minimum support gate, not calibration proof. Started games and prior-week projections are excluded. NFL results are graded against final scheduled scores plus matching GSIS/season/week/team/opponent stats from nflverse. Missing rows or stats remain pending, never inferred as losses. NFL source failures do not block MLB updates.
+
+Live lines connector: ParlayAPI's documented /v1/sports/{sport}/props endpoint, scoped to Sleeper, for MLB/NFL/NBA/NHL. It is UNCONNECTED until the owner adds PARLAY_API_KEY in repository Actions secrets. Never place the key in source, a public file, or chat. Personal key setup: https://parlay-api.com/ ; repository secret settings: https://github.com/Zhotchki/MLB-Picks-Assets/settings/secrets/actions . Default cadence is two board polls per day per sport, maximum 900 reserved credits/month. Four sports at this cadence use at most 744 credits in a 31-day month before any failures. No automatic pagination, paid subscription, credit purchase, or rate increase. Documentation claims a 1,000-credit free tier; coverage and pricing need confirmation with the actual account. To change cadence/budget, explicitly set PICKEM_REFRESH_MINUTES / PARLAY_MONTHLY_CREDIT_CAP after choosing a suitable plan. Slow default polling intentionally means offers disappear after 15 minutes; it is not a continuous real-time four-sport board.
+
+The live /props path has not been tested against an authenticated account. Contract tests use fixtures. A key is necessary to verify real sport coverage, projection types, periods, matching and completeness headers. Board diagnostics preserve truncation/degradation/has-more flags; do not claim exhaustive coverage. No key: forecasts, result grading and model review continue without live-line requests.
+
+Match only a named standard, FULL-game offer with reported kickoff, canonical event ID, known market, unique player identity, matching teams, and observation age <=15 minutes. Match the EXACT model line; no interpolation or assigning a forecast probability to a different platform line. Price fields from DFS midpoint/effective conversions are not used as estimated win probabilities or payouts. Unknown offer type, period or time is excluded. NBA/NHL remain without forecast adapters even if their boards are observed.
+
+Slip search supports 2/3/4/5/6/8 legs, 200-offer pool, 128 beam states per leg count and up to five returned slips per size. No repeated player or game; Sleeper offers only. Joint probability assumes independence across games, excludes same-game combinations, and is explicitly labeled an estimate. This is a bounded search of matched available offers, not a proven global optimum or learned correlation model. Source payout unavailable means no payout is displayed. The result ledger remains a forecast ledger; provider-specific wager/slip settlement needs a separate ledger in a future release.

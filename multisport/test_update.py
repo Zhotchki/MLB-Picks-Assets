@@ -42,10 +42,10 @@ class PipelineTests(unittest.TestCase):
             if 'schedule?' in url:
                 g=dict(event,status={'abstractGameState':'Final' if state['final'] else 'Preview','codedGameState':'F' if state['final'] else 'P'})
                 return {'dates':[{'games':[g]}]}
-            if 'teams?' in url:return {'teams':[{'id':1,'abbreviation':'AA'},{'id':2,'abbreviation':'BB'}]}
+            if 'teams?' in url:return {'teams':[{'id':1,'abbreviation':'AA','name':'Team A'},{'id':2,'abbreviation':'BB','name':'Team B'}]}
             if 'boxscore' in url:return {'teams':{'home':{'players':{'ID99':{'person':{'id':99,'fullName':'Test Player'},'stats':{'batting':{'plateAppearances':4,'hits':2}}}}},'away':{'players':{}}}}
             raise AssertionError(url)
-        with tempfile.TemporaryDirectory() as tmp, patch.object(update,'ROOT',Path(tmp)),patch.object(update,'datetime',Clock),patch.object(update,'get',mock_get),redirect_stdout(io.StringIO()):
+        with tempfile.TemporaryDirectory() as tmp, patch.object(update,'ROOT',Path(tmp)),patch.object(update,'datetime',Clock),patch.object(update,'get',mock_get),redirect_stdout(io.StringIO()),patch('nfl_adapter.collect',return_value=([],{'status':'NOT_CONNECTED'},{})),patch('nfl_adapter.grade'):
             update.run()
             first=json.loads((Path(tmp)/'ledger.json').read_text())
             self.assertEqual(len(first),1); self.assertEqual(first[0]['probability'],.8)

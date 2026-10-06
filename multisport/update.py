@@ -1,4 +1,4 @@
-"""Automatic v0.2 MLB adapter, immutable forecasts, final grading and weekly validation.
+"""Automatic v0.3 MLB/NFL adapter, immutable forecasts, final grading and weekly validation.
 Uses only stdlib. Platform lines are NOT inferred from model thresholds.
 """
 import json, math, unicodedata, urllib.request, urllib.parse, os
@@ -8,13 +8,13 @@ from zoneinfo import ZoneInfo
 from collections import Counter, defaultdict
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '0.2.0'
+VERSION = '0.3.0'
 API = 'https://statsapi.mlb.com/api/v1/'
 STAT_KEYS = {'Hits': 'hits', 'Runs': 'runs', 'RBI': 'rbi', 'Bases': 'totalBases', 'Walks': 'baseOnBalls', 'Strikeouts': 'strikeOuts', 'Stolen Bases': 'stolenBases', 'Home Runs': 'homeRuns'}
 
-def get(url):
-    req = urllib.request.Request(url, headers={'User-Agent': 'MultiSport-Pickem/0.2'})
-    with urllib.request.urlopen(req, timeout=40) as response:
+def get(url,timeout=40):
+    req = urllib.request.Request(url, headers={'User-Agent': 'MultiSport-Pickem/0.3'})
+    with urllib.request.urlopen(req, timeout=timeout) as response:
         return json.load(response)
 
 def read(name, default):
@@ -68,11 +68,11 @@ def learn(ledger, incumbent, today):
     if today.weekday() != 0 or incumbent.get('lastReviewWeek') == week: return incumbent
     # Split by entire games so multiple props for one game never cross train/test.
     rows = [r for r in ledger if r.get('outcome') in (0, 1) and r.get('resultStatus') == 'GRADED']
-    games = sorted({(r['startTime'],r['gameId']) for r in rows})
+    games = sorted({(r['startTime'],str(r['sport'])+':'+str(r['gameId'])) for r in rows})
     cut = int(len(games)*.8)
     train_games = {g for _,g in games[:cut]}
-    train = [r for r in rows if r['gameId'] in train_games]
-    test = [r for r in rows if r['gameId'] not in train_games]
+    train = [r for r in rows if r['sport']+':'+str(r['gameId']) in train_games]
+    test = [r for r in rows if r['sport']+':'+str(r['gameId']) not in train_games]
     updated = dict(incumbent, lastReviewWeek=week)
     if len(train) < 200 or len(test) < 50 or len(games) < 10:
         updated['review'] = {'status': 'COLLECTING_RESULTS', 'trainingRows': len(train), 'holdoutRows': len(test), 'games': len(games)}
@@ -152,7 +152,7 @@ def run():
         player = identity[0]
         r = {'id':f"MLB:{g['gamePk']}:{player['person']['id']}:{row['Prop']}:MORE:{target}",
              'sport':'MLB','gameId':g['gamePk'],'playerId':player['person']['id'],'player':player['person']['fullName'],
-             'team':row['Team'],'opponent':row['Opponent'],'prop':row['Prop'],'direction':'MORE',
+             'team':row['Team'],'opponent':row['Opponent'],'homeTeam':team_info[g['teams']['home']['team']['id']]['name'],'awayTeam':team_info[g['teams']['away']['team']['id']]['name'],'prop':row['Prop'],'direction':'MORE',
              'target':target,'projection':number(row.get('Model Projection')), 'sourceProbability':p,
              'samples':row['Probability Samples'],'startTime':g['gameDate'], 'capturedAt':now.isoformat(),
              'lineupStatus':row.get('Lineup Status'), 'probabilityStatus':row.get('Probability Status'),
@@ -160,13 +160,22 @@ def run():
         r['probability'] = corrected(r, model)
         r['modelVersion'] = model['version']
         verified.append(r)
+    from nfl_adapter import collect as collect_nfl, grade as grade_nfl
+    nfl_status = {'status':'UNAVAILABLE','sourceStatus':'UNAVAILABLE','verifiedRows':0}
+    try:
+        nfl_rows,nfl_status,nfl_rejected = collect_nfl(now,lambda url:get(url,timeout=90),model,corrected,ROOT,norm)
+        verified.extend(nfl_rows)
+        rejected.update({'NFL:'+k:v for k,v in nfl_rejected.items()})
+    except Exception as error:
+        nfl_status['detail'] = 'NFL feed could not be verified this run; MLB continues.'
+        rejected['NFL:unavailable_source'] += 1
     # Immutable first pregame snapshot; later refreshes never overwrite predictions.
     ids = {r['id'] for r in ledger}
     for r in verified:
         if r['id'] not in ids: ledger.append(dict(r)); ids.add(r['id'])
     event_cache = {}
     for r in ledger:
-        if r.get('resultStatus') != 'PENDING' or iso(r['startTime']) > now: continue
+        if r['sport'] != 'MLB' or r.get('resultStatus') != 'PENDING' or iso(r['startTime']) > now: continue
         if r['gameId'] not in event_cache:
             event_cache[r['gameId']] = get(API+'schedule?'+urllib.parse.urlencode({'sportId':1,'gamePk':r['gameId']}))
         dates = event_cache[r['gameId']]
@@ -185,15 +194,22 @@ def run():
         val = actual(r['prop'],stats)
         if val is None: continue
         r.update(resultStatus='GRADED', actual=val, outcome=int(val>=r['target']), gradedAt=now.isoformat())
+    try:
+        grade_nfl(ledger,now,ROOT)
+    except Exception:
+        nfl_status['gradingStatus'] = 'AWAITING_RESULT_SOURCE'
     model = learn(ledger,model,today)
     graded = [r for r in ledger if r.get('resultStatus')=='GRADED']
     frozen = {'n':len(graded), 'brier':sum((r['probability']-r['outcome'])**2 for r in graded)/len(graded) if graded else None}
+    from platform_feed import fetch as fetch_board,match as match_offers,slips as build_slips
+    board,feed_state=fetch_board(ROOT,now)
+    offers,offer_counts=match_offers(verified,board,now,norm)
     data = {'version':VERSION,'updatedAt':now.isoformat(),'sourceUpdatedAt':timestamp,'sourceRefresh':refresh,'sourceStatus':'CURRENT' if source_fresh else 'STALE',
-            'sports':{'MLB':{'status':'LIVE_FORECASTS','verifiedRows':len(verified)}, 'NFL':{'status':'NOT_CONNECTED'},'NBA':{'status':'NOT_CONNECTED'},'NHL':{'status':'NOT_CONNECTED'}},
+            'sports':{'MLB':{'status':'LIVE_FORECASTS','sourceStatus':'CURRENT' if source_fresh else 'STALE','verifiedRows':sum(r['sport']=='MLB' for r in verified)}, 'NFL':nfl_status,'NBA':{'status':'NOT_CONNECTED'},'NHL':{'status':'NOT_CONNECTED'}},
             'picks':sorted(verified,key=lambda r:-r['probability']),'rejected':dict(rejected),'model':model,
             'results':{'recorded':len(ledger),'graded':len(graded),'void':sum(r.get('resultStatus')=='VOID' for r in ledger),'frozenPredictionMetrics':frozen},
-            'slipStatus':'WAITING_FOR_VERIFIED_PLATFORM_LINES'}
-    write('ledger.json',ledger); write('model.json',model); write('data.json',data)
+            'slipStatus':'READY' if offers else 'WAITING_FOR_VERIFIED_PLATFORM_LINES','platformFeed':{k:v for k,v in board.items() if k!='sports'},'offerCounts':offer_counts,'offers':offers,'slips':{str(size):build_slips(offers,size) for size in (2,3,4,5,6,8)}}
+    write('feed-state.json',feed_state); write('ledger.json',ledger); write('model.json',model); write('data.json',data)
     print(json.dumps({'verifiedForecasts':len(verified),'rejected':dict(rejected),'ledger':len(ledger),'graded':len(graded)}))
 
 if __name__ == '__main__': run()
