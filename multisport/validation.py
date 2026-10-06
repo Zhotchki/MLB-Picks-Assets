@@ -2,7 +2,7 @@
 Separate source/model versions and split entire events chronologically.
 Repeated thresholds do not count as additional player-game support.
 """
-import math
+import math,json,hashlib
 from collections import defaultdict,Counter
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -20,7 +20,10 @@ def finite(v):return isinstance(v,(int,float)) and not isinstance(v,bool) and ma
 def player_game(r):return (r['sport'],str(r['gameId']),str(r['playerId']))
 def event(r):return (r['sport'],str(r['gameId']))
 def source_version(r):return str(r.get('baselineVersion') or r.get('upstreamModelVersion') or 'upstream-unspecified')
-def key(r):return (r['sport'],r['prop'],r['direction'],source_version(r),str(r.get('modelVersion','unspecified')))
+def calibration_signature(group,offset):
+    payload=json.dumps({'method':'additive-clamped-v1','group':group,'offset':float(offset)},sort_keys=True)
+    return 'cal-'+hashlib.sha256(payload.encode()).hexdigest()[:12]
+def key(r):return (r['sport'],r['prop'],r['direction'],source_version(r),str(r.get('calibrationGroupVersion') or r.get('modelVersion','unspecified')))
 
 def pregame(r):
     try:
@@ -99,10 +102,12 @@ def report(ledger):
         seen.add(r['id']);buckets[key(r)].append(r)
     groups=[];sport_rows=defaultdict(list)
     for k,rows in sorted(buckets.items()):
-        sport,prop,direction,source,model=k;completed=[r for r in rows if graded(r)]
+        sport,prop,direction,source,calibration=k;completed=[r for r in rows if graded(r)]
+        versions=sorted({str(r.get('modelVersion','unspecified')) for r in rows})
         invalid_results=sum(r.get('resultStatus')=='GRADED' and not graded(r) for r in rows)
         projection=projection_errors(completed);review=holdout(completed)
-        groups.append({'sport':sport,'prop':prop,'direction':direction,'sourceVersion':source,'modelVersion':model,
+        groups.append({'sport':sport,'prop':prop,'direction':direction,'sourceVersion':source,'modelVersion':versions[0],
+                       'modelVersions':versions,'calibrationVersion':calibration,
                        'status':'COLLECTING_RESULTS' if not completed else review['status'],
                        'recorded':support(rows),'graded':support(completed),'pending':sum(r.get('resultStatus')=='PENDING' for r in rows),
                        'void':sum(r.get('resultStatus')=='VOID' for r in rows),'invalidResults':invalid_results,

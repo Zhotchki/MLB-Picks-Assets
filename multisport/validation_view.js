@@ -21,7 +21,7 @@ function validationMarkup(report, sport = 'All sports') {
       ' · Training-only reference: '+validationValue(review.referenceScores.brier)+
       '<br><small>Better on both Brier and log loss: '+(review.beatsReference?'yes':'no')+'. This comparison does not enable playable offers.</small></p>' : '';
     return '<article class="panel"><h2>'+esc(g.sport)+' · '+esc(g.prop)+'</h2><p>'+esc(statuses[g.status] || g.status)+
-      '</p><small>'+esc(g.sourceVersion || 'No source forecasts yet')+(g.modelVersion?' · '+esc(g.modelVersion):'')+'</small><p>'+esc(g.recorded.forecasts)+
+      '</p><small>'+esc(g.sourceVersion || 'No source forecasts yet')+(g.modelVersion?' · '+esc((g.modelVersions || [g.modelVersion]).join(', ')):'')+'</small><p>'+esc(g.recorded.forecasts)+
       ' saved targets · '+esc(g.recorded.playerGames)+' player-games<br>'+esc(g.graded.playerGames)+' graded player-games · '+esc(g.pending)+' pending targets · '+esc(g.void)+' void</p>'+
       '<table class="validation-table"><thead><tr><th>Support</th><th>Training / needed</th><th>Holdout / needed</th></tr></thead><tbody>'+progress+'</tbody></table>'+
       '<p>All graded targets · game-balanced scores<br><small>Brier '+validationValue(score.brier)+' · Log loss '+validationValue(score.logLoss)+

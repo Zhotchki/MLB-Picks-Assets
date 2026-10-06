@@ -1,6 +1,6 @@
 import unittest
 from datetime import datetime,timedelta,timezone
-from validation import report,score,chronological,graded,holdout,support
+from validation import report,score,chronological,graded,holdout,support,calibration_signature
 
 def row(day=0,player=1,target=3,sport='NHL',outcome=1,probability=.8):
     start=datetime(2026,10,1,23,tzinfo=timezone.utc)+timedelta(days=day)
@@ -32,6 +32,15 @@ class ValidationTests(unittest.TestCase):
         a=row();b=dict(row(day=1),baselineVersion='shots-2');c=dict(row(day=2),modelVersion='weekly-2')
         groups=[g for g in report([a,b,c])['groups'] if g['sport']=='NHL']
         self.assertEqual(len(groups),3);self.assertTrue(all(g['graded']['playerGames']==1 for g in groups))
+
+    def test_unrelated_global_release_does_not_fragment_same_group_correction(self):
+        signature=calibration_signature('NHL|Shots|MORE|shots-1',0)
+        a=dict(row(),calibrationGroupVersion=signature)
+        b=dict(row(day=1),modelVersion='weekly-2',calibrationGroupVersion=signature)
+        groups=[g for g in report([a,b])['groups'] if g['sport']=='NHL']
+        self.assertEqual(len(groups),1);self.assertEqual(groups[0]['graded']['playerGames'],2)
+        self.assertEqual(groups[0]['modelVersions'],['baseline','weekly-2'])
+        self.assertNotEqual(signature,calibration_signature('NHL|Shots|MORE|shots-1',.01))
 
     def test_holdout_keeps_all_players_and_targets_of_game_together(self):
         rows=[row(day=d,player=p,target=t) for d in range(10) for p in range(3) for t in (1,2,3)]

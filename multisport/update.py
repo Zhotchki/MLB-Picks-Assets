@@ -264,7 +264,11 @@ def run():
     active = [r for r in verified if iso(r['startTime']) > captured_at]
     rejected['started_during_refresh'] += len(verified)-len(active)
     verified = active
-    for r in verified: r['capturedAt'] = captured_at.isoformat()
+    from validation import calibration_signature
+    for r in verified:
+        r['capturedAt'] = captured_at.isoformat()
+        r['calibrationOffset'] = model.get('offsets',{}).get(group(r),0)
+        r['calibrationGroupVersion'] = calibration_signature(group(r),r['calibrationOffset'])
     for sport,status in (('MLB',mlb_status),('NFL',nfl_status),('NBA',nba_status),('NHL',nhl_status)):
         status['verifiedRows'] = sum(r['sport']==sport for r in verified)
     # Immutable first pregame snapshot; later refreshes never overwrite predictions.
