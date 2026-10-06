@@ -2,7 +2,7 @@
 Default two daily polls across four sports cost at most 744 credits / 31 days
 before truncation; no pagination is performed automatically. No API key is saved.
 """
-import os,json,urllib.request,urllib.parse,math
+import os,json,urllib.request,urllib.parse,urllib.error,math
 from datetime import datetime,timezone
 from pathlib import Path
 SPORTS={'MLB':'baseball_mlb','NFL':'americanfootball_nfl','NBA':'basketball_nba','NHL':'icehockey_nhl'}
@@ -19,7 +19,10 @@ def fetch(root,now):
     cap=max(0,int(os.environ.get('PARLAY_MONTHLY_CREDIT_CAP','900')))
     for sport,api_sport in SPORTS.items():
         old=state['sports'].get(sport,{})
-        if now.timestamp()-old.get('fetchedAtEpoch',0)<interval:continue
+        retry_interval=interval if old.get('status')=='OBSERVED_BOARD' else 900
+        # Older failures had no diagnostics: retry once to obtain a safe status code.
+        if old.get('status')=='UNAVAILABLE' and not old.get('errorCode'):retry_interval=0
+        if now.timestamp()-old.get('fetchedAtEpoch',0)<retry_interval:continue
         if state['creditsUsed']+3>cap:break
         url='https://parlay-api.com/v1/sports/'+api_sport+'/props?'+urllib.parse.urlencode({'bookmakers':'sleeper','maxAgeSec':900,'limit':5000,'grouped':'false'})
         req=urllib.request.Request(url,headers={'X-API-Key':key,'User-Agent':'MultiSport-Pickem/0.3'})
@@ -31,8 +34,12 @@ def fetch(root,now):
             if not isinstance(rows,list):raise ValueError('Expected prop list')
             kept=[r for r in rows if r.get('bookmaker')=='sleeper']
             state['sports'][sport]={'status':'OBSERVED_BOARD','rows':kept,'fetchedAtEpoch':now.timestamp(),'hasMore':headers.get('x-result-has-more')=='true','truncated':headers.get('x-result-truncated')=='true','degraded':headers.get('x-result-degraded') or None}
-        except Exception:
-            state['sports'][sport]={'status':'UNAVAILABLE','rows':[],'fetchedAtEpoch':now.timestamp()}
+        except urllib.error.HTTPError as error:
+            state['sports'][sport]={'status':'UNAVAILABLE','rows':[],'fetchedAtEpoch':now.timestamp(),'httpStatus':error.code,'errorCode':'HTTP_'+str(error.code)}
+        except Exception as error:
+            # Do not publish URLs, response bodies or exception text: they may contain credentials.
+            code='INVALID_RESPONSE' if isinstance(error,(ValueError,TypeError)) else 'NETWORK_ERROR'
+            state['sports'][sport]={'status':'UNAVAILABLE','rows':[],'fetchedAtEpoch':now.timestamp(),'errorCode':code}
     return {'status':'CONFIGURED','sports':state['sports'],'creditsUsed':state['creditsUsed'],'creditCap':cap,'refreshMinutes':interval//60},state
 
 def match(forecasts,board,now,norm):

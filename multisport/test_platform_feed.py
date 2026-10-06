@@ -1,4 +1,5 @@
 import unittest,os,tempfile,json
+from urllib.error import HTTPError
 from pathlib import Path
 from datetime import datetime,timezone
 from unittest.mock import patch
@@ -13,6 +14,21 @@ class PlatformTests(unittest.TestCase):
     def test_missing_key_makes_no_request(self):
         with tempfile.TemporaryDirectory() as tmp,patch.dict(os.environ,{'PARLAY_API_KEY':''}),patch('urllib.request.urlopen') as request:
             board,state=fetch(Path(tmp),self.now);self.assertEqual(board['status'],'NEEDS_API_KEY');request.assert_not_called()
+    def test_http_errors_report_safe_status_and_retry_after_15_minutes(self):
+        with tempfile.TemporaryDirectory() as tmp,patch.dict(os.environ,{'PARLAY_API_KEY':'private-test-key'}),patch('urllib.request.urlopen',side_effect=HTTPError('secret-url',403,'secret-message',{},None)) as request:
+            board,state=fetch(Path(tmp),self.now)
+            self.assertEqual(request.call_count,4)
+            self.assertEqual(state['sports']['MLB']['errorCode'],'HTTP_403')
+            self.assertNotIn('secret',json.dumps(state))
+            Path(tmp,'feed-state.json').write_text(json.dumps(state))
+            fetch(Path(tmp),self.now);self.assertEqual(request.call_count,4)
+            from datetime import timedelta
+            fetch(Path(tmp),self.now+timedelta(minutes=15));self.assertEqual(request.call_count,8)
+    def test_successful_board_keeps_12_hour_budget_interval(self):
+        with tempfile.TemporaryDirectory() as tmp,patch.dict(os.environ,{'PARLAY_API_KEY':'private-test-key'}),patch('urllib.request.urlopen') as request:
+            state={'month':'2030-01','creditsUsed':12,'sports':{s:{'status':'OBSERVED_BOARD','rows':[],'fetchedAtEpoch':self.now.timestamp()-3600} for s in ['MLB','NFL','NBA','NHL']}}
+            Path(tmp,'feed-state.json').write_text(json.dumps(state))
+            fetch(Path(tmp),self.now);request.assert_not_called()
     def test_only_exact_line_gets_probability(self):
         rows,_=match([self.forecast],self.board(),self.now,norm);self.assertEqual(len(rows),1);self.assertIsNone(rows[0]['payoutMultiplier'])
         self.row['line']=2.5;rows,_=match([self.forecast],self.board(),self.now,norm);self.assertEqual(rows,[])
