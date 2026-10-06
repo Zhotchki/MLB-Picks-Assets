@@ -8,7 +8,7 @@ from zoneinfo import ZoneInfo
 from collections import Counter, defaultdict
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '0.4.0'
+VERSION = '0.5.0'
 API = 'https://statsapi.mlb.com/api/v1/'
 STAT_KEYS = {'Hits': 'hits', 'Runs': 'runs', 'RBI': 'rbi', 'Bases': 'totalBases', 'Walks': 'baseOnBalls', 'Strikeouts': 'strikeOuts', 'Stolen Bases': 'stolenBases', 'Home Runs': 'homeRuns'}
 
@@ -52,41 +52,70 @@ def actual(prop, stats):
         return sum(values) if all(v is not None for v in values) else None
     return number(stats.get(STAT_KEYS.get(prop, '')))
 
-def group(row): return row['sport'] + '|' + row['prop'] + '|' + row['direction']
+def group(row):
+    key = row['sport'] + '|' + row['prop'] + '|' + row['direction']
+    version = row.get('baselineVersion') or row.get('upstreamModelVersion')
+    return key + '|' + str(version) if version else key
 def corrected(row, model):
     p = row['sourceProbability'] + model.get('offsets', {}).get(group(row), 0)
     return max(.01, min(.99, p))
 
 def metrics(rows, model):
     if not rows: return {'n': 0, 'brier': None, 'logLoss': None}
-    pairs = [(corrected(r, model), r['outcome']) for r in rows]
-    return {'n': len(rows), 'brier': sum((p-y)**2 for p,y in pairs)/len(rows),
-            'logLoss': -sum(y*math.log(p)+(1-y)*math.log(1-p) for p,y in pairs)/len(rows)}
+    from validation import score,player_game,event
+    scores = score(rows,lambda r:corrected(r,model))
+    return {'n':len(rows),'playerGames':len({player_game(r) for r in rows}),'games':len({event(r) for r in rows}),
+            'brier':scores['brier'],'logLoss':scores['logLoss']}
 
 def learn(ledger, incumbent, today):
     week = today.strftime('%G-W%V')
     if today.weekday() != 0 or incumbent.get('lastReviewWeek') == week: return incumbent
     # Split by entire games so multiple props for one game never cross train/test.
-    rows = [r for r in ledger if r.get('outcome') in (0, 1) and r.get('resultStatus') == 'GRADED']
-    games = sorted({(r['startTime'],str(r['sport'])+':'+str(r['gameId'])) for r in rows})
+    from validation import pregame,graded,player_game,event
+    rows=[];seen=set()
+    for r in sorted(ledger,key=lambda r:str(r.get('capturedAt',''))):
+        if not pregame(r) or not graded(r) or r['id'] in seen:continue
+        seen.add(r['id'])
+        source_p=number(r.get('sourceProbability'))
+        if source_p is not None and 0<source_p<1:rows.append(dict(r,sourceProbability=source_p))
+    games = sorted({(iso(r['startTime']),event(r)) for r in rows})
     cut = int(len(games)*.8)
     train_games = {g for _,g in games[:cut]}
-    train = [r for r in rows if r['sport']+':'+str(r['gameId']) in train_games]
-    test = [r for r in rows if r['sport']+':'+str(r['gameId']) not in train_games]
+    train = [r for r in rows if event(r) in train_games]
+    test = [r for r in rows if event(r) not in train_games]
     updated = dict(incumbent, lastReviewWeek=week)
-    if len(train) < 200 or len(test) < 50 or len(games) < 10:
-        updated['review'] = {'status': 'COLLECTING_RESULTS', 'trainingRows': len(train), 'holdoutRows': len(test), 'games': len(games)}
+    training_players=len({player_game(r) for r in train});holdout_players=len({player_game(r) for r in test})
+    if training_players < 200 or holdout_players < 50 or len(games) < 10:
+        updated['review'] = {'status':'COLLECTING_RESULTS','trainingRows':len(train),'holdoutRows':len(test),
+                             'trainingPlayerGames':training_players,'holdoutPlayerGames':holdout_players,'games':len(games)}
         return updated
     buckets = defaultdict(list)
     for r in train: buckets[group(r)].append(r)
-    candidate = {'version': 'weekly-' + week, 'offsets': {k:sum(r['outcome']-r['sourceProbability'] for r in rs)/(len(rs)+50) for k,rs in buckets.items() if len(rs)>=50}}
-    base, trial = metrics(test, incumbent), metrics(test, candidate)
     # Test data newer than the incumbent's training data; reuse cannot justify promotion.
-    fresh = not incumbent.get('trainedThrough') or min(r['startTime'] for r in test) > incumbent['trainedThrough']
-    promote = fresh and trial['brier'] < base['brier']-.001 and trial['logLoss'] < base['logLoss']-.001
+    fresh = not incumbent.get('trainedThrough') or min(iso(r['startTime']) for r in test) > iso(incumbent['trainedThrough'])
+    candidate={'version':'weekly-'+week,'offsets':dict(incumbent.get('offsets',{}))}
+    reviews={};accepted=[]
+    for k,rs in buckets.items():
+        later=[r for r in test if group(r)==k]
+        players=defaultdict(list)
+        for r in rs:players[player_game(r)].append(r['outcome']-r['sourceProbability'])
+        n=len(players);later_n=len({player_game(r) for r in later})
+        detail={'trainingPlayerGames':n,'holdoutPlayerGames':later_n,'trainingGames':len({event(r) for r in rs}),'holdoutGames':len({event(r) for r in later})}
+        if n<50 or later_n<25 or detail['trainingGames']<10 or detail['holdoutGames']<5:
+            reviews[k]=dict(detail,status='COLLECTING_SEPARATE_GAMES');continue
+        offset=sum(sum(v)/len(v) for v in players.values())/(n+50)
+        proposed={'offsets':dict(incumbent.get('offsets',{}),**{k:offset})}
+        base_group,trial_group=metrics(later,incumbent),metrics(later,proposed)
+        passes=fresh and trial_group['brier']<base_group['brier']-.001 and trial_group['logLoss']<base_group['logLoss']-.001
+        reviews[k]=dict(detail,status='PASSED' if passes else 'KEPT_CURRENT_GROUP',baseline=base_group,candidate=trial_group)
+        if passes:candidate['offsets'][k]=offset;accepted.append(k)
+    base, trial = metrics(test, incumbent), metrics(test, candidate)
+    promote = fresh and bool(accepted) and trial['brier'] < base['brier']-.001 and trial['logLoss'] < base['logLoss']-.001
     if promote:
-        updated.update(candidate, trainedThrough=max(r['startTime'] for r in train))
-    updated['review'] = {'status': 'PROMOTED' if promote else 'KEPT_CURRENT_MODEL', 'trainingRows':len(train), 'holdoutRows':len(test), 'baseline':base, 'candidate':trial, 'freshHoldout':fresh}
+        updated.update(candidate, trainedThrough=max(train,key=lambda r:iso(r['startTime']))['startTime'])
+    updated['review'] = {'status':'PROMOTED' if promote else 'KEPT_CURRENT_MODEL','trainingRows':len(train),'holdoutRows':len(test),
+                        'trainingPlayerGames':training_players,'holdoutPlayerGames':holdout_players,'baseline':base,'candidate':trial,
+                        'freshHoldout':fresh,'groupReviews':reviews,'acceptedGroups':accepted if promote else []}
     return updated
 
 def collect_mlb(now, today, model):
@@ -155,6 +184,7 @@ def collect_mlb(now, today, model):
              'platformLine':None,'platform':None,'actionable':False, 'resultStatus':'PENDING'}
         r['probability'] = corrected(r, model)
         r['modelVersion'] = model['version']
+        r['upstreamModelVersion'] = upstream.get('appVersion') or upstream.get('version')
         verified.append(r)
     return verified, {'status':'LIVE_FORECASTS' if source_fresh else 'STALE','sourceStatus':'CURRENT' if source_fresh else 'STALE','verifiedRows':len(verified)}, rejected, timestamp, refresh
 
@@ -258,6 +288,8 @@ def run():
     except Exception:
         nba_status['gradingStatus'] = 'AWAITING_RESULT_SOURCE'
     model = learn(ledger,model,today)
+    from validation import report as validation_report
+    validation = validation_report(ledger)
     graded = [r for r in ledger if r.get('resultStatus')=='GRADED']
     frozen = {'n':len(graded), 'brier':sum((r['probability']-r['outcome'])**2 for r in graded)/len(graded) if graded else None}
     from platform_feed import fetch as fetch_board,match as match_offers,slips as build_slips
@@ -266,7 +298,7 @@ def run():
     offers,offer_counts=match_offers(verified,board,published_at,norm)
     data = {'version':VERSION,'updatedAt':published_at.isoformat(),'sourceUpdatedAt':timestamp,'sourceRefresh':refresh,'sourceStatus':mlb_status['sourceStatus'],
             'sports':{'MLB':mlb_status, 'NFL':nfl_status,'NBA':nba_status,'NHL':nhl_status},
-            'picks':sorted(verified,key=lambda r:-r['probability']),'rejected':dict(rejected),'model':model,
+            'picks':sorted(verified,key=lambda r:-r['probability']),'rejected':dict(rejected),'model':model,'validation':validation,
             'results':{'recorded':len(ledger),'graded':len(graded),'void':sum(r.get('resultStatus')=='VOID' for r in ledger),'frozenPredictionMetrics':frozen},
             'slipStatus':'READY' if offers else 'WAITING_FOR_VERIFIED_PLATFORM_LINES','platformFeed':{k:v for k,v in board.items() if k!='sports'},'offerCounts':offer_counts,'offers':offers,'slips':{str(size):build_slips(offers,size) for size in (2,3,4,5,6,8)}}
     write('feed-state.json',feed_state); write('ledger.json',ledger); write('model.json',model); write('data.json',data)
