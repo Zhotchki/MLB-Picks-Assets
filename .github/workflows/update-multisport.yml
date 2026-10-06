@@ -32,6 +32,7 @@ jobs:
           restore-keys: multisport-sources-
       - name: Verify adapter and update forecasts
         run: |
+          node multisport/test_player_view.js
           node multisport/test_eligibility.js
           node multisport/test_validation_view.js
           node multisport/test_slip_view.js

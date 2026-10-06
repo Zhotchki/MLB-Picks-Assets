@@ -1,0 +1,37 @@
+const assert=require('assert'),{forecastPool,forecastGameKey,playerGroups,playerCardsMarkup}=require('./player_view');
+const now=Date.now(),row=(id,game,prop,p)=>({id,sport:'NHL',gameId:game,playerId:'p1',player:'<José Test>',team:'AAA',opponent:game==='g1'?'BBB':'CCC',prop,probability:p,target:2,projection:2.4,samples:25,startTime:new Date(now+3600000).toISOString(),probabilityStatus:'UNVALIDATED_BASELINE',playingTimeUnit:'MINUTES',expectedPlayingTime:18});
+const data={updatedAt:new Date(now).toISOString(),sports:{NHL:{sourceStatus:'CURRENT'}},picks:[row('a','g1','Shots on Goal',.8),row('b','g1','Goals',.9),row('c','g2','Shots on Goal',.7)]};
+let groups=playerGroups(data,{},now);
+assert.equal(groups.length,2);assert.equal(groups[0][0].id,'b');assert.equal(groups[0].length,2);
+assert.equal(playerGroups(data,{prop:'Shots on Goal'},now)[0][0].id,'a');
+assert.equal(playerGroups(data,{search:'jose',minimum:75},now).length,1);
+assert.equal(playerGroups(data,{search:'CCC'},now)[0][0].gameId,'g2');
+assert.equal(playerGroups(data,{game:forecastGameKey(data.picks[2])},now).length,1);
+assert.equal(playerGroups(data,{sport:'MLB'},now).length,0);
+assert.equal(playerGroups(data,{minimum:95},now).length,0);
+assert.equal(data.picks[0].id,'a'); // View sorting never changes the supplied forecasts.
+const html=playerCardsMarkup(groups);assert(html.includes('&lt;José Test&gt;'));assert(!html.includes('<José Test>'));
+assert(html.includes('AAA vs BBB'));assert(html.includes('AAA vs CCC'));assert(html.includes('Unvalidated baseline'));
+for(const bad of [{...data,updatedAt:new Date(now-46*60000).toISOString()},{...data,updatedAt:'bad'},{...data,sports:{NHL:{sourceStatus:'STALE'}}}])assert.equal(forecastPool(bad,now).length,0);
+assert.equal(forecastPool({...data,picks:[{...data.picks[0],startTime:new Date(now).toISOString()},{...data.picks[0],probability:NaN},{...data.picks[0],gameId:null}]},now).length,0);
+// Exercise the actual page handlers as well as the pure grouping functions.
+const fs=require('fs'),vm=require('vm'),path=require('path'),nodes={};
+const initial={'#sport':'All sports','#validationSport':'All sports','#playerSearch':'','#playerProp':'All props','#playerGame':'All games','#playerMinimum':'0','#size':'4'};
+const node=id=>nodes[id]||(nodes[id]={value:initial[id]||'',options:id==='#size'?[2,3,4,5,6,8].map(n=>({value:String(n)})):[],innerHTML:'',textContent:'',hidden:false});
+const context=vm.createContext({document:{querySelector:node,querySelectorAll:()=>[],addEventListener:()=>{}},fetch:()=>new Promise(()=>{}),setInterval:()=>{},Date});
+for(const file of ['player_view.js','eligibility.js','validation_view.js'])vm.runInContext(fs.readFileSync(path.join(__dirname,file),'utf8'),context);
+for(const match of fs.readFileSync(path.join(__dirname,'index.html'),'utf8').matchAll(/<script>([\s\S]*?)<\/script>/g))vm.runInContext(match[1],context);
+context.fixture={...data,sourceStatus:'CURRENT',results:{recorded:0,graded:0,frozenPredictionMetrics:{brier:null}},model:{version:'fixture'}};
+vm.runInContext('data=fixture;render()',context);
+assert(node('#playerCount').textContent.includes('1 players · 2 player-game cards · 3 matching forecast rows'));
+node('#playerProp').value='Shots on Goal';node('#playerProp').onchange();
+assert(node('#cards').innerHTML.includes('80.0%'));assert(!node('#cards').innerHTML.includes('90.0%'));
+node('#playerSearch').value='CCC';node('#playerSearch').oninput();
+assert(node('#cards').innerHTML.includes('AAA vs CCC'));assert(!node('#cards').innerHTML.includes('AAA vs BBB'));
+node('#playerMinimum').value='90';node('#playerMinimum').onchange();
+assert(node('#cards').innerHTML.includes('No forecasts match these filters'));
+node('#resetPlayers').onclick();assert(node('#cards').innerHTML.includes('90.0%'));
+assert.equal(node('#playerSearch').value,'');assert.equal(node('#playerMinimum').value,'0');
+context.fixture.updatedAt=new Date(now-46*60000).toISOString();vm.runInContext('render()',context);
+assert(node('#cards').innerHTML.includes('No fresh verified upcoming forecasts'));
+console.log('Player/game grouping, filtered best picks, page filter/reset handlers, search, probability, escaping and freshness checks passed.');

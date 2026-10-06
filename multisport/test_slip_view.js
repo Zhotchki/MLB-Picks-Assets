@@ -1,8 +1,8 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
 const path=require('path'),root=__dirname,nodes={};
-const node=id=>nodes[id]||(nodes[id]={value:id==='#size'?'4':'All sports',options:id==='#size'?[2,3,4,5,6,8].map(value=>({value:String(value)})):[],innerHTML:'',textContent:'',hidden:false,disabled:false});
+const node=id=>nodes[id]||(nodes[id]={value:id==='#size'?'4':id==='#playerSearch'?'':id==='#playerProp'?'All props':id==='#playerGame'?'All games':id==='#playerMinimum'?'0':'All sports',options:id==='#size'?[2,3,4,5,6,8].map(value=>({value:String(value)})):[],innerHTML:'',textContent:'',hidden:false,disabled:false});
 const context=vm.createContext({document:{querySelector:node,querySelectorAll:()=>[],addEventListener:()=>{}},fetch:()=>new Promise(()=>{}),setInterval:()=>{},Date});
-for(const file of ['eligibility.js','validation_view.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),context);
+for(const file of ['player_view.js','eligibility.js','validation_view.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),context);
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
 for(const match of html.matchAll(/<script>([\s\S]*?)<\/script>/g))vm.runInContext(match[1],context);
 const now=Date.now(),leg=id=>({sport:'MLB',gameId:id,playerId:id,player:'<Player '+id+'>',prop:'Hits',platformLine:0.5,probability:0.7,platform:'Sleeper',actionable:true,requiresPlatformReview:true,platformOfferType:'unreported',kickoffSource:'OFFICIAL_SCHEDULE',startTime:new Date(now+3600000).toISOString(),offerObservedAt:new Date(now-1000).toISOString()});

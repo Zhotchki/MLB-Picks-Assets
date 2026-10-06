@@ -1,4 +1,4 @@
-# MultiSport Pick’em v0.5.5
+# MultiSport Pick’em v0.5.6
 
 Dedicated app: https://zhotchki.github.io/MLB-Picks-Assets/multisport/
 
@@ -98,3 +98,7 @@ Tests verify no off-hours requests, one read per near-game window, missed-window
 ## v0.5.5 — incomplete MLB results
 
 Missing players, missing batting data and missing plate-appearance counts in a final boxscore remain pending for a later retry. Only an explicit zero plate-appearance count voids a no-appearance forecast. Missing target stats remain pending. Frozen captures and existing ledger results are preserved. Added regression tests for incomplete boxscores, explicit zero appearances and missing target stats.
+
+## v0.5.6 — player browsing
+
+Player cards now group by sport, player and game so forecasts from different fixtures never share one opponent or kickoff label. Search players or teams, filter by sport/prop/game/minimum probability, and reset filters in one tap. Each card leads with its highest-probability matching forecast; expanded rows obey the same filters. The view shows distinct players, player-game cards and forecast-row counts separately. Stale snapshots, stale sports, started games and invalid probabilities remain hidden. Filtering does not alter captured predictions or platform eligibility.
