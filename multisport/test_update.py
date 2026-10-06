@@ -2,6 +2,12 @@ import unittest
 from datetime import date
 from update import number, prob, actual, learn, corrected
 class AdapterTests(unittest.TestCase):
+    def setUp(self):
+        from unittest.mock import patch
+        # Integration fixtures must never consume a real provider key or credits.
+        key=patch.dict('os.environ',{'PARLAY_API_KEY':''})
+        key.start();self.addCleanup(key.stop)
+
     def test_blank_and_nonfinite_are_not_zero(self):
         for v in ('',None,'nan','inf',True): self.assertIsNone(number(v))
         self.assertEqual(number(0),0)
