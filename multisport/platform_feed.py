@@ -10,7 +10,35 @@ MARKETS={'player_hits':'Hits','player_total_bases':'Bases','player_hits_runs_rbi
 MARKETS.update({'player_bat_walks':'Walks','player_passing_yards':'Pass Yards','player_passing_touchdowns':'Pass TDs','player_passing_attempts':'Pass Attempts','player_rushing_yards':'Rush Yards','player_rushing_attempts':'Rush Attempts','player_rushing_and_receiving_yards':'Rush + Receiving Yards'})
 NFL_NAMES=dict(zip('ARI ATL BAL BUF CAR CHI CIN CLE DAL DEN DET GB HOU IND JAX KC LAC LAR LV MIA MIN NE NO NYG NYJ PHI PIT SEA SF TB TEN WAS'.split(),['Arizona Cardinals','Atlanta Falcons','Baltimore Ravens','Buffalo Bills','Carolina Panthers','Chicago Bears','Cincinnati Bengals','Cleveland Browns','Dallas Cowboys','Denver Broncos','Detroit Lions','Green Bay Packers','Houston Texans','Indianapolis Colts','Jacksonville Jaguars','Kansas City Chiefs','Los Angeles Chargers','Los Angeles Rams','Las Vegas Raiders','Miami Dolphins','Minnesota Vikings','New England Patriots','New Orleans Saints','New York Giants','New York Jets','Philadelphia Eagles','Pittsburgh Steelers','Seattle Seahawks','San Francisco 49ers','Tampa Bay Buccaneers','Tennessee Titans','Washington Commanders']))
 
-def fetch(root,now,eligible_sports=None):
+def pregame_checks(forecasts,now,daily_calls=8,remaining_today=None,fetched=None):
+    """Choose UTC-day calls near verified starts; batch identical sport/start windows."""
+    events={}
+    for row in forecasts:
+        if row.get('platformEligible') is False or not row.get('scheduleVerified'):continue
+        if row.get('sport') not in SPORTS or row.get('gameId') is None:continue
+        try:
+            start=datetime.fromisoformat(row['startTime'].replace('Z','+00:00'))
+            if start.tzinfo is None or start<=now+timedelta(minutes=5):continue
+        except (KeyError,ValueError,TypeError,AttributeError):continue
+        events[(row['sport'],str(row['gameId']))]=start
+    slots={}
+    for (sport,event),start in events.items():
+        for priority,lead in enumerate((20,90,240)):
+            at=start-timedelta(minutes=lead)
+            key=(sport,at.timestamp())
+            slot=slots.setdefault(key,{'sport':sport,'at':at,'until':min(at+timedelta(minutes=15),start-timedelta(minutes=5)),'leadMinutes':lead,'priority':priority,'games':set()})
+            slot['games'].add(event)
+    by_day={}
+    for slot in slots.values():
+        if slot['until']<now or (fetched or {}).get(slot['sport'],0)>=slot['at'].timestamp():continue
+        by_day.setdefault(slot['at'].astimezone(timezone.utc).strftime('%Y-%m-%d'),[]).append(slot)
+    chosen=[]
+    for day,entries in by_day.items():
+        limit=remaining_today if day==now.astimezone(timezone.utc).strftime('%Y-%m-%d') and remaining_today is not None else daily_calls
+        chosen.extend(sorted(entries,key=lambda slot:(slot['priority'],slot['at'],slot['sport']))[:max(0,limit)])
+    return sorted(chosen,key=lambda slot:(slot['at'],slot['sport']))
+
+def fetch(root,now,eligible_sports=None,forecasts=None):
     key=os.environ.get('PARLAY_API_KEY','').strip()
     path=Path(root)/'feed-state.json'
     state=json.loads(path.read_text()) if path.exists() else {'month':now.strftime('%Y-%m'),'creditsUsed':0,'sports':{}}
@@ -37,9 +65,16 @@ def fetch(root,now,eligible_sports=None):
     def retry_seconds(entry):
         if entry.get('status')=='OBSERVED_BOARD':return interval
         return 0 if entry.get('status')=='UNAVAILABLE' and not entry.get('errorCode') else 900
+    planned=forecasts is not None and 'PICKEM_REFRESH_MINUTES' not in os.environ
+    checks=pregame_checks(forecasts,now,daily_cap//3,max(0,(daily_cap-state['dailyCreditsUsed'])//3),{sport:entry.get('fetchedAtEpoch',0) for sport,entry in state['sports'].items()}) if planned else []
+    def pending(slot):
+        return slot['until']>=now and state['sports'].get(slot['sport'],{}).get('fetchedAtEpoch',0)<slot['at'].timestamp()
+    due={slot['sport']:slot for slot in checks if slot['sport'] in active and slot['at']<=now<=slot['until'] and pending(slot)}
     for sport in active:
         old=state['sports'].get(sport,{})
-        if now.timestamp()-old.get('fetchedAtEpoch',0)<retry_seconds(old):continue
+        if planned:
+            if sport not in due:continue
+        elif now.timestamp()-old.get('fetchedAtEpoch',0)<retry_seconds(old):continue
         if state['creditsUsed']+3>cap or state['dailyCreditsUsed']+3>daily_cap:break
         if state.get('providerCreditsRemaining',3)<3:break
         url='https://parlay-api.com/v1/sports/'+SPORTS[sport]+'/props?'+urllib.parse.urlencode({'bookmakers':'sleeper','maxAgeSec':900,'limit':5000,'grouped':'false'})
@@ -65,15 +100,19 @@ def fetch(root,now,eligible_sports=None):
             next_at=(first+timedelta(days=32)).replace(day=1);reason='MONTHLY_BUDGET'
         elif state['dailyCreditsUsed']+3>daily_cap:
             next_at=now.replace(hour=0,minute=0,second=0,microsecond=0)+timedelta(days=1);reason='DAILY_BUDGET'
+        elif planned:
+            remaining=[slot for slot in checks if slot['sport'] in active and pending(slot)]
+            next_at=max(now,remaining[0]['at']) if remaining else None;reason='PREGAME_WINDOW' if remaining else 'WAITING_FOR_GAMES'
         else:
             due=min(state['sports'].get(s,{}).get('fetchedAtEpoch',0)+retry_seconds(state['sports'].get(s,{})) for s in active)
             next_at=datetime.fromtimestamp(max(now.timestamp(),due),timezone.utc);reason='SCHEDULED'
     return {'status':'CONFIGURED','sports':state['sports'],'creditsUsed':state['creditsUsed'],'creditCap':cap,
             'dailyCreditsUsed':state['dailyCreditsUsed'],'dailyCreditCap':daily_cap,'eligibleSports':active,
-            'refreshMinutes':interval//60,'nextRefreshAt':next_at.isoformat() if next_at else None,'refreshReason':reason},state
+            'refreshMinutes':None if planned else interval//60,'refreshMode':'PREGAME_WINDOWS' if planned else 'INTERVAL','plannedChecks':[{'sport':slot['sport'],'checkAt':slot['at'].isoformat(),'leadMinutes':slot['leadMinutes'],'games':len(slot['games'])} for slot in checks if slot['until']>=now],'nextRefreshAt':next_at.isoformat() if next_at else None,'refreshReason':reason},state
 
 def match(forecasts,board,now,norm):
-    out=[];counts={'observed':0,'matched':0,'missingOfferType':0,'missingKickoff':0}
+    out=[];counts={'observed':0,'matched':0,'missingOfferType':0,'missingKickoff':0,'excluded':{}}
+    def reject(reason,n=1):counts['excluded'][reason]=counts['excluded'].get(reason,0)+n
     def teams(r):
         if r['sport']=='NFL':
             return NFL_NAMES.get(r.get('homeTeamAbbr')),NFL_NAMES.get(r.get('awayTeamAbbr'))
@@ -88,11 +127,15 @@ def match(forecasts,board,now,norm):
         key=(r['sport'],r['officialGameDate'],norm(home),norm(away))
         fixtures.setdefault(key,set()).add((str(r['gameId']),r['startTime']))
     for sport,entry in board.get('sports',{}).items():
+        rows=entry.get('rows',[]);counts['observed']+=len(rows)
+        if board.get('eligibleSports') is not None and sport not in board['eligibleSports']:
+            reject('sport_not_eligible',len(rows));continue
         elapsed=now.timestamp()-entry.get('fetchedAtEpoch',0)
-        if elapsed<0 or elapsed>900:continue
-        for line in entry.get('rows',[]):
-            counts['observed']+=1
-            if line.get('bookmaker')!='sleeper' or line.get('sport_key',SPORTS[sport])!=SPORTS[sport]:continue
+        if elapsed<0:reject('invalid_board_time',len(rows));continue
+        if elapsed>900:reject('expired_board',len(rows));continue
+        for line in rows:
+            if line.get('bookmaker')!='sleeper' or line.get('sport_key',SPORTS[sport])!=SPORTS[sport]:
+                reject('unsupported_source');continue
             types=[str(line[key]).lower() for key in ('odds_type','projection_type') if key in line]
             unknown_type=not types
             if unknown_type:counts['missingOfferType']+=1
@@ -100,29 +143,32 @@ def match(forecasts,board,now,norm):
             if not reported:counts['missingKickoff']+=1
             # Missing classification is a review flag, never an invented "standard" label.
             # Explicit special variants and inconsistent/null tags remain excluded.
-            if line.get('period')!='FULL' or (types and any(t!='standard' for t in types)):continue
-            if unknown_type and line.get('is_dfs_flat_payout') is not True:continue
-            if not line.get('canonical_event_id'):continue
+            if line.get('period')!='FULL':reject('unsupported_period');continue
+            if types and any(t!='standard' for t in types):reject('special_offer_type');continue
+            if unknown_type and line.get('is_dfs_flat_payout') is not True:reject('unverified_offer_type');continue
+            if not line.get('canonical_event_id'):reject('missing_event_identity');continue
             try:
                 value=float(line['line']);age=float(line['age_seconds'])+elapsed
-                if not math.isfinite(value) or not math.isfinite(age) or not 0<=age<=900:continue
+                if not math.isfinite(value) or not math.isfinite(age) or age<0:reject('invalid_line_or_age');continue
+                if age>900:reject('expired_line');continue
                 if reported:
                     start=datetime.fromisoformat(line['commence_time'].replace('Z','+00:00'))
-                    if start.tzinfo is None:continue
+                    if start.tzinfo is None:reject('unverified_kickoff');continue
                     fixture_id=None;start_source='PROVIDER'
                 else:
                     # Contradictory timestamps are not repaired. Teamless/date-less fixtures are rejected.
-                    if line.get('commence_time') is not None:continue
+                    if line.get('commence_time') is not None:reject('contradictory_kickoff');continue
                     key=(sport,line.get('game_date'),norm(line.get('home_team')),norm(line.get('away_team')))
                     events=fixtures.get(key,set())
-                    if len(events)!=1:continue
+                    if len(events)!=1:reject('unresolved_fixture');continue
                     fixture_id,official_start=next(iter(events))
                     start=datetime.fromisoformat(official_start.replace('Z','+00:00'))
                     if start.tzinfo is None:continue
                     start_source='OFFICIAL_SCHEDULE'
-                if start<=now:continue
-            except (ValueError,TypeError,KeyError,AttributeError):continue
+                if start<=now:reject('game_started');continue
+            except (ValueError,TypeError,KeyError,AttributeError):reject('invalid_line_or_kickoff');continue
             prop=MARKETS.get(line.get('market_key'))
+            if not prop:reject('unsupported_market');continue
             candidates=[]
             for r in forecast_index.get((sport,prop,norm(line.get('player'))),[]):
                 if r.get('platformEligible') is False:continue
@@ -138,13 +184,17 @@ def match(forecasts,board,now,norm):
                 model_line=r.get('modelLine',r['target']-.5)
                 if r['direction']!='MORE' or abs(model_line-value)>1e-9:continue
                 candidates.append(r)
-            if len(candidates)!=1:continue
+            if len(candidates)!=1:
+                indexed=forecast_index.get((sport,prop,norm(line.get('player'))),[])
+                reason='ambiguous_match' if len(candidates)>1 else 'no_player_prop_forecast' if not indexed else 'unmatched_model_line' if not any(abs(r.get('modelLine',r['target']-.5)-value)<=1e-9 for r in indexed) else 'fixture_mismatch'
+                reject(reason);continue
             r=dict(candidates[0],platform='Sleeper',platformLine=value,platformEventId=line['canonical_event_id'],actionable=True,
                    offerObservedAt=datetime.fromtimestamp(now.timestamp()-age,timezone.utc).isoformat(),
                    provider='ParlayAPI',payoutMultiplier=None,platformOfferType='unreported' if unknown_type else 'standard',
                    requiresPlatformReview=unknown_type,kickoffSource=start_source)
             r['offerId']=f"Sleeper:{sport}:{r['platformEventId']}:{r['playerId']}:{r['prop']}:FULL:MORE:{value}"
             if not any(x['offerId']==r['offerId'] for x in out):out.append(r);counts['matched']+=1
+            else:reject('duplicate_offer')
     return out,counts
 
 def _offer_key(row):
