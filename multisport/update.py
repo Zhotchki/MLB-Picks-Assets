@@ -8,7 +8,7 @@ from zoneinfo import ZoneInfo
 from collections import Counter, defaultdict
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '0.5.1'
+VERSION = '0.5.2'
 API = 'https://statsapi.mlb.com/api/v1/'
 STAT_KEYS = {'Hits': 'hits', 'Runs': 'runs', 'RBI': 'rbi', 'Bases': 'totalBases', 'Walks': 'baseOnBalls', 'Strikeouts': 'strikeOuts', 'Stolen Bases': 'stolenBases', 'Home Runs': 'homeRuns'}
 
@@ -298,7 +298,8 @@ def run():
     frozen = {'n':len(graded), 'brier':sum((r['probability']-r['outcome'])**2 for r in graded)/len(graded) if graded else None}
     from platform_feed import fetch as fetch_board,match as match_offers,slips as build_slips
     published_at = datetime.now(timezone.utc)
-    board,feed_state=fetch_board(ROOT,published_at)
+    eligible_sports={r['sport'] for r in verified if r.get('platformEligible') is not False}
+    board,feed_state=fetch_board(ROOT,published_at,eligible_sports)
     offers,offer_counts=match_offers(verified,board,published_at,norm)
     data = {'version':VERSION,'updatedAt':published_at.isoformat(),'sourceUpdatedAt':timestamp,'sourceRefresh':refresh,'sourceStatus':mlb_status['sourceStatus'],
             'sports':{'MLB':mlb_status, 'NFL':nfl_status,'NBA':nba_status,'NHL':nhl_status},

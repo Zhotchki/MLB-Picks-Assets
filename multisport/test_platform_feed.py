@@ -98,4 +98,54 @@ class PlatformTests(unittest.TestCase):
         self.row.update(market_key='player_rushing_yards',home_team='Green Bay Packers',away_team='Chicago Bears')
         board={'sports':{'NFL':{'fetchedAtEpoch':self.now.timestamp(),'rows':[self.row]}}}
         self.assertEqual(len(match([self.forecast],board,self.now,norm)[0]),1)
+    def response(self,headers=None):
+        import io
+        response=io.StringIO('[]');response.headers=headers or {};return response
+    def test_eligible_sports_share_budget_and_other_sports_are_not_polled(self):
+        from datetime import timedelta
+        with tempfile.TemporaryDirectory() as tmp,patch.dict(os.environ,{'PARLAY_API_KEY':'fixture-key'}),patch('urllib.request.urlopen',side_effect=lambda *a,**k:self.response()) as request:
+            board,state=fetch(Path(tmp),self.now,{'MLB','NFL'})
+            self.assertEqual(request.call_count,2);self.assertEqual(board['refreshMinutes'],360)
+            self.assertEqual(board['eligibleSports'],['MLB','NFL'])
+            self.assertTrue(all('/baseball_mlb/' in call.args[0].full_url or '/americanfootball_nfl/' in call.args[0].full_url for call in request.call_args_list))
+            Path(tmp,'feed-state.json').write_text(json.dumps(state))
+            board,state=fetch(Path(tmp),self.now+timedelta(hours=3),{'MLB','NFL'})
+            self.assertEqual(request.call_count,2)
+            Path(tmp,'feed-state.json').write_text(json.dumps(state))
+            fetch(Path(tmp),self.now+timedelta(hours=6),{'MLB','NFL'})
+            self.assertEqual(request.call_count,4)
+    def test_no_eligible_sports_never_spends_credits(self):
+        with tempfile.TemporaryDirectory() as tmp,patch.dict(os.environ,{'PARLAY_API_KEY':'fixture-key'}),patch('urllib.request.urlopen') as request:
+            board,state=fetch(Path(tmp),self.now,set())
+            request.assert_not_called();self.assertEqual(state['creditsUsed'],0)
+            self.assertIsNone(board['nextRefreshAt'])
+    def test_daily_cap_includes_failures_and_resumes_next_utc_day(self):
+        from datetime import timedelta
+        with tempfile.TemporaryDirectory() as tmp,patch.dict(os.environ,{'PARLAY_API_KEY':'fixture-key','PARLAY_DAILY_CREDIT_CAP':'6'}),patch('urllib.request.urlopen',side_effect=HTTPError('private',401,'private',{},None)) as request:
+            board,state=fetch(Path(tmp),self.now,{'MLB','NFL'})
+            self.assertEqual(request.call_count,2)
+            Path(tmp,'feed-state.json').write_text(json.dumps(state))
+            board,state=fetch(Path(tmp),self.now+timedelta(minutes=15),{'MLB','NFL'})
+            self.assertEqual(request.call_count,2);self.assertEqual(board['refreshReason'],'DAILY_BUDGET')
+            self.assertEqual(board['nextRefreshAt'],'2030-01-02T00:00:00+00:00')
+            Path(tmp,'feed-state.json').write_text(json.dumps(state))
+            board,state=fetch(Path(tmp),self.now+timedelta(days=1),{'MLB','NFL'})
+            self.assertEqual(request.call_count,4);self.assertEqual(state['creditsUsed'],12)
+            self.assertEqual(state['dailyCreditsUsed'],6)
+    def test_reported_provider_usage_prevents_untracked_usage_overspend(self):
+        with tempfile.TemporaryDirectory() as tmp,patch.dict(os.environ,{'PARLAY_API_KEY':'fixture-key'}),patch('urllib.request.urlopen',side_effect=lambda *a,**k:self.response({'x-requests-used':'899','x-requests-remaining':'1'})) as request:
+            board,state=fetch(Path(tmp),self.now,{'MLB','NFL'})
+            self.assertEqual(request.call_count,1)
+            self.assertEqual(state['creditsUsed'],899);self.assertEqual(board['refreshReason'],'MONTHLY_BUDGET')
+            self.assertEqual(board['nextRefreshAt'],'2030-02-01T00:00:00+00:00')
+    def test_default_single_sport_has_at_most_eight_calls_per_day(self):
+        from datetime import timedelta
+        start=self.now.replace(hour=0)
+        with tempfile.TemporaryDirectory() as tmp,patch.dict(os.environ,{'PARLAY_API_KEY':'fixture-key'}),patch('urllib.request.urlopen',side_effect=lambda *a,**k:self.response()) as request:
+            for hour in range(24):
+                board,state=fetch(Path(tmp),start+timedelta(hours=hour),{'MLB'})
+                Path(tmp,'feed-state.json').write_text(json.dumps(state))
+            self.assertEqual(request.call_count,8)
+            self.assertEqual(state['creditsUsed'],24)
+            self.assertEqual(board['refreshMinutes'],180)
 if __name__=='__main__':unittest.main()
