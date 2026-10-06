@@ -1,0 +1,14 @@
+const assert = require('node:assert/strict');
+const {offerUsable, eligibleSlips} = require('./eligibility');
+const now = Date.parse('2030-01-01T14:00:00Z');
+const r = {sport:'NFL', actionable:true, platform:'Sleeper', startTime:'2030-01-01T16:00:00Z', offerObservedAt:'2030-01-01T13:50:00Z'};
+const data = {updatedAt:'2030-01-01T13:59:00Z', sports:{NFL:{sourceStatus:'CURRENT'}}, slips:{2:[{legs:[r,r]}]}};
+assert(offerUsable(r,data,now));
+assert.equal(eligibleSlips(data,2,now).length,1);
+assert.equal(eligibleSlips(data,2,now+6*60000).length,0);
+assert.equal(offerUsable({...r,startTime:'2030-01-01T14:00:00Z'},data,now),false);
+assert.equal(offerUsable({...r,offerObservedAt:'bad'},data,now),false);
+assert.equal(offerUsable({...r,offerObservedAt:'2030-01-01T14:01:00Z'},data,now),false);
+assert.equal(offerUsable(r,{...data,sports:{NFL:{sourceStatus:'UNAVAILABLE'}}},now),false);
+assert.equal(offerUsable(r,{...data,updatedAt:'2030-01-01T13:00:00Z'},now),false);
+console.log('Offer expiry, kickoff, invalid time, stale snapshot and outage checks passed.');

@@ -1,4 +1,4 @@
-# MultiSport Pick’em v0.3.0
+# MultiSport Pick’em v0.3.1
 
 Dedicated app: https://zhotchki.github.io/MLB-Picks-Assets/multisport/
 
@@ -31,3 +31,9 @@ The live /props path has not been tested against an authenticated account. Contr
 Match only a named standard, FULL-game offer with reported kickoff, canonical event ID, known market, unique player identity, matching teams, and observation age <=15 minutes. Match the EXACT model line; no interpolation or assigning a forecast probability to a different platform line. Price fields from DFS midpoint/effective conversions are not used as estimated win probabilities or payouts. Unknown offer type, period or time is excluded. NBA/NHL remain without forecast adapters even if their boards are observed.
 
 Slip search supports 2/3/4/5/6/8 legs, 200-offer pool, 128 beam states per leg count and up to five returned slips per size. No repeated player or game; Sleeper offers only. Joint probability assumes independence across games, excludes same-game combinations, and is explicitly labeled an estimate. This is a bounded search of matched available offers, not a proven global optimum or learned correlation model. Source payout unavailable means no payout is displayed. The result ledger remains a forecast ledger; provider-specific wager/slip settlement needs a separate ledger in a future release.
+
+## v0.3.1: independent refresh and browser expiry
+
+MLB collection and grading failures are isolated from NFL. An unavailable MLB source publishes an explicit unavailable status, excludes its forecasts for this run, preserves existing immutable ledger entries, and still runs NFL collection/grading. Unknown results stay pending. Browser offer eligibility rechecks the observation timestamp (15-minute maximum), snapshot age (45-minute maximum), kickoff and per-sport source status at generation and every 15 seconds, including already displayed slips. NFL support counts are labeled historical games, not calibration samples.
+
+NHL official schedule/roster/player-log endpoint requests returned HTTP 403 during the October 5 implementation check. No NHL data or probability is fabricated. NBA and NHL adapters remain pending. Platform key status was still NEEDS_API_KEY in the latest automatic run.

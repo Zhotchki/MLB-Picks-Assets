@@ -60,5 +60,25 @@ class PipelineTests(unittest.TestCase):
             self.assertEqual(graded['resultStatus'],'GRADED');self.assertEqual(graded['outcome'],1)
             self.assertEqual(graded['actual'],2);self.assertEqual(graded['probability'],.8)
 
-if __name__=='__main__': unittest.main()
+class OutageTests(unittest.TestCase):
+    def test_mlb_outage_keeps_nfl_forecasts_and_existing_ledger(self):
+        import update, tempfile, json, io
+        from pathlib import Path
+        from datetime import datetime, timezone
+        from unittest.mock import patch
+        from contextlib import redirect_stdout
+        row={'id':'NFL:test','sport':'NFL','gameId':'test','playerId':'99','player':'Test',
+             'prop':'Rush Yards','direction':'MORE','target':50,'probability':.7,
+             'startTime':'2099-01-01T12:00:00Z','resultStatus':'PENDING'}
+        old={'id':'MLB:old','sport':'MLB','resultStatus':'PENDING','startTime':'2020-01-01T12:00:00Z','gameId':10}
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp); (root/'ledger.json').write_text(json.dumps([old]))
+            with patch.object(update,'ROOT',root), patch.object(update,'get',side_effect=TimeoutError), patch('nfl_adapter.collect',return_value=([row],{'status':'LIVE_FORECASTS','sourceStatus':'CURRENT','verifiedRows':1},{})),patch('nfl_adapter.grade'),redirect_stdout(io.StringIO()):
+                update.run()
+            data=json.loads((root/'data.json').read_text()); ledger=json.loads((root/'ledger.json').read_text())
+            self.assertEqual(data['sports']['MLB']['sourceStatus'],'UNAVAILABLE')
+            self.assertEqual(data['sports']['NFL']['sourceStatus'],'CURRENT')
+            self.assertEqual(data['picks'],[row]); self.assertEqual(ledger,[old,row])
+            self.assertEqual(data['sports']['MLB']['gradingStatus'],'AWAITING_RESULT_SOURCE')
 
+if __name__=='__main__': unittest.main()

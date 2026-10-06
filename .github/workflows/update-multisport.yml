@@ -30,6 +30,7 @@ jobs:
           restore-keys: multisport-sources-
       - name: Verify adapter and update forecasts
         run: |
+          node multisport/test_eligibility.js
           python -m unittest discover -s multisport -p 'test_*.py'
           python multisport/update.py
       - name: Preserve predictions and publish current data
