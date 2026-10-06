@@ -1,12 +1,14 @@
 import unittest
 from datetime import date
 from update import number, prob, actual, learn, corrected
-class AdapterTests(unittest.TestCase):
+class SecretFreeTests(unittest.TestCase):
     def setUp(self):
         from unittest.mock import patch
         # Integration fixtures must never consume a real provider key or credits.
         key=patch.dict('os.environ',{'PARLAY_API_KEY':''})
         key.start();self.addCleanup(key.stop)
+
+class AdapterTests(SecretFreeTests):
 
     def test_blank_and_nonfinite_are_not_zero(self):
         for v in ('',None,'nan','inf',True): self.assertIsNone(number(v))
@@ -29,7 +31,7 @@ class AdapterTests(unittest.TestCase):
         r={'sport':'MLB','prop':'Hits','direction':'MORE','sourceProbability':.9}
         self.assertEqual(corrected(r,{'offsets':{'MLB|Hits|MORE':1}}),.99)
 
-class PipelineTests(unittest.TestCase):
+class PipelineTests(SecretFreeTests):
     def test_pregame_capture_is_immutable_and_final_result_is_graded(self):
         import update, tempfile, json, io
         from pathlib import Path
@@ -66,12 +68,7 @@ class PipelineTests(unittest.TestCase):
             self.assertEqual(graded['resultStatus'],'GRADED');self.assertEqual(graded['outcome'],1)
             self.assertEqual(graded['actual'],2);self.assertEqual(graded['probability'],.8)
 
-class OutageTests(unittest.TestCase):
-    def setUp(self):
-        from unittest.mock import patch
-        # Integration fixtures must never consume a real provider key or credits.
-        key=patch.dict('os.environ',{'PARLAY_API_KEY':''})
-        key.start();self.addCleanup(key.stop)
+class OutageTests(SecretFreeTests):
 
     def test_slow_import_cannot_backdate_forecast_after_kickoff(self):
         import update, tempfile, json, io
