@@ -45,7 +45,7 @@ class PipelineTests(unittest.TestCase):
             if 'teams?' in url:return {'teams':[{'id':1,'abbreviation':'AA','name':'Team A'},{'id':2,'abbreviation':'BB','name':'Team B'}]}
             if 'boxscore' in url:return {'teams':{'home':{'players':{'ID99':{'person':{'id':99,'fullName':'Test Player'},'stats':{'batting':{'plateAppearances':4,'hits':2}}}}},'away':{'players':{}}}}
             raise AssertionError(url)
-        with tempfile.TemporaryDirectory() as tmp, patch.object(update,'ROOT',Path(tmp)),patch.object(update,'datetime',Clock),patch.object(update,'get',mock_get),redirect_stdout(io.StringIO()),patch('nfl_adapter.collect',return_value=([],{'status':'NOT_CONNECTED'},{})),patch('nfl_adapter.grade'):
+        with tempfile.TemporaryDirectory() as tmp, patch.object(update,'ROOT',Path(tmp)),patch.object(update,'datetime',Clock),patch.object(update,'get',mock_get),redirect_stdout(io.StringIO()),patch('nfl_adapter.collect',return_value=([],{'status':'NOT_CONNECTED'},{})),patch('nfl_adapter.grade'),patch('nhl_adapter.collect',return_value=([],{'status':'NOT_CONNECTED'},{})),patch('nhl_adapter.grade'),patch('nba_adapter.collect',return_value=([],{'status':'NOT_CONNECTED'},{})),patch('nba_adapter.grade'):
             update.run()
             first=json.loads((Path(tmp)/'ledger.json').read_text())
             self.assertEqual(len(first),1); self.assertEqual(first[0]['probability'],.8)
@@ -61,6 +61,23 @@ class PipelineTests(unittest.TestCase):
             self.assertEqual(graded['actual'],2);self.assertEqual(graded['probability'],.8)
 
 class OutageTests(unittest.TestCase):
+    def test_slow_import_cannot_backdate_forecast_after_kickoff(self):
+        import update, tempfile, json, io
+        from pathlib import Path
+        from datetime import datetime, timezone
+        from unittest.mock import patch
+        from contextlib import redirect_stdout
+        class Clock(datetime):
+            times=iter([datetime(2030,1,1,14,tzinfo=timezone.utc),datetime(2030,1,1,14,10,tzinfo=timezone.utc),datetime(2030,1,1,14,11,tzinfo=timezone.utc)])
+            @classmethod
+            def now(cls,tz=None):return next(cls.times)
+        row={'id':'NFL:late','sport':'NFL','probability':.8,'startTime':'2030-01-01T14:05:00Z'}
+        with tempfile.TemporaryDirectory() as tmp, patch.object(update,'ROOT',Path(tmp)),patch.object(update,'datetime',Clock),patch.object(update,'collect_mlb',return_value=([],{'sourceStatus':'CURRENT'}, {},None,None)),patch.object(update,'grade_mlb'),patch('nfl_adapter.collect',return_value=([row],{'sourceStatus':'CURRENT'},{})),patch('nfl_adapter.grade'),patch('nhl_adapter.collect',return_value=([],{'sourceStatus':'CURRENT'},{})),patch('nhl_adapter.grade'),patch('nba_adapter.collect',return_value=([],{'sourceStatus':'CURRENT'},{})),patch('nba_adapter.grade'),redirect_stdout(io.StringIO()):
+            update.run()
+            data=json.loads((Path(tmp)/'data.json').read_text())
+            self.assertFalse(data['picks']);self.assertEqual(data['results']['recorded'],0)
+            self.assertEqual(data['rejected']['started_during_refresh'],1)
+
     def test_mlb_outage_keeps_nfl_forecasts_and_existing_ledger(self):
         import update, tempfile, json, io
         from pathlib import Path
@@ -73,7 +90,7 @@ class OutageTests(unittest.TestCase):
         old={'id':'MLB:old','sport':'MLB','resultStatus':'PENDING','startTime':'2020-01-01T12:00:00Z','gameId':10}
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp); (root/'ledger.json').write_text(json.dumps([old]))
-            with patch.object(update,'ROOT',root), patch.object(update,'get',side_effect=TimeoutError), patch('nfl_adapter.collect',return_value=([row],{'status':'LIVE_FORECASTS','sourceStatus':'CURRENT','verifiedRows':1},{})),patch('nfl_adapter.grade'),redirect_stdout(io.StringIO()):
+            with patch.object(update,'ROOT',root), patch.object(update,'get',side_effect=TimeoutError), patch('nfl_adapter.collect',return_value=([row],{'status':'LIVE_FORECASTS','sourceStatus':'CURRENT','verifiedRows':1},{})),patch('nfl_adapter.grade'),patch('nhl_adapter.collect',return_value=([],{'status':'NOT_CONNECTED'},{})),patch('nhl_adapter.grade'),patch('nba_adapter.collect',return_value=([],{'status':'NOT_CONNECTED'},{})),patch('nba_adapter.grade'),redirect_stdout(io.StringIO()):
                 update.run()
             data=json.loads((root/'data.json').read_text()); ledger=json.loads((root/'ledger.json').read_text())
             self.assertEqual(data['sports']['MLB']['sourceStatus'],'UNAVAILABLE')

@@ -22,6 +22,9 @@ class PlatformTests(unittest.TestCase):
         self.row['away_team']='Team C';self.assertEqual(match([self.forecast],self.board(),self.now,norm)[0],[])
     def test_stale_offer_rejected(self):
         self.row['age_seconds']=901;self.assertEqual(match([self.forecast],self.board(),self.now,norm)[0],[])
+    def test_unvalidated_baseline_never_enters_playable_offers(self):
+        self.forecast['platformEligible']=False
+        self.assertEqual(match([self.forecast],self.board(),self.now,norm)[0],[])
     def test_duplicate_player_or_event_not_in_slip(self):
         a=dict(self.forecast,actionable=True,platform='Sleeper');b=dict(a,prop='Runs');c=dict(a,playerId=100)
         self.assertEqual(slips([a,b,c],2),[])

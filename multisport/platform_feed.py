@@ -52,6 +52,7 @@ def match(forecasts,board,now,norm):
             prop=MARKETS.get(line.get('market_key'))
             candidates=[]
             for r in forecasts:
+                if r.get('platformEligible') is False: continue
                 if r['sport']!=sport or r['prop']!=prop or norm(r['player'])!=norm(line.get('player')):continue
                 if abs((datetime.fromisoformat(r['startTime'].replace('Z','+00:00'))-start).total_seconds())>300:continue
                 teams=[r.get('homeTeam'),r.get('awayTeam')]
