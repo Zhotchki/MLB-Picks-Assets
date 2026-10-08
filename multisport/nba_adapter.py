@@ -122,11 +122,12 @@ def collect(now,root,model,corrected,norm,fetch=get_json):
     return out,status,rejected
 
 def grade(ledger,now,root,fetch=get_json):
-    summaries={}
-    for r in ledger:
-        if r['sport']!='NBA' or r.get('resultStatus')!='PENDING' or iso(r['startTime'])>now:continue
+    from result_jobs import load_results
+    pending=[r for r in ledger if r['sport']=='NBA' and r.get('resultStatus')=='PENDING' and iso(r['startTime'])<=now]
+    summaries,health=load_results((r['gameId'] for r in pending),lambda gid:cached(root,'nba-summary-'+str(gid),API+'summary?event='+str(gid),900,now,fetch))
+    for r in pending:
         gid=r['gameId']
-        if gid not in summaries:summaries[gid]=cached(root,'nba-summary-'+str(gid),API+'summary?event='+str(gid),900,now,fetch)
+        if gid not in summaries:continue
         summary=summaries[gid];header=summary.get('header',{})
         games=header.get('competitions',[])
         if str(header.get('id'))!=str(gid) or header.get('season',{}).get('year')!=r['season'] or header.get('season',{}).get('type')!=2 or len(games)!=1 or not games[0].get('status',{}).get('type',{}).get('completed'):continue
@@ -148,3 +149,4 @@ def grade(ledger,now,root,fetch=get_json):
         value=stat_value(r['prop'],stats.get(STATS[r['prop']][1]))
         if toi is None or value is None:continue
         r.update(resultStatus='GRADED',actual=value,outcome=int(value>=r['target']),gradedAt=now.isoformat())
+    return health

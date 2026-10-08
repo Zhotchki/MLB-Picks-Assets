@@ -1,4 +1,4 @@
-# MultiSport Pick’em v0.5.6
+# MultiSport Pick’em v0.5.7
 
 Dedicated app: https://zhotchki.github.io/MLB-Picks-Assets/multisport/
 
@@ -102,3 +102,7 @@ Missing players, missing batting data and missing plate-appearance counts in a f
 ## v0.5.6 — player browsing
 
 Player cards now group by sport, player and game so forecasts from different fixtures never share one opponent or kickoff label. Search players or teams, filter by sport/prop/game/minimum probability, and reset filters in one tap. Each card leads with its highest-probability matching forecast; expanded rows obey the same filters. The view shows distinct players, player-game cards and forecast-row counts separately. Stale snapshots, stale sports, started games and invalid probabilities remain hidden. Filtering does not alter captured predictions or platform eligibility.
+
+## v0.5.7 — independent game-result reads
+
+MLB, NBA and NHL grading fetch each distinct due game once per run with at most four concurrent result workers per sport. A failed request leaves that game pending and allows other available games to grade. No requests are made for future games or already settled forecasts. NBA/NHL keep their 15-minute result cache and all fixture, regular-season, player identity and explicit DNP checks. Frozen forecast probabilities and captures are untouched. Grading metadata reports checked and unavailable games; Model results displays source failures and automatic retry behavior. NFL retains its shared schedule/stat feed. This changes result fetching only; calibration, forecast eligibility, ParlayAPI budgets and offer expiry are preserved.

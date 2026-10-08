@@ -178,11 +178,12 @@ def collect(now, root, model, corrected, norm, fetch=get_json):
                 'sourceUpdatedAt':now.isoformat()},rejected
 
 def grade(ledger, now, root, fetch=get_json):
-    boxes={}
-    for r in ledger:
-        if r['sport']!='NHL' or r.get('resultStatus')!='PENDING' or iso(r['startTime'])>now: continue
+    from result_jobs import load_results
+    pending=[r for r in ledger if r['sport']=='NHL' and r.get('resultStatus')=='PENDING' and iso(r['startTime'])<=now]
+    boxes,health=load_results((r['gameId'] for r in pending),lambda gid:cached(root,'box-'+str(gid),API+f'gamecenter/{gid}/boxscore',900,now,fetch))
+    for r in pending:
         gid=r['gameId']
-        if gid not in boxes: boxes[gid]=cached(root,'box-'+str(gid),API+f'gamecenter/{gid}/boxscore',900,now,fetch)
+        if gid not in boxes:continue
         box=boxes[gid]
         if box.get('id')!=gid or box.get('season')!=r['season'] or box.get('gameType')!=2 or box.get('gameState') not in ('FINAL','OFF'): continue
         side=next((s for s in ('homeTeam','awayTeam') if box.get(s,{}).get('abbrev')==r['team']),None)
@@ -196,3 +197,4 @@ def grade(ledger, now, root, fetch=get_json):
             r.update(resultStatus='VOID',voidReason='No ice time');continue
         if toi is None or shots is None or shots<0: continue
         r.update(resultStatus='GRADED',actual=shots,outcome=int(shots>=r['target']),gradedAt=now.isoformat())
+    return health

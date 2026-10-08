@@ -39,4 +39,8 @@ context.fixture.platformFeed.refreshMode='PREGAME_WINDOWS';context.fixture.platf
 assert(node('#feedTiming').textContent.includes('Daily allowance used.'));
 assert(node('#feedTiming').textContent.includes('Checks target upcoming game windows.'));
 assert(node('#slipSupport').innerHTML.includes('0 fresh exact-line offers · 0 players · 0 separate games'));
+context.fixture.sports.MLB.gradingStatus='PARTIAL_RESULT_SOURCE';context.fixture.sports.MLB.gradingGamesUnavailable=1;vm.runInContext('render()',context);
+assert(node('#gradingHealth').textContent.includes('MLB: 1 game-result source unavailable'));
+assert(node('#gradingHealth').textContent.includes('Affected forecasts stay pending'));
+context.fixture.sports.MLB.gradingStatus='CURRENT';vm.runInContext('render()',context);assert.equal(node('#gradingHealth').textContent,'');
 console.log('Slip rendering, leg availability, board timing, review flags, expiry and provider errors passed.');

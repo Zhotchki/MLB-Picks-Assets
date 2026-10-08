@@ -8,7 +8,7 @@ from zoneinfo import ZoneInfo
 from collections import Counter, defaultdict
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '0.5.6'
+VERSION = '0.5.7'
 API = 'https://statsapi.mlb.com/api/v1/'
 STAT_KEYS = {'Hits': 'hits', 'Runs': 'runs', 'RBI': 'rbi', 'Bases': 'totalBases', 'Walks': 'baseOnBalls', 'Strikeouts': 'strikeOuts', 'Stolen Bases': 'stolenBases', 'Home Runs': 'homeRuns'}
 
@@ -189,25 +189,23 @@ def collect_mlb(now, today, model):
     return verified, {'status':'LIVE_FORECASTS' if source_fresh else 'STALE','sourceStatus':'CURRENT' if source_fresh else 'STALE','verifiedRows':len(verified)}, rejected, timestamp, refresh
 
 def grade_mlb(ledger, now):
-    boxes = {}
-    def box(game_id):
-        if game_id not in boxes: boxes[game_id] = get(API+f'game/{game_id}/boxscore')
-        return boxes[game_id]
-    event_cache = {}
-    for r in ledger:
-        if r['sport'] != 'MLB' or r.get('resultStatus') != 'PENDING' or iso(r['startTime']) > now: continue
-        if r['gameId'] not in event_cache:
-            event_cache[r['gameId']] = get(API+'schedule?'+urllib.parse.urlencode({'sportId':1,'gamePk':r['gameId']}))
-        dates = event_cache[r['gameId']]
+    from result_jobs import load_results
+    pending=[r for r in ledger if r['sport']=='MLB' and r.get('resultStatus')=='PENDING' and iso(r['startTime'])<=now]
+    def load_game(gid):
+        dates=get(API+'schedule?'+urllib.parse.urlencode({'sportId':1,'gamePk':gid}))
         events = [g for d in dates.get('dates',[]) for g in d.get('games',[])]
-        if not events: continue
-        event = next((g for g in events if g['gamePk']==r['gameId']),None)
-        if not event: continue
+        event=next((g for g in events if g['gamePk']==gid),None)
+        box=get(API+f'game/{gid}/boxscore') if event and event['status']['abstractGameState']=='Final' and event['status'].get('codedGameState') not in ('C','D') else None
+        return event,box
+    games,health=load_results((r['gameId'] for r in pending),load_game)
+    for r in pending:
+        event,box=games.get(r['gameId'],(None,None))
+        if event is None:continue
         status = event['status']
         if status.get('codedGameState') in ('C','D'):
             r.update(resultStatus='VOID', voidReason='Cancelled or postponed'); continue
         if status['abstractGameState'] != 'Final': continue
-        found = [p for s in box(r['gameId'])['teams'].values() for p in s['players'].values() if p['person']['id']==r['playerId']]
+        found = [p for s in box['teams'].values() for p in s['players'].values() if p['person']['id']==r['playerId']]
         stats = found[0].get('stats',{}).get('batting',{}) if found else {}
         appearances = number(stats.get('plateAppearances'))
         # Incomplete final boxscores are retried; absence is not proof of DNP.
@@ -217,6 +215,7 @@ def grade_mlb(ledger, now):
         val = actual(r['prop'],stats)
         if val is None: continue
         r.update(resultStatus='GRADED', actual=val, outcome=int(val>=r['target']), gradedAt=now.isoformat())
+    return health
 
 def run():
     now = datetime.now(timezone.utc)
@@ -279,7 +278,7 @@ def run():
     for r in verified:
         if r['id'] not in ids: ledger.append(dict(r)); ids.add(r['id'])
     try:
-        grade_mlb(ledger,now)
+        mlb_status.update(grade_mlb(ledger,now) or {})
     except Exception:
         mlb_status['gradingStatus'] = 'AWAITING_RESULT_SOURCE'
     try:
@@ -287,11 +286,11 @@ def run():
     except Exception:
         nfl_status['gradingStatus'] = 'AWAITING_RESULT_SOURCE'
     try:
-        grade_nhl(ledger,now,ROOT)
+        nhl_status.update(grade_nhl(ledger,now,ROOT) or {})
     except Exception:
         nhl_status['gradingStatus'] = 'AWAITING_RESULT_SOURCE'
     try:
-        grade_nba(ledger,now,ROOT)
+        nba_status.update(grade_nba(ledger,now,ROOT) or {})
     except Exception:
         nba_status['gradingStatus'] = 'AWAITING_RESULT_SOURCE'
     model = learn(ledger,model,today)
