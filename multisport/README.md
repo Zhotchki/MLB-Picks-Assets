@@ -1,4 +1,4 @@
-# MultiSport Pick’em v0.5.7
+# MultiSport Pick’em v0.5.8
 
 Dedicated app: https://zhotchki.github.io/MLB-Picks-Assets/multisport/
 
@@ -106,3 +106,7 @@ Player cards now group by sport, player and game so forecasts from different fix
 ## v0.5.7 — independent game-result reads
 
 MLB, NBA and NHL grading fetch each distinct due game once per run with at most four concurrent result workers per sport. A failed request leaves that game pending and allows other available games to grade. No requests are made for future games or already settled forecasts. NBA/NHL keep their 15-minute result cache and all fixture, regular-season, player identity and explicit DNP checks. Frozen forecast probabilities and captures are untouched. Grading metadata reports checked and unavailable games; Model results displays source failures and automatic retry behavior. NFL retains its shared schedule/stat feed. This changes result fetching only; calibration, forecast eligibility, ParlayAPI budgets and offer expiry are preserved.
+
+## v0.5.8 — steady player cards
+
+Collapsed cards show the highest matching prop and target beside its probability, including a visible unvalidated-baseline label. Expanded cards retain their open state across refreshes for the same sport/player/game. Unchanged card content is not rebuilt on the 15-second expiry tick, preserving native card focus and expansion; changed or expired forecasts still rerender through the existing freshness rules. Filter menus are only rebuilt when their choices change. This affects browsing only and preserves exact-line slip checks and forecast eligibility.

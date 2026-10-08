@@ -8,7 +8,7 @@ from zoneinfo import ZoneInfo
 from collections import Counter, defaultdict
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '0.5.7'
+VERSION = '0.5.8'
 API = 'https://statsapi.mlb.com/api/v1/'
 STAT_KEYS = {'Hits': 'hits', 'Runs': 'runs', 'RBI': 'rbi', 'Bases': 'totalBases', 'Walks': 'baseOnBalls', 'Strikeouts': 'strikeOuts', 'Stolen Bases': 'stolenBases', 'Home Runs': 'homeRuns'}
 
