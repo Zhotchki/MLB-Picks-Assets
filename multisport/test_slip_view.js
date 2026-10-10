@@ -44,3 +44,14 @@ assert(node('#gradingHealth').textContent.includes('MLB: 1 game-result source un
 assert(node('#gradingHealth').textContent.includes('Affected forecasts stay pending'));
 context.fixture.sports.MLB.gradingStatus='CURRENT';vm.runInContext('render()',context);assert.equal(node('#gradingHealth').textContent,'');
 console.log('Slip rendering, leg availability, board timing, review flags, expiry and provider errors passed.');
+
+context.fixture.platformFeed.plannedChecks=[{sport:'NFL',checkAt:new Date(now+7200000).toISOString(),games:8},{sport:'MLB',checkAt:new Date(now+3600000).toISOString(),games:1},{sport:'NHL',checkAt:new Date(now-3600000).toISOString(),games:2},{sport:'<NBA>',checkAt:'invalid',games:1}];
+vm.runInContext('render()',context);
+assert(node('#boardSchedule').innerHTML.includes('Upcoming automatic board checks'));
+assert(node('#boardSchedule').innerHTML.indexOf('MLB')<node('#boardSchedule').innerHTML.indexOf('NFL'));
+assert(!node('#boardSchedule').innerHTML.includes('NHL'));
+assert(!node('#boardSchedule').innerHTML.includes('NBA'));
+assert(node('#boardSchedule').innerHTML.includes('8 games'));
+assert(node('#boardSchedule').innerHTML.includes('1 game</li>'));
+context.fixture.platformFeed.plannedChecks=[];vm.runInContext('render()',context);assert.equal(node('#boardSchedule').innerHTML,'');
+console.log('Upcoming board schedule ordering, stale/invalid exclusion and empty state passed.');
