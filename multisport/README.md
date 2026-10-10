@@ -1,4 +1,4 @@
-# MultiSport Pick’em v0.5.8
+# MultiSport Pick’em v0.5.9
 
 Dedicated app: https://zhotchki.github.io/MLB-Picks-Assets/multisport/
 
@@ -110,3 +110,9 @@ MLB, NBA and NHL grading fetch each distinct due game once per run with at most 
 ## v0.5.8 — steady player cards
 
 Collapsed cards show the highest matching prop and target beside its probability, including a visible unvalidated-baseline label. Expanded cards retain their open state across refreshes for the same sport/player/game. Unchanged card content is not rebuilt on the 15-second expiry tick, preserving native card focus and expansion; changed or expired forecasts still rerender through the existing freshness rules. Filter menus are only rebuilt when their choices change. This affects browsing only and preserves exact-line slip checks and forecast eligibility.
+
+## v0.5.9 — prospective NFL exact-line history candidates
+
+Fresh observed NFL Sleeper half-integer lines missing from existing model targets now receive a separately versioned empirical baseline when an already verified player/prop/fixture has at least eight distinct, completed, same-team regular-season games within 400 days and an appearance within 21 days. At most 25 recent games are used. Probability is (historical exceedances + 1) / (games + 2), evaluated at the actual observed line. Missing stats do not become zero. This is a descriptive historical baseline with no matchup or playing-time scaling; inherited expected snaps do not imply such an adjustment. Whole-number push lines and PPR fractional-score lines are excluded. Existing exact-line probabilities remain unchanged.
+
+Candidates retain true pregame capture times, immutable forecast IDs and separate source-version validation. They are graded against their own exact modelLine. They are explicitly UNVALIDATED_BASELINE, platformEligible=false and actionable=false: more candidate forecasts do not mean more playable slips. No platform budget increase, extra board calls or payout inference is introduced. Invalid, expired, ambiguous, special and mismatched offers fail the existing matcher before history is fetched. History-source failures are isolated from existing feeds. Promotion requires chronological validation; no automatic eligibility promotion is implemented. MLB expansion remains dependent on a trustworthy distribution or exact-line source probabilities rather than interpolation from one target.

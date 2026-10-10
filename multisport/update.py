@@ -8,7 +8,7 @@ from zoneinfo import ZoneInfo
 from collections import Counter, defaultdict
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '0.5.8'
+VERSION = '0.5.9'
 API = 'https://statsapi.mlb.com/api/v1/'
 STAT_KEYS = {'Hits': 'hits', 'Runs': 'runs', 'RBI': 'rbi', 'Bases': 'totalBases', 'Walks': 'baseOnBalls', 'Strikeouts': 'strikeOuts', 'Stolen Bases': 'stolenBases', 'Home Runs': 'homeRuns'}
 
@@ -260,6 +260,18 @@ def run():
     except Exception:
         nba_status['detail'] = 'NBA sources could not be verified this run; other sports continue.'
         rejected['NBA:unavailable_source'] += 1
+    from platform_feed import fetch as fetch_board,match as match_offers,slip_sets as build_slip_sets
+    board_time = datetime.now(timezone.utc)
+    eligible_sports={r['sport'] for r in verified if r.get('platformEligible') is not False}
+    board,feed_state=fetch_board(ROOT,board_time,eligible_sports,verified)
+    from exact_lines import collect as collect_exact_lines
+    exact_rows,exact_rejected=collect_exact_lines(verified,board,board_time,ROOT,norm)
+    for r in exact_rows:
+        r['probability']=corrected(r,model)
+        r['modelVersion']=model['version']
+    verified.extend(exact_rows)
+    rejected.update({'NFL:exact_line:'+k:v for k,v in exact_rejected.items()})
+    nfl_status['exactLineCandidateRows']=len(exact_rows)
     # Recheck after network reads: a slow import must never backdate a prediction
     # for a game that started while its sources were being fetched.
     captured_at = datetime.now(timezone.utc)
@@ -298,10 +310,7 @@ def run():
     validation = validation_report(ledger)
     graded = [r for r in ledger if r.get('resultStatus')=='GRADED']
     frozen = {'n':len(graded), 'brier':sum((r['probability']-r['outcome'])**2 for r in graded)/len(graded) if graded else None}
-    from platform_feed import fetch as fetch_board,match as match_offers,slip_sets as build_slip_sets
     published_at = datetime.now(timezone.utc)
-    eligible_sports={r['sport'] for r in verified if r.get('platformEligible') is not False}
-    board,feed_state=fetch_board(ROOT,published_at,eligible_sports,verified)
     offers,offer_counts=match_offers(verified,board,published_at,norm)
     data = {'version':VERSION,'updatedAt':published_at.isoformat(),'sourceUpdatedAt':timestamp,'sourceRefresh':refresh,'sourceStatus':mlb_status['sourceStatus'],
             'sports':{'MLB':mlb_status, 'NFL':nfl_status,'NBA':nba_status,'NHL':nhl_status},
