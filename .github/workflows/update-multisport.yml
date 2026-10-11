@@ -30,14 +30,23 @@ jobs:
           path: multisport/.runtime
           key: multisport-sources-${{ github.run_id }}
           restore-keys: multisport-sources-
-      - name: Verify adapter and update forecasts
+      - name: Verify adapter and forecast tests
         run: |
           node multisport/test_player_view.js
           node multisport/test_eligibility.js
           node multisport/test_validation_view.js
           node multisport/test_slip_view.js
           python -m unittest discover -s multisport -p 'test_*.py'
-          python multisport/update.py
+      - name: Update forecasts with transient retry and diagnostics
+        run: python multisport/update_with_retry.py
+      - name: Save failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: multisport-failure-${{ github.run_id }}
+          path: multisport/.runtime/update-report.json
+          if-no-files-found: ignore
+          retention-days: 14
       - name: Preserve predictions and publish current data
         run: |
           git config user.name 'github-actions[bot]'
