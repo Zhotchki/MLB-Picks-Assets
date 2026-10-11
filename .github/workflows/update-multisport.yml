@@ -2,7 +2,7 @@ name: Update MultiSport forecasts and results
 on:
   push:
     branches: [main]
-    paths: ['multisport/*.py', 'multisport/*.js', '.github/workflows/update-multisport.yml']
+    paths: ['multisport/*.py', 'multisport/*.js', 'multisport/index.html', '.github/workflows/update-multisport.yml']
   schedule:
     - cron: '7,22,37,52 * * * *'
   workflow_dispatch:
