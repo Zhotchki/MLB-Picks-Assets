@@ -8,8 +8,9 @@ from zoneinfo import ZoneInfo
 from collections import Counter, defaultdict
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '0.5.9'
+VERSION = '0.5.10'
 API = 'https://statsapi.mlb.com/api/v1/'
+MLB_FEED = 'https://script.google.com/macros/s/AKfycbw1_xLZM-fAaBm9c4hmvwrvdlWxbV-3S3gW3e8GCZ8DKsfpNf-FVlwHb4lhwMECXNoiAA/exec?api=mobile'
 STAT_KEYS = {'Hits': 'hits', 'Runs': 'runs', 'RBI': 'rbi', 'Bases': 'totalBases', 'Walks': 'baseOnBalls', 'Strikeouts': 'strikeOuts', 'Stolen Bases': 'stolenBases', 'Home Runs': 'homeRuns'}
 
 def get(url,timeout=40):
@@ -56,6 +57,16 @@ def group(row):
     key = row['sport'] + '|' + row['prop'] + '|' + row['direction']
     version = row.get('baselineVersion') or row.get('upstreamModelVersion')
     return key + '|' + str(version) if version else key
+
+def mlb_source():
+    try:
+        return get(MLB_FEED), False
+    except Exception:
+        # Use source-native timestamps from the independently synced snapshot.
+        # The normal freshness gates below still reject old repository copies.
+        snapshot = ROOT.parent / 'mobile-data.json'
+        return json.loads(snapshot.read_text()), True
+
 def corrected(row, model):
     p = row['sourceProbability'] + model.get('offsets', {}).get(group(row), 0)
     return max(.01, min(.99, p))
@@ -119,7 +130,7 @@ def learn(ledger, incumbent, today):
     return updated
 
 def collect_mlb(now, today, model):
-    upstream = get('https://script.google.com/macros/s/AKfycbw1_xLZM-fAaBm9c4hmvwrvdlWxbV-3S3gW3e8GCZ8DKsfpNf-FVlwHb4lhwMECXNoiAA/exec?api=mobile')
+    upstream, cached = mlb_source()
     timestamp = upstream.get('generatedAt')
     try:
         age = (now-iso(timestamp)).total_seconds()
@@ -186,7 +197,7 @@ def collect_mlb(now, today, model):
         r['modelVersion'] = model['version']
         r['upstreamModelVersion'] = upstream.get('appVersion') or upstream.get('version')
         verified.append(r)
-    return verified, {'status':'LIVE_FORECASTS' if source_fresh else 'STALE','sourceStatus':'CURRENT' if source_fresh else 'STALE','verifiedRows':len(verified)}, rejected, timestamp, refresh
+    return verified, {'status':'LIVE_FORECASTS' if source_fresh else 'STALE','sourceStatus':'CURRENT' if source_fresh else 'STALE','verifiedRows':len(verified),'usingCachedFeed':cached}, rejected, timestamp, refresh
 
 def grade_mlb(ledger, now):
     from result_jobs import load_results

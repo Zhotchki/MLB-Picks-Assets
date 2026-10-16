@@ -10,6 +10,31 @@ class SecretFreeTests(unittest.TestCase):
 
 class AdapterTests(SecretFreeTests):
 
+    def test_mlb_source_falls_back_to_synced_snapshot_without_changing_timestamps(self):
+        import update, tempfile, json
+        from pathlib import Path
+        from unittest.mock import patch
+        source={'generatedAt':'2030-01-01T14:00:00Z','lastRefresh':'01/01/2030 08:00:00 AM','picks':[]}
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp); app=root/'multisport'; app.mkdir()
+            (root/'mobile-data.json').write_text(json.dumps(source))
+            with patch.object(update,'ROOT',app),patch.object(update,'get',side_effect=TimeoutError):
+                loaded,cached=update.mlb_source()
+        self.assertTrue(cached);self.assertEqual(loaded,source)
+
+    def test_stale_mlb_snapshot_fallback_is_not_published(self):
+        import update
+        from datetime import datetime, timezone
+        from unittest.mock import patch
+        source={'generatedAt':'2029-12-31T12:00:00Z','lastRefresh':'12/31/2029 06:00:00 AM','picks':[{'Player':'Old'}]}
+        def official(url):
+            return {'dates':[]} if 'schedule?' in url else {'teams':[]}
+        now=datetime(2030,1,1,14,tzinfo=timezone.utc)
+        with patch.object(update,'mlb_source',return_value=(source,True)),patch.object(update,'get',side_effect=official):
+            rows,status,rejected,_,_=update.collect_mlb(now,now.date(),{'version':'baseline','offsets':{}})
+        self.assertFalse(rows);self.assertEqual(status['sourceStatus'],'STALE')
+        self.assertTrue(status['usingCachedFeed']);self.assertEqual(rejected['stale_source'],1)
+
     def test_blank_and_nonfinite_are_not_zero(self):
         for v in ('',None,'nan','inf',True): self.assertIsNone(number(v))
         self.assertEqual(number(0),0)
