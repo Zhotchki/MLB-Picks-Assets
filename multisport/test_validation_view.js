@@ -9,6 +9,15 @@ assert(html.includes('Shots &lt;script&gt;'));assert(!html.includes('<script>'))
 assert(html.includes('0 / 200'));assert(html.includes('0 / 100'));
 assert(html.includes('Brier —'));assert(!html.includes('0.0%'));
 assert(validationMarkup({groups:[g]},'NBA').includes('No saved forecasts'));
+
+const reviewed=JSON.parse(JSON.stringify(g));
+reviewed.status='REVIEWABLE_HOLDOUT';reviewed.review.status='REVIEWABLE_HOLDOUT';
+reviewed.review.forecastScores={brier:.1,logLoss:.3};reviewed.review.referenceScores={brier:.2,logLoss:.5};
+reviewed.review.beatsReference=true;reviewed.review.allTargetsBeatReference=false;
+reviewed.review.targetReviews=[{modelLine:2.5,status:'REVIEWABLE_TARGET',beatsReference:false,holdout:{playerGames:40}}];
+const reviewedHtml=validationMarkup({groups:[reviewed]});
+assert(reviewedHtml.includes('Exact targets all pass: no'));
+assert(reviewedHtml.includes('2.5 · 40 holdout player-games · does not beat reference'));
 assert(validationMarkup(null).includes('after the automatic feed updates'));
 assert.equal(validationValue(null),'—');
 console.log('Validation rendering, support counts, missing metrics, filtering and escaping checks passed.');

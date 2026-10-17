@@ -9,6 +9,8 @@ from zoneinfo import ZoneInfo
 
 MINIMUMS={'trainingPlayerGames':200,'holdoutPlayerGames':100,'trainingGames':25,
           'holdoutGames':10,'trainingDays':7,'holdoutDays':3}
+TARGET_MINIMUMS={'trainingPlayerGames':30,'holdoutPlayerGames':30,'trainingGames':10,
+                 'holdoutGames':5,'trainingDays':3,'holdoutDays':2}
 DEFAULTS={'NBA':['Points','Rebounds','Assists','3-Pointers Made'],'NHL':['Shots on Goal']}
 
 def iso(v):
@@ -75,7 +77,8 @@ def holdout(rows):
     train,test=chronological(rows);a,b=support(train),support(test)
     result={'status':'COLLECTING_SEPARATE_GAMES','training':a,'holdout':b,'minimums':MINIMUMS,
             'trainingThrough':max((r['startTime'] for r in train),default=None),
-            'holdoutFrom':min((r['startTime'] for r in test),default=None),'forecastScores':None,'referenceScores':None}
+            'holdoutFrom':min((r['startTime'] for r in test),default=None),'forecastScores':None,'referenceScores':None,
+            'targetReviews':[],'allTargetsBeatReference':False}
     if any(a[k]<MINIMUMS['training'+k[0].upper()+k[1:]] or b[k]<MINIMUMS['holdout'+k[0].upper()+k[1:]] for k in ('playerGames','games','days')):return result
     # Constant-per-target reference fitted only on training outcomes. It is a
     # skill comparator, not a bookmaker probability or payout.
@@ -89,9 +92,24 @@ def holdout(rows):
         n=len({player_game(r) for r in values})
         reference[k]=(score(values)['targetHitRate']*n+2)/(n+4)
     trial=score(test);base=score(test,lambda r:reference[threshold(r)])
+    target_reviews=[]
+    for target in sorted({threshold(r) for r in test},key=lambda value:str(value)):
+        training=buckets[target];testing=[r for r in test if threshold(r)==target]
+        training_support,holdout_support=support(training),support(testing)
+        enough=all(training_support[k]>=TARGET_MINIMUMS['training'+k[0].upper()+k[1:]] and
+                   holdout_support[k]>=TARGET_MINIMUMS['holdout'+k[0].upper()+k[1:]]
+                   for k in ('playerGames','games','days'))
+        target_trial=score(testing);target_base=score(testing,lambda r,p=reference[target]:p)
+        target_beats=enough and target_trial['brier']<target_base['brier'] and target_trial['logLoss']<target_base['logLoss']
+        target_reviews.append({'modelLine':target[0],'target':target[1],
+                               'status':'REVIEWABLE_TARGET' if enough else 'COLLECTING_TARGET_RESULTS',
+                               'training':training_support,'holdout':holdout_support,'minimums':TARGET_MINIMUMS,
+                               'forecastScores':target_trial,'referenceScores':target_base,'beatsReference':target_beats})
     result.update(status='REVIEWABLE_HOLDOUT',forecastScores=trial,referenceScores=base,
                   brierImprovement=base['brier']-trial['brier'],logLossImprovement=base['logLoss']-trial['logLoss'],
-                  beatsReference=trial['brier']<base['brier'] and trial['logLoss']<base['logLoss'])
+                  beatsReference=trial['brier']<base['brier'] and trial['logLoss']<base['logLoss'],
+                  targetReviews=target_reviews,
+                  allTargetsBeatReference=bool(target_reviews) and all(r['beatsReference'] for r in target_reviews))
     return result
 
 def report(ledger):
@@ -122,6 +140,6 @@ def report(ledger):
     sports={s:{'recorded':support(sport_rows[s]),'graded':support([r for r in sport_rows[s] if graded(r)]),
                'pending':sum(r.get('resultStatus')=='PENDING' for r in sport_rows[s]),
                'void':sum(r.get('resultStatus')=='VOID' for r in sport_rows[s])} for s in ('MLB','NFL','NBA','NHL')}
-    return {'version':'prospective-targets-1','sports':sports,'groups':groups,'invalidForecasts':invalid,'duplicateForecasts':duplicate,
-            'method':'Frozen pregame probabilities; versions separated; later whole-game holdout; scores balanced by player-game then event.',
+    return {'version':'prospective-targets-2','sports':sports,'groups':groups,'invalidForecasts':invalid,'duplicateForecasts':duplicate,
+            'method':'Frozen pregame probabilities; versions separated; later whole-game holdout; scores balanced by player-game then event; exact targets reviewed separately.',
             'limitation':'Model-target accuracy is not platform wager win rate. Reviewable support is not proof of calibration, betting edge, or generalization. Reports never enable baseline offers.'}

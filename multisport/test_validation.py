@@ -71,6 +71,20 @@ class ValidationTests(unittest.TestCase):
         self.assertEqual(review['status'],'REVIEWABLE_HOLDOUT');self.assertEqual(review['holdout']['playerGames'],100)
         self.assertAlmostEqual(review['referenceScores']['meanProbability'],.5)
         self.assertTrue(review['beatsReference']);self.assertFalse(g['enablesPlayableOffers'])
+        self.assertTrue(review['allTargetsBeatReference']);self.assertEqual(len(review['targetReviews']),2)
+
+    def test_pooled_gain_does_not_hide_harm_at_one_exact_target(self):
+        rows=[]
+        for day in range(50):
+            for player in range(10):
+                y=player%2
+                for target in (3,4):
+                    probability=(.9 if y else .1) if target==3 else (.45 if y else .55)
+                    rows.append(row(day,player,target,outcome=y,probability=probability))
+        review=self.group(rows)['review']
+        self.assertTrue(review['beatsReference'])
+        self.assertFalse(review['allTargetsBeatReference'])
+        self.assertEqual([r['beatsReference'] for r in review['targetReviews']],[True,False])
 
     def test_pending_void_and_empty_sports_are_reported_without_fake_accuracy(self):
         rows=[dict(row(),resultStatus='PENDING'),dict(row(day=1),resultStatus='VOID')]

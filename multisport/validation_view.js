@@ -19,14 +19,19 @@ function validationMarkup(report, sport = 'All sports') {
     const percent = v => v == null ? '—' : validationValue(v*100,1)+'%';
     const skill = review.forecastScores ? '<p>Later holdout Brier: '+validationValue(review.forecastScores.brier)+
       ' · Training-only reference: '+validationValue(review.referenceScores.brier)+
-      '<br><small>Better on both Brier and log loss: '+(review.beatsReference?'yes':'no')+'. This comparison does not enable playable offers.</small></p>' : '';
+      '<br><small>Better on both Brier and log loss: '+(review.beatsReference?'yes':'no')+'. Exact targets all pass: '+
+      (review.allTargetsBeatReference?'yes':'no')+'. This comparison does not enable playable offers.</small></p>' : '';
+    const targets = (review.targetReviews || []).length ? '<details><summary>Exact target holdout checks</summary><ul>'+
+      review.targetReviews.map(t => '<li>'+esc(t.modelLine == null ? t.target : t.modelLine)+' · '+
+        esc(t.holdout.playerGames)+' holdout player-games · '+(t.status==='REVIEWABLE_TARGET'?(t.beatsReference?'beats reference':'does not beat reference'):'collecting support')+'</li>').join('')+
+      '</ul><small>Every sufficiently supported target must improve both Brier score and log loss. These checks do not enable playable offers.</small></details>' : '';
     return '<article class="panel"><h2>'+esc(g.sport)+' · '+esc(g.prop)+'</h2><p>'+esc(statuses[g.status] || g.status)+
       '</p><small>'+esc(g.sourceVersion || 'No source forecasts yet')+(g.modelVersion?' · '+esc((g.modelVersions || [g.modelVersion]).join(', ')):'')+'</small><p>'+esc(g.recorded.forecasts)+
       ' saved targets · '+esc(g.recorded.playerGames)+' player-games<br>'+esc(g.graded.playerGames)+' graded player-games · '+esc(g.pending)+' pending targets · '+esc(g.void)+' void</p>'+
       '<table class="validation-table"><thead><tr><th>Support</th><th>Training / needed</th><th>Holdout / needed</th></tr></thead><tbody>'+progress+'</tbody></table>'+
       '<p>All graded targets · game-balanced scores<br><small>Brier '+validationValue(score.brier)+' · Log loss '+validationValue(score.logLoss)+
       '<br>Average forecast '+percent(score.meanProbability)+' · Model-target hit rate '+percent(score.targetHitRate)+
-      '<br>Stat projection MAE '+validationValue(errors.mae)+' over '+esc(errors.playerGames)+' player-games</small></p>'+skill+
+      '<br>Stat projection MAE '+validationValue(errors.mae)+' over '+esc(errors.playerGames)+' player-games</small></p>'+skill+targets+
       (g.invalidResults?'<p class="error">'+esc(g.invalidResults)+' inconsistent results excluded.</p>':'')+'</article>';
   }).join('');
 }

@@ -1,4 +1,4 @@
-# MultiSport Pick’em v0.5.10
+# MultiSport Pick’em v0.5.11
 
 Dedicated app: https://zhotchki.github.io/MLB-Picks-Assets/multisport/
 
@@ -120,3 +120,7 @@ Candidates retain true pregame capture times, immutable forecast IDs and separat
 ## v0.5.10 — freshness-gated MLB snapshot fallback
 
 When the direct MLB model request fails, MultiSport can read the independently synced repository snapshot. It retains the source's original generated and refresh timestamps and must pass the existing one-hour snapshot and two-hour underlying-refresh limits. A missing, malformed or stale snapshot still leaves MLB unavailable while NFL, NBA and NHL continue independently. This adds no provider calls and does not modify the standalone MLB app.
+
+## v0.5.11 — exact-target holdout diagnostics
+
+Reviewable sport/prop holdouts now report each exact model line separately. Every line needs distinct training and later holdout support and must improve both Brier score and log loss against its own training-only reference before the report says all targets pass. A pooled improvement cannot hide harm at one line. These diagnostics remain evidence only: they never enable NBA/NHL baselines, change frozen forecasts or infer platform terms.
