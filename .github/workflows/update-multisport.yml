@@ -10,11 +10,13 @@ permissions:
   contents: write
 concurrency:
   group: multisport-data
-  cancel-in-progress: false
+  # A newer cron run supersedes an older guard wait. The fresh run recalculates
+  # the same immutable window from current data before any provider request.
+  cancel-in-progress: true
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 130
     env:
       PARLAY_API_KEY: ${{ secrets.PARLAY_API_KEY }}
     steps:
@@ -54,5 +56,22 @@ jobs:
           git add multisport/data.json multisport/ledger.json multisport/model.json multisport/feed-state.json
           if git diff --cached --quiet; then exit 0; fi
           git commit -m 'Refresh MultiSport forecasts and final results [skip ci]'
+          git pull --rebase origin main
+          git push origin main
+      - name: Plan one guarded pregame follow-up
+        id: window_guard
+        run: python multisport/window_guard.py >> "$GITHUB_OUTPUT"
+      - name: Wait for the planned pregame window
+        if: steps.window_guard.outputs.should_wait == 'true'
+        run: sleep "${{ steps.window_guard.outputs.wait_seconds }}"
+      - name: Refresh at the guarded pregame window
+        if: steps.window_guard.outputs.should_wait == 'true'
+        run: python multisport/update_with_retry.py
+      - name: Publish guarded pregame refresh
+        if: steps.window_guard.outputs.should_wait == 'true'
+        run: |
+          git add multisport/data.json multisport/ledger.json multisport/model.json multisport/feed-state.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Refresh MultiSport pregame window [skip ci]'
           git pull --rebase origin main
           git push origin main

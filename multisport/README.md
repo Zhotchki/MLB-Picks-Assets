@@ -1,4 +1,4 @@
-# MultiSport Pick’em v0.5.11
+# MultiSport Pick’em v0.5.12
 
 Dedicated app: https://zhotchki.github.io/MLB-Picks-Assets/multisport/
 
@@ -120,6 +120,13 @@ Candidates retain true pregame capture times, immutable forecast IDs and separat
 ## v0.5.10 — freshness-gated MLB snapshot fallback
 
 When the direct MLB model request fails, MultiSport can read the independently synced repository snapshot. It retains the source's original generated and refresh timestamps and must pass the existing one-hour snapshot and two-hour underlying-refresh limits. A missing, malformed or stale snapshot still leaves MLB unavailable while NFL, NBA and NHL continue independently. This adds no provider calls and does not modify the standalone MLB app.
+
+## v0.5.12 — delayed-schedule pregame guard
+
+- GitHub Actions may start scheduled jobs hours late. A successful run now waits once for a nearby verified `nextRefreshAt` window (maximum 105 minutes) and refreshes at that exact window.
+- A newer scheduled run cancels an older wait and recalculates from current data, preventing queued guard jobs from accumulating.
+- The normal pregame scheduler still controls whether any provider request is due. The 240/90/20-minute targets, five-minute cutoff, no-repeat state, 15-minute line expiry, daily/monthly/account caps, and explicit interval override are unchanged.
+- The guard never runs for budget waits, interval mode, missing/invalid timestamps, or distant windows.
 
 ## v0.5.11 — exact-target holdout diagnostics
 
