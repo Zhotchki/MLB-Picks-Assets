@@ -3,7 +3,7 @@ from copy import deepcopy
 from datetime import datetime,timedelta
 from zoneinfo import ZoneInfo
 import math
-from platform_feed import rank_pool
+from platform_feed import diverse_slips
 from validation import graded as valid_grade
 
 SIZES=(2,3,4,5,6,8)
@@ -56,11 +56,10 @@ def update(saved,forecasts,ledger,sports,now):
         except (KeyError,ValueError,TypeError,AttributeError):continue
     # More than three candidates allows a later refresh to fill remaining slots
     # while excluding signatures already frozen earlier in the week.
-    ranked=rank_pool(pool,SIZES,COUNT*2)
     for size in SIZES:
         existing=[s for s in saved if s['week']==week and s['size']==size]
         seen={signature(s['legs']) for s in existing}
-        for candidate in ranked[str(size)]:
+        for candidate in diverse_slips(pool,size,COUNT-len(existing),existing):
             if len(existing)>=COUNT:break
             legs=[]
             for r in candidate['legs']:

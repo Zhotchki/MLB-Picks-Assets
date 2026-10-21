@@ -151,3 +151,6 @@ The Slips view builds up to three paper previews for 2/3/4/5/6/8 legs directly f
 
 ### Slip sport selection (v0.5.15)
 The Slips view has one sport selector for both on-demand builders: All sports (mixed pool), MLB, NFL, NBA or NHL. Model forecasts are filtered before ranking. Live single-sport slips are ranked from current usable offers, so a sport is not limited to precomputed mixed slips. Existing freshness and platform gates still apply. Weekly frozen tests are unchanged. Changing sport clears preview cards and recomputes available sizes.
+
+### Pick reuse limit (v0.5.18)
+New batches use the same player/game/prop/direction/line in at most two slips per leg count. Model previews, live builders and future weekly fills enforce the cap; existing frozen weekly slips are retained. Selection greedily ranks remaining alternatives after a pick reaches two uses. A small pool can yield fewer slips; this is not a globally optimal batch search. Different model/provider IDs for the same pick share one cap.

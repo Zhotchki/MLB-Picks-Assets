@@ -1,5 +1,5 @@
 import itertools,math,random,unittest
-from platform_feed import slip_sets,slips
+from platform_feed import slip_sets,slips,rank_pool,pick_key,diverse_slips
 
 def offer(event,player,probability,variant=0):
     return {'offerId':f'{event}:{player}:{variant}','sport':'MLB','gameId':event,'playerId':player,
@@ -18,7 +18,7 @@ class SlipRankingTests(unittest.TestCase):
         rng=random.Random(810)
         for case in range(20):
             pool=[offer(event,event*10+player,rng.uniform(.25,.95)) for event in range(5) for player in range(2)]
-            result=slip_sets(pool,(2,3,4))
+            result=rank_pool(pool,(2,3,4),5)
             for size in (2,3,4):
                 expected=self.exhaustive(pool,size)
                 actual=result[str(size)]
@@ -29,7 +29,7 @@ class SlipRankingTests(unittest.TestCase):
         pool=[offer('dominant',i,.95,variant=i) for i in range(210)]
         pool += [offer(f'other-{i}',300+i,.6) for i in range(7)]
         result=slips(pool,8)
-        self.assertTrue(result);self.assertTrue(result[0]['searchComplete'])
+        self.assertTrue(result);self.assertFalse(result[0]['searchComplete'])
         self.assertEqual(len({r['gameId'] for r in result[0]['legs']}),8)
     def test_input_order_and_ties_are_deterministic_and_duplicates_are_removed(self):
         pool=[offer(event,event*10+player,.7) for event in range(4) for player in range(3)]
@@ -44,7 +44,7 @@ class SlipRankingTests(unittest.TestCase):
         for rows in result.values():
             for slip in rows:
                 self.assertFalse(slip['searchComplete'])
-                self.assertEqual(slip['rankingMethod'],'BOUNDED_PLAYER_BEAM')
+                self.assertEqual(slip['rankingMethod'],'GREEDY_REUSE_CAP')
                 self.assertEqual(len({r['playerId'] for r in slip['legs']}),len(slip['legs']))
                 self.assertEqual(len({r['gameId'] for r in slip['legs']}),len(slip['legs']))
         self.assertAlmostEqual(result['3'][0]['probability'],.9*.7*.6)
@@ -62,5 +62,29 @@ class SlipRankingTests(unittest.TestCase):
             self.assertTrue(all(len(s['legs'])==int(size) for s in rows))
         self.assertEqual(slip_sets(pool,(2,),count=0),{'2':[]})
         with self.assertRaises(ValueError):slips(pool,7)
+
+class ReuseLimitTests(unittest.TestCase):
+    def test_diverse_batches_rerank_after_two_uses_and_aliases_share_cap(self):
+        from collections import Counter
+        pool=[offer(i,i,.95-i*.01) for i in range(16)]
+        pool.append(dict(pool[0],offerId='alias',probability=.99))
+        for size in (2,4,8):
+            batch=slip_sets(pool,(size,),3)[str(size)]
+            self.assertEqual(len(batch),3)
+            counts=Counter(pick_key(r) for s in batch for r in s['legs'])
+            self.assertLessEqual(max(counts.values()),2)
+            self.assertTrue(all(s['searchComplete'] is False for s in batch))
+        self.assertEqual(pick_key(dict(pool[0],platformLine=1)),pick_key(dict(pool[0],platformLine=1.0)))
+    def test_exhausted_pool_returns_fewer_and_existing_picks_count(self):
+        from collections import Counter
+        pool=[offer(i,i,.9-i*.01) for i in range(3)]
+        batch=diverse_slips(pool,2,3)
+        self.assertEqual(len(batch),3)
+        self.assertLessEqual(max(Counter(pick_key(r) for s in batch for r in s['legs']).values()),2)
+        self.assertEqual(diverse_slips(pool[:2],2,3).__len__(),1)
+        first=diverse_slips(pool,2,1)
+        rest=diverse_slips(pool,2,2,first)
+        self.assertEqual(len(rest),2)
+        self.assertLessEqual(max(Counter(pick_key(r) for s in first+rest for r in s['legs']).values()),2)
 
 if __name__=='__main__':unittest.main()

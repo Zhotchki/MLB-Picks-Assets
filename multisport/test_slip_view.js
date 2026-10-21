@@ -116,3 +116,18 @@ node('#slipSport').value='All sports';node('#slipSport').onchange();
 assert.equal(node('#generateModel').disabled,false);
 assert.equal(vm.runInContext('modelSlips(data,4).length',context),1);
 console.log('Sport-specific model/live ranking, mixed mode, size fallback, expiry and empty-state clearing passed.');
+
+// Reuse is counted by the exact pick, across the whole generated batch.
+context.reusePool=Array.from({length:16},(_,i)=>({...paperLeg(100+i),probability:.95-i*.01}));
+vm.runInContext(`
+for(const size of [2,4,8]){
+ const batch=rankSlipPool(reusePool,size),counts=new Map();if(batch.length!==3)throw Error('Missing alternatives');
+ for(const s of batch)for(const r of s.legs){const k=slipPickKey(r);counts.set(k,(counts.get(k)||0)+1);}
+ if([...counts.values()].some(n=>n>2))throw Error('Pick used three times');
+}
+const aliases=[reusePool[0],{...reusePool[0],id:'different-model-id'},...reusePool.slice(1)];
+const aliasCounts=new Map();for(const s of rankSlipPool(aliases,4))for(const r of s.legs){const k=slipPickKey(r);aliasCounts.set(k,(aliasCounts.get(k)||0)+1);}
+if([...aliasCounts.values()].some(n=>n>2))throw Error('Alias bypassed cap');
+if(rankSlipPool(reusePool.slice(0,2),2).length!==1)throw Error('Duplicate slips');
+`,context);
+console.log('Two-use pick cap, alternate-pick reranking, aliases and exhausted pools passed.');

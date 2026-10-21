@@ -3,7 +3,27 @@ function modelSlips(data,size,now=Date.now(),sport='All sports'){
  const pool=forecastPool(data,now).filter(r=>r.scheduleVerified===true&&r.direction==='MORE'&&Number.isFinite(r.target)&&(sport==='All sports'||r.sport===sport));
  return rankSlipPool(pool,size).map(s=>({...s,kind:'MODEL_TEST',actionable:false}));
 }
+function slipPickKey(r){
+ const line=Number.isFinite(r.platformLine)?r.platformLine:Number.isFinite(r.modelLine)?r.modelLine:Number.isFinite(r.target)?r.target-.5:null;
+ return JSON.stringify([r.sport,String(r.gameId),String(r.playerId),r.prop,r.direction||'MORE',line]);
+}
+function limitSlipReuse(slips,count=3){
+ const uses=new Map(),seen=new Set(),out=[];
+ for(const s of slips){const keys=s.legs.map(slipPickKey),sig=[...keys].sort().join('|');
+  if(seen.has(sig)||keys.some(k=>(uses.get(k)||0)>=2))continue;
+  out.push(s);seen.add(sig);keys.forEach(k=>uses.set(k,(uses.get(k)||0)+1));if(out.length>=count)break;
+ }return out;
+}
 function rankSlipPool(pool,size){
+ const unique=[...new Map([...pool].sort((a,b)=>a.probability-b.probability).map(r=>[slipPickKey(r),r])).values()],out=[],uses=new Map(),seen=new Set();
+ for(let slot=0;slot<3;slot++){
+  const candidates=rankSlipCandidates(unique.filter(r=>(uses.get(slipPickKey(r))||0)<2),size);
+  const next=candidates.find(s=>!seen.has(s.legs.map(slipPickKey).sort().join('|')));if(!next)break;
+  out.push(next);seen.add(next.legs.map(slipPickKey).sort().join('|'));
+  for(const r of next.legs){const k=slipPickKey(r);uses.set(k,(uses.get(k)||0)+1);}
+ }return out;
+}
+function rankSlipCandidates(pool,size){
  size=Number(size);if(![2,3,4,5,6,8].includes(size))return [];
  const groups=new Map();
  for(const r of pool){const key=forecastGameKey(r);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(r);}
@@ -23,6 +43,6 @@ function rankSlipPool(pool,size){
    next.sort((a,b)=>b.probability-a.probability);states[n]=next.slice(0,200);
   }
  }
- return states[size].slice(0,3).map(({legs,probability})=>({legs,probability,searchComplete:false}));
+ return states[size].map(({legs,probability})=>({legs,probability,searchComplete:false}));
 }
-if(typeof module!=='undefined')module.exports={modelSlips,rankSlipPool};
+if(typeof module!=='undefined')module.exports={modelSlips,rankSlipPool,slipPickKey,limitSlipReuse};

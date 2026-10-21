@@ -217,7 +217,33 @@ def slip_sets(picks,sizes=(2,3,4,5,6,8),count=5):
         if row.get('actionable') is not True or row.get('platform')!='Sleeper' or row.get('platformEligible') is False:continue
         if any(row.get(key) is None for key in ('sport','gameId','playerId')):continue
         pool.append(dict(row,probability=p))
-    return rank_pool(pool,sizes,count)
+    return {str(size):diverse_slips(pool,size,count) for size in sizes}
+
+def pick_key(row):
+    """Same sport/game/player/prop/side/threshold, independent of provider or model IDs."""
+    line=next((row[k] for k in ('platformLine','modelLine') if isinstance(row.get(k),(int,float)) and not isinstance(row[k],bool)),None)
+    if line is None and isinstance(row.get('target'),(int,float)):line=row['target']-.5
+    if line is not None:line=format(line,'.15g')
+    return tuple(str(x) for x in (row.get('sport'),row.get('gameId'),row.get('playerId'),row.get('prop'),row.get('direction') or 'MORE',line))
+
+def diverse_slips(pool,size,count,existing=()):
+    """Greedy probability ranking with at most two uses of each pick per size/batch."""
+    from collections import Counter
+    uses=Counter(pick_key(r) for s in existing for r in s['legs'])
+    signature=lambda legs:tuple(sorted(pick_key(r) for r in legs))
+    seen={signature(s['legs']) for s in existing};out=[]
+    unique={}
+    for row in pool:
+        key=pick_key(row)
+        if key not in unique or row['probability']>unique[key]['probability']:unique[key]=row
+    for _ in range(max(0,count)):
+        eligible=[r for k,r in unique.items() if uses[k]<2]
+        candidates=rank_pool(eligible,(size,),max(128,count))[str(size)]
+        candidate=next((s for s in candidates if signature(s['legs']) not in seen),None)
+        if candidate is None:break
+        candidate=dict(candidate,searchComplete=False,rankingMethod='GREEDY_REUSE_CAP',maxPickUses=2)
+        out.append(candidate);seen.add(signature(candidate['legs']));uses.update(pick_key(r) for r in candidate['legs'])
+    return out
 
 def rank_pool(pool,sizes,count):
     """Pure ranking shared by live offers and separately labeled model tests."""

@@ -6,12 +6,16 @@ from platform_feed import slip_sets
 class WeeklySlipTests(unittest.TestCase):
     def setUp(self):
         self.now=datetime(2030,1,2,14,tzinfo=timezone.utc)
-        self.rows=[dict(id=f'NHL:{i}:MORE:1',sport='NHL',gameId=i,playerId=i,player=f'Player {i}',prop='Shots on Goal',direction='MORE',target=1,modelLine=.5,probability=.8+i*.001,sourceProbability=.8,platformEligible=False,probabilityStatus='UNVALIDATED_BASELINE',scheduleVerified=True,capturedAt=self.now.isoformat(),startTime=(self.now+timedelta(hours=i+1)).isoformat()) for i in range(10)]
+        self.rows=[dict(id=f'NHL:{i}:MORE:1',sport='NHL',gameId=i,playerId=i,player=f'Player {i}',prop='Shots on Goal',direction='MORE',target=1,modelLine=.5,probability=.8+i*.001,sourceProbability=.8,platformEligible=False,probabilityStatus='UNVALIDATED_BASELINE',scheduleVerified=True,capturedAt=self.now.isoformat(),startTime=(self.now+timedelta(hours=i+1)).isoformat()) for i in range(16)]
         self.sports={'NHL':{'sourceStatus':'CURRENT'}}
     def run_update(self,saved=None,rows=None,ledger=None,now=None):return update(saved or [],self.rows if rows is None else rows,ledger or [],self.sports,now or self.now)
     def test_three_per_size_unique_players_events_and_not_platform_slips(self):
         saved,t=self.run_update();self.assertEqual(len(saved),18)
         for size in SIZES:self.assertEqual(sum(s['size']==size for s in saved),3)
+        from collections import Counter
+        from platform_feed import pick_key
+        for size in SIZES:
+            self.assertLessEqual(max(Counter(pick_key(r) for s in saved if s['size']==size for r in s['legs']).values()),2)
         for s in saved:
             self.assertEqual(len({r['gameId'] for r in s['legs']}),s['size']);self.assertEqual(len({r['playerId'] for r in s['legs']}),s['size'])
             self.assertFalse(s['actionable']);self.assertIsNone(s['platform'])
