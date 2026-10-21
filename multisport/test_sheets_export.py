@@ -26,7 +26,7 @@ class SheetsExportTests(unittest.TestCase):
             export(p)
             rows=list(csv.reader(io.StringIO(p.joinpath('sheets/forecasts.csv').read_text())))
             self.assertEqual(rows[1][1],'Name, "Quoted"');self.assertNotIn('never-export',str(rows))
-            self.assertEqual(len(list(p.joinpath('sheets').glob('*.csv'))),6)
+            self.assertEqual(len(list(p.joinpath('sheets').glob('*.csv'))),8)
     def test_export_does_not_change_source_predictions(self):
         r=dict(sport='NHL',target=1,probability=.2,platformEligible=False)
         source=json.dumps(r,sort_keys=True);view=tables(dict(picks=[r]),[])

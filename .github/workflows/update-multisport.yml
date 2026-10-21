@@ -54,7 +54,7 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           python multisport/sheets_export.py
-          git add multisport/data.json multisport/ledger.json multisport/model.json multisport/feed-state.json multisport/sheets/*.csv
+          git add multisport/data.json multisport/ledger.json multisport/model.json multisport/feed-state.json multisport/weekly-slips.json multisport/sheets/*.csv
           if git diff --cached --quiet; then exit 0; fi
           git commit -m 'Refresh MultiSport forecasts and final results [skip ci]'
           git pull --rebase origin main
@@ -72,7 +72,7 @@ jobs:
         if: steps.window_guard.outputs.should_wait == 'true'
         run: |
           python multisport/sheets_export.py
-          git add multisport/data.json multisport/ledger.json multisport/model.json multisport/feed-state.json multisport/sheets/*.csv
+          git add multisport/data.json multisport/ledger.json multisport/model.json multisport/feed-state.json multisport/weekly-slips.json multisport/sheets/*.csv
           if git diff --cached --quiet; then exit 0; fi
           git commit -m 'Refresh MultiSport pregame window [skip ci]'
           git pull --rebase origin main

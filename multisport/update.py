@@ -8,7 +8,7 @@ from zoneinfo import ZoneInfo
 from collections import Counter, defaultdict
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '0.5.12'
+VERSION = '0.5.13'
 API = 'https://statsapi.mlb.com/api/v1/'
 MLB_FEED = 'https://script.google.com/macros/s/AKfycbw1_xLZM-fAaBm9c4hmvwrvdlWxbV-3S3gW3e8GCZ8DKsfpNf-FVlwHb4lhwMECXNoiAA/exec?api=mobile'
 STAT_KEYS = {'Hits': 'hits', 'Runs': 'runs', 'RBI': 'rbi', 'Bases': 'totalBases', 'Walks': 'baseOnBalls', 'Strikeouts': 'strikeOuts', 'Stolen Bases': 'stolenBases', 'Home Runs': 'homeRuns'}
@@ -323,11 +323,14 @@ def run():
     frozen = {'n':len(graded), 'brier':sum((r['probability']-r['outcome'])**2 for r in graded)/len(graded) if graded else None}
     published_at = datetime.now(timezone.utc)
     offers,offer_counts=match_offers(verified,board,published_at,norm)
-    data = {'version':VERSION,'updatedAt':published_at.isoformat(),'sourceUpdatedAt':timestamp,'sourceRefresh':refresh,'sourceStatus':mlb_status['sourceStatus'],
+    from weekly_slips import update as update_weekly_slips
+    weekly_saved,weekly_tracking=update_weekly_slips(read('weekly-slips.json',[]),verified,ledger,{'MLB':mlb_status,'NFL':nfl_status,'NBA':nba_status,'NHL':nhl_status},published_at)
+    data = {'weeklyTracking':weekly_tracking,'version':VERSION,'updatedAt':published_at.isoformat(),'sourceUpdatedAt':timestamp,'sourceRefresh':refresh,'sourceStatus':mlb_status['sourceStatus'],
             'sports':{'MLB':mlb_status, 'NFL':nfl_status,'NBA':nba_status,'NHL':nhl_status},
             'picks':sorted(verified,key=lambda r:-r['probability']),'rejected':dict(rejected),'model':model,'validation':validation,
             'results':{'recorded':len(ledger),'graded':len(graded),'void':sum(r.get('resultStatus')=='VOID' for r in ledger),'frozenPredictionMetrics':frozen},
             'slipStatus':('REVIEW_REQUIRED' if any(r.get('requiresPlatformReview') for r in offers) else 'READY') if offers else 'WAITING_FOR_VERIFIED_PLATFORM_LINES','platformFeed':{**{k:v for k,v in board.items() if k!='sports'},'sportStatus':{s:{k:v for k,v in entry.items() if k!='rows'} for s,entry in board.get('sports',{}).items()}},'offerCounts':offer_counts,'offers':offers,'slips':build_slip_sets(offers)}
+    write('weekly-slips.json',weekly_saved)
     write('feed-state.json',feed_state); write('ledger.json',ledger); write('model.json',model); write('data.json',data)
     print(json.dumps({'verifiedForecasts':len(verified),'rejected':dict(rejected),'ledger':len(ledger),'graded':len(graded)}))
 

@@ -55,3 +55,13 @@ assert(node('#boardSchedule').innerHTML.includes('8 games'));
 assert(node('#boardSchedule').innerHTML.includes('1 game</li>'));
 context.fixture.platformFeed.plannedChecks=[];vm.runInContext('render()',context);assert.equal(node('#boardSchedule').innerHTML,'');
 console.log('Upcoming board schedule ordering, stale/invalid exclusion and empty state passed.');
+
+context.fixture.weeklyTracking={currentWeek:'2030-W01',summary:[{week:'2030-W01',size:2,allHit:1,missed:0,pending:0,voided:0}],slips:[{week:'2030-W01',size:2,slot:1,status:'ALL_HIT',allHit:true,hits:2,misses:0,voids:0,pending:0,probability:.49,capturedAt:new Date(now).toISOString(),searchComplete:true,legs:[{player:'<Test Player>',sport:'NHL',prop:'Shots',usesModelLine:true,modelLine:.5,probability:.7,status:'HIT',actual:0,startTime:new Date(now).toISOString(),platformEligible:false}]}]};
+node('#weeklySize').value='2';vm.runInContext('renderWeekly()',context);
+assert(node('#weeklySummary').textContent.includes('1 all-hit'));
+assert(node('#weeklyCards').innerHTML.includes('100% HIT'));
+assert(node('#weeklyCards').innerHTML.includes('&lt;Test Player&gt;'));
+assert(node('#weeklyCards').innerHTML.includes('Actual: 0'));
+assert(node('#weeklyCards').innerHTML.includes('Unvalidated baseline'));
+assert(node('#weeklyCards').innerHTML.includes('Paper evaluation only'));
+console.log('Weekly model slips, all-hit labels, escaping and zero actuals passed.');
