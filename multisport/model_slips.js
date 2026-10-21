@@ -1,7 +1,10 @@
-/* Paper slips only. Never changes live-platform eligibility. */
-function modelSlips(data,size,now=Date.now()){
+/* Shared bounded ranking; callers supply independently eligible pools. */
+function modelSlips(data,size,now=Date.now(),sport='All sports'){
+ const pool=forecastPool(data,now).filter(r=>r.scheduleVerified===true&&r.direction==='MORE'&&Number.isFinite(r.target)&&(sport==='All sports'||r.sport===sport));
+ return rankSlipPool(pool,size).map(s=>({...s,kind:'MODEL_TEST',actionable:false}));
+}
+function rankSlipPool(pool,size){
  size=Number(size);if(![2,3,4,5,6,8].includes(size))return [];
- const pool=forecastPool(data,now).filter(r=>r.scheduleVerified===true&&r.direction==='MORE'&&Number.isFinite(r.target));
  const groups=new Map();
  for(const r of pool){const key=forecastGameKey(r);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(r);}
  if(groups.size<size)return [];
@@ -20,6 +23,6 @@ function modelSlips(data,size,now=Date.now()){
    next.sort((a,b)=>b.probability-a.probability);states[n]=next.slice(0,200);
   }
  }
- return states[size].slice(0,3).map(({legs,probability})=>({legs,probability,kind:'MODEL_TEST',actionable:false,searchComplete:false}));
+ return states[size].slice(0,3).map(({legs,probability})=>({legs,probability,searchComplete:false}));
 }
-if(typeof module!=='undefined')module.exports={modelSlips};
+if(typeof module!=='undefined')module.exports={modelSlips,rankSlipPool};

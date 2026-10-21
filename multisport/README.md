@@ -148,3 +148,6 @@ Both ordinary and guarded workflow publish steps persist the weekly ledger. `she
 
 ### On-demand model previews (v0.5.14)
 The Slips view builds up to three paper previews for 2/3/4/5/6/8 legs directly from fresh, schedule-verified upcoming forecasts. It automatically falls back to a smaller available size. Experimental baselines are allowed only in paper previews and weekly tests, with explicit labels. Previews are recalculated as games start or data expires, are not saved, and never change live eligibility. Weekly frozen slips remain the automatically graded record. Ranking is bounded (200 states per size, 24 candidates per game); no highest-possible probability guarantee. No new provider calls or costs.
+
+### Slip sport selection (v0.5.15)
+The Slips view has one sport selector for both on-demand builders: All sports (mixed pool), MLB, NFL, NBA or NHL. Model forecasts are filtered before ranking. Live single-sport slips are ranked from current usable offers, so a sport is not limited to precomputed mixed slips. Existing freshness and platform gates still apply. Weekly frozen tests are unchanged. Changing sport clears preview cards and recomputes available sizes.
