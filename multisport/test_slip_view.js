@@ -2,7 +2,7 @@ const fs=require('fs'),vm=require('vm'),assert=require('assert');
 const path=require('path'),root=__dirname,nodes={};
 const node=id=>nodes[id]||(nodes[id]={value:id==='#size'?'4':id==='#playerSearch'?'':id==='#playerProp'?'All props':id==='#playerGame'?'All games':id==='#playerMinimum'?'0':'All sports',options:id==='#size'?[2,3,4,5,6,8].map(value=>({value:String(value)})):[],innerHTML:'',textContent:'',hidden:false,disabled:false});
 const context=vm.createContext({document:{querySelector:node,querySelectorAll:()=>[],addEventListener:()=>{}},fetch:()=>new Promise(()=>{}),setInterval:()=>{},Date});
-for(const file of ['player_view.js','eligibility.js','validation_view.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),context);
+for(const file of ['player_view.js','model_slips.js','eligibility.js','validation_view.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),context);
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
 for(const match of html.matchAll(/<script>([\s\S]*?)<\/script>/g))vm.runInContext(match[1],context);
 const now=Date.now(),leg=id=>({sport:'MLB',gameId:id,playerId:id,player:'<Player '+id+'>',prop:'Hits',platformLine:0.5,probability:0.7,platform:'Sleeper',actionable:true,requiresPlatformReview:true,platformOfferType:'unreported',kickoffSource:'OFFICIAL_SCHEDULE',startTime:new Date(now+3600000).toISOString(),offerObservedAt:new Date(now-1000).toISOString()});
@@ -65,3 +65,22 @@ assert(node('#weeklyCards').innerHTML.includes('Actual: 0'));
 assert(node('#weeklyCards').innerHTML.includes('Unvalidated baseline'));
 assert(node('#weeklyCards').innerHTML.includes('Paper evaluation only'));
 console.log('Weekly model slips, all-hit labels, escaping and zero actuals passed.');
+
+// Model previews remain usable with zero live offers; start times and stale sources still gate.
+const paperLeg=(id,p=.8)=>({...leg(id),id:'forecast-'+id,target:1,modelLine:.5,direction:'MORE',scheduleVerified:true,probability:p,probabilityStatus:'UNVALIDATED_BASELINE',platformEligible:false});
+context.fixture.picks=[paperLeg(10),paperLeg(11),paperLeg(12),paperLeg(13)];
+context.fixture.offers=[];context.fixture.slips={};node('#modelSize').value='4';
+vm.runInContext('render();renderModelCards()',context);
+assert.equal(node('#generateModel').disabled,false);
+assert(node('#modelCards').innerHTML.includes('Model preview'));
+assert(node('#modelCards').innerHTML.includes('Unvalidated baseline'));
+assert.equal(node('#generate').disabled,true);
+vm.runInContext(`
+const paper=modelSlips(data,2);if(paper.length!==3)throw Error('Expected three alternatives');
+for(const s of paper){if(new Set(s.legs.map(forecastGameKey)).size!==2)throw Error('Repeated game');if(s.actionable!==false)throw Error('Live contamination');}
+`,context);
+context.fixture.picks[1].playerId=10;context.fixture.picks[2].scheduleVerified=false;context.fixture.picks[3].startTime=new Date(now-1000).toISOString();
+assert.equal(vm.runInContext('modelSlips(data,2).length',context),0);
+context.fixture.updatedAt=new Date(now-46*60000).toISOString();
+assert.equal(vm.runInContext('modelSlips(data,2).length',context),0);
+console.log('On-demand model generation, unvalidated labels, unique players/games, started games and stale feed passed.');

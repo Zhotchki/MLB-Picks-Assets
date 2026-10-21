@@ -110,7 +110,7 @@ def collect(now,root,model,corrected,norm,fetch=get_json):
                        'projection':estimate['projection'],'sourceProbability':exceedance(estimate['projection'],estimate['shape'],target),
                        'samples':estimate['samples'],'currentSeasonGames':len(current),'expectedPlayingTime':estimate['expectedMinutes'],
                        'playingTimeUnit':'minutes','startTime':g['date'],'capturedAt':now.isoformat(),'lineupStatus':'Active roster; lineup unconfirmed',
-                       'probabilityStatus':'UNVALIDATED_BASELINE','baselineVersion':'nba-counts-minutes-nb-1','modelVersion':model['version'],
+                       'scheduleVerified':True,'probabilityStatus':'UNVALIDATED_BASELINE','baselineVersion':'nba-counts-minutes-nb-1','modelVersion':model['version'],
                        'platformEligible':False,'platformLine':None,'platform':None,'actionable':False,'resultStatus':'PENDING'}
                     r['probability']=corrected(r,model);rows.append(r)
             return rows,reasons

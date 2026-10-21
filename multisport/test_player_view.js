@@ -11,9 +11,9 @@ assert.equal(playerGroups(data,{sport:'MLB'},now).length,0);
 assert.equal(playerGroups(data,{minimum:95},now).length,0);
 assert.equal(data.picks[0].id,'a'); // View sorting never changes the supplied forecasts.
 const html=playerCardsMarkup(groups);assert(html.includes('&lt;José Test&gt;'));assert(!html.includes('<José Test>'));
-assert(html.includes('AAA vs BBB'));assert(html.includes('AAA vs CCC'));assert(html.includes('Unvalidated baseline'));
+assert(html.includes('AAA vs BBB'));assert(html.includes('AAA vs CCC'));assert(html.includes('Experimental model estimate'));
 assert(html.split('</summary>')[0].includes('Goals · 2+'));
-assert(html.split('</summary>')[0].includes('Unvalidated baseline · not eligible for slips'));
+assert(html.split('</summary>')[0].includes('Experimental model estimate · model slips only'));
 const opened=playerCardsMarkup(groups,new Set([playerCardKey(data.picks[0])]));
 assert.equal((opened.match(/ open=""/g)||[]).length,1); // Other fixtures for this player stay closed.
 assert(!playerCardsMarkup(groups).includes(' open=""'));
@@ -25,7 +25,7 @@ const initial={'#sport':'All sports','#validationSport':'All sports','#playerSea
 const node=id=>nodes[id]||(nodes[id]={value:initial[id]||'',options:id==='#size'?[2,3,4,5,6,8].map(n=>({value:String(n)})):[],markup:'',writes:0,get innerHTML(){return this.markup},set innerHTML(value){this.markup=value;this.writes++},textContent:'',hidden:false});
 let openCards=[];
 const context=vm.createContext({document:{querySelector:node,querySelectorAll:selector=>selector==='#cards details[open]'?openCards:[],addEventListener:()=>{}},fetch:()=>new Promise(()=>{}),setInterval:()=>{},Date});
-for(const file of ['player_view.js','eligibility.js','validation_view.js'])vm.runInContext(fs.readFileSync(path.join(__dirname,file),'utf8'),context);
+for(const file of ['player_view.js','model_slips.js','eligibility.js','validation_view.js'])vm.runInContext(fs.readFileSync(path.join(__dirname,file),'utf8'),context);
 for(const match of fs.readFileSync(path.join(__dirname,'index.html'),'utf8').matchAll(/<script>([\s\S]*?)<\/script>/g))vm.runInContext(match[1],context);
 context.fixture={...data,sourceStatus:'CURRENT',results:{recorded:0,graded:0,frozenPredictionMetrics:{brier:null}},model:{version:'fixture'}};
 vm.runInContext('data=fixture;render()',context);

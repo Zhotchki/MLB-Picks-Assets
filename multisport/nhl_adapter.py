@@ -159,7 +159,7 @@ def collect(now, root, model, corrected, norm, fetch=get_json):
                    'samples':estimate['samples'],'currentSeasonGames':estimate['currentSeasonGames'],
                    'expectedPlayingTime':estimate['expectedMinutes'],'playingTimeUnit':'minutes on ice',
                    'startTime':g['startTimeUTC'],'capturedAt':now.isoformat(),'lineupStatus':'Roster verified; lineup unconfirmed',
-                   'probabilityStatus':'UNVALIDATED_BASELINE','baselineVersion':'nhl-shots-toi-nb-1',
+                   'scheduleVerified':True,'probabilityStatus':'UNVALIDATED_BASELINE','baselineVersion':'nhl-shots-toi-nb-1',
                    'platformEligible':False,'platformLine':None,'platform':None,'actionable':False,'resultStatus':'PENDING',
                    'modelVersion':model['version']}
                 r['probability']=corrected(r,model);rows.append(r)
