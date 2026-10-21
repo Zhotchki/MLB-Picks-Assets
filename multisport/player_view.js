@@ -1,17 +1,22 @@
 /* Upcoming model forecasts, grouped by player AND verified game. */
-function forecastPool(data,now=Date.now()){
+function forecastPool(data,now=Date.now(),maxAgeMinutes=45){
   const age=now-Date.parse(data?.updatedAt);
-  if(!Number.isFinite(age)||age>45*60000||age< -5*60000)return [];
+  if(!Number.isFinite(age)||age>maxAgeMinutes*60000||age< -5*60000)return [];
   return (data.picks||[]).filter(r=>data.sports?.[r.sport]?.sourceStatus==='CURRENT'&&
     Number.isFinite(Date.parse(r.startTime))&&Date.parse(r.startTime)>now&&
     r.playerId!=null&&r.gameId!=null&&Number.isFinite(r.probability)&&r.probability>0&&r.probability<1);
+}
+// Browsing can retain saved upcoming forecasts for one day; generation uses the strict pool.
+function displayForecastPool(data,now=Date.now()){
+ const stale=now-Date.parse(data?.updatedAt)>45*60000;
+ return forecastPool(data,now,24*60).map(r=>stale?{...r,displayStale:true}:r);
 }
 function forecastGameKey(r){return JSON.stringify([r.sport,String(r.gameId)]);}
 function playerCardKey(r){return JSON.stringify([r.sport,String(r.playerId),String(r.gameId)]);}
 function playerGroups(data,filters={},now=Date.now()){
   const normalize=v=>String(v??'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
   const query=normalize(filters.search).trim(),minimum=Number(filters.minimum)||0,groups=new Map();
-  for(const r of forecastPool(data,now)){
+  for(const r of displayForecastPool(data,now)){
     if(filters.sport&&filters.sport!=='All sports'&&r.sport!==filters.sport)continue;
     if(filters.prop&&filters.prop!=='All props'&&r.prop!==filters.prop)continue;
     if(filters.game&&filters.game!=='All games'&&forecastGameKey(r)!==filters.game)continue;
@@ -30,7 +35,7 @@ function playerCardsMarkup(groups,openKeys=new Set()){
   return groups.map(rows=>{
     const r=rows[0];
     const key=playerCardKey(r);
-    return '<details class="card" data-player-key="'+escape(key)+'"'+(openKeys.has(key)?' open=""':'')+'><summary><div><div class="name">'+escape(r.player)+'</div><div class="best-pick">'+escape(r.prop)+' · '+escape(r.sport==='NFL'?'MORE '+r.modelLine:r.target+'+')+'</div><small>'+escape(r.sport+' · '+r.team+' vs '+r.opponent)+'<br>'+escape(new Date(r.startTime).toLocaleString())+(r.probabilityStatus==='UNVALIDATED_BASELINE'?'<br>Experimental model estimate · model slips only':'')+'</small></div><div class="prob">'+percent(r.probability)+(r.probabilityStatus==='UNVALIDATED_BASELINE'?'<br><small>Model estimate</small>':'')+'</div></summary>'+prop(r)+'<small>'+escape(r.lineupStatus)+'</small><div class="extra">'+(rows.slice(1).map(prop).join('')||'<small>No additional forecasts matching these filters</small>')+'</div></details>';
+    return '<details class="card" data-player-key="'+escape(key)+'"'+(openKeys.has(key)?' open=""':'')+'><summary><div><div class="name">'+escape(r.player)+'</div><div class="best-pick">'+escape(r.prop)+' · '+escape(r.sport==='NFL'?'MORE '+r.modelLine:r.target+'+')+'</div><small>'+escape(r.sport+' · '+r.team+' vs '+r.opponent)+'<br>'+escape(new Date(r.startTime).toLocaleString())+(r.displayStale?'<br>Saved forecast · refresh delayed':'')+(r.probabilityStatus==='UNVALIDATED_BASELINE'?'<br>Experimental model estimate · model slips only':'')+'</small></div><div class="prob">'+percent(r.probability)+(r.probabilityStatus==='UNVALIDATED_BASELINE'?'<br><small>Model estimate</small>':'')+'</div></summary>'+prop(r)+'<small>'+escape(r.lineupStatus)+'</small><div class="extra">'+(rows.slice(1).map(prop).join('')||'<small>No additional forecasts matching these filters</small>')+'</div></details>';
   }).join('');
 }
-if(typeof module!=='undefined')module.exports={forecastPool,forecastGameKey,playerCardKey,playerGroups,playerCardsMarkup};
+if(typeof module!=='undefined')module.exports={forecastPool,displayForecastPool,forecastGameKey,playerCardKey,playerGroups,playerCardsMarkup};
