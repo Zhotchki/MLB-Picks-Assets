@@ -35,4 +35,17 @@ function validationMarkup(report, sport = 'All sports') {
       (g.invalidResults?'<p class="error">'+esc(g.invalidResults)+' inconsistent results excluded.</p>':'')+'</article>';
   }).join('');
 }
-if (typeof module !== 'undefined') module.exports = {validationMarkup, validationValue};
+function lineCoverageMarkup(data,now=Date.now()){
+ const evidence=data?.lineValidation,esc=validationEscape;
+ if(!evidence)return '<details><summary>Sleeper line coverage and validation</summary><p>Exact-line tracking will populate after the next data refresh.</p></details>';
+ const rows=['MLB','NFL','NBA','NHL'].map(sport=>{
+  const g=evidence.sports?.[sport]||{},feed=data.platformFeed?.sportStatus?.[sport]||{};
+  const age=now-Number(feed.fetchedAtEpoch)*1000;
+  const status=feed.status==='UNAVAILABLE'?'Feed unavailable':!feed.fetchedAtEpoch?'Awaiting board check':age<0?'Invalid timestamp':age>900000?'Board expired':'Board fresh';
+  return '<tr><td>'+sport+'</td><td>'+esc(status)+(feed.hasMore||feed.truncated||feed.degraded?' · partial board':'')+(feed.observedLines!=null?' · '+esc(feed.observedLines)+' lines':'')+'</td><td>'+esc(g.recorded||0)+'</td><td>'+esc(g.graded||0)+'</td><td>'+esc(g.eligibleTargets||0)+'</td></tr>';
+ }).join('');
+ const groups=(evidence.groups||[]).map(g=>'<li>'+esc(g.sport+' · '+g.prop)+' · '+esc(g.graded.playerGames)+' graded player-games · '+esc(g.review.training.playerGames)+' training / '+esc(g.review.holdout.playerGames)+' holdout · '+esc(g.eligibleTargets)+' eligible thresholds</li>').join('');
+ const reasons=Object.entries(data.lineCollection?.excluded||{}).filter(([,n])=>n>0).map(([k,n])=>'<li>'+esc(k.replaceAll('_',' '))+': '+esc(n)+'</li>').join('');
+ return '<details><summary>Sleeper line coverage and validation</summary><p>Fresh board lines and validated probabilities are checked separately. Only predictions frozen at observed Sleeper thresholds count here.</p><div style="overflow-x:auto"><table class="validation-table"><thead><tr><th>Sport</th><th>Board</th><th>Saved line forecasts</th><th>Graded</th><th>Validated thresholds</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+(groups?'<ul>'+groups+'</ul>':'<p>Waiting for fresh lines to record exact-threshold predictions.</p>')+(reasons?'<details><summary>Why other observed lines could not be evaluated</summary><ul>'+reasons+'</ul></details>':'')+'<small>Promotion requires separate later games, exact-threshold skill checks and calibration. It does not establish betting profitability. Provider credits remain capped.</small></details>';
+}
+if (typeof module !== 'undefined') module.exports = {validationMarkup, validationValue,lineCoverageMarkup};

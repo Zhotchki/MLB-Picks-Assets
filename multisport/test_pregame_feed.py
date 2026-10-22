@@ -39,14 +39,14 @@ class PregameTests(unittest.TestCase):
         checks=pregame_checks(self.rows(),self.now,remaining_today=2)
         self.assertEqual({slot['leadMinutes'] for slot in checks},{20,90})
         self.assertNotIn(240,[slot['leadMinutes'] for slot in checks])
-    def test_plan_limits_each_utc_day_and_excludes_baselines_or_unverified_starts(self):
+    def test_plan_limits_each_utc_day_collects_baselines_and_excludes_unverified_starts(self):
         rows=[dict(self.rows()[0],gameId=i,startTime=(self.now.replace(hour=12)+timedelta(hours=i)).isoformat()) for i in range(10)]
         rows += [dict(self.rows()[0],sport='NHL',platformEligible=False),dict(self.rows()[0],sport='NBA',scheduleVerified=False)]
         checks=pregame_checks(rows,self.now,daily_calls=4)
         dates={}
         for slot in checks:dates[slot['at'].date()]=dates.get(slot['at'].date(),0)+1
         self.assertTrue(all(n<=4 for n in dates.values()))
-        self.assertTrue(all(slot['sport']=='MLB' for slot in checks))
+        self.assertTrue(all(slot['sport'] in ('MLB','NHL') for slot in checks));self.assertTrue(any(slot['sport']=='NHL' for slot in checks))
     def test_explicit_interval_override_keeps_existing_mode(self):
         with tempfile.TemporaryDirectory() as tmp,patch.dict('os.environ',{'PARLAY_API_KEY':'fixture','PICKEM_REFRESH_MINUTES':'60'},clear=True),patch('urllib.request.urlopen',side_effect=lambda *a,**kw:self.response()) as request:
             board,state=fetch(Path(tmp),self.now,{'MLB'},self.rows())
@@ -56,5 +56,16 @@ class PregameTests(unittest.TestCase):
         rows,counts=match([],board,self.now,norm)
         self.assertEqual(counts['observed'],3);self.assertEqual(counts['excluded'],{'expired_board':2,'sport_not_eligible':1})
         self.assertFalse(rows)
+
+class CollectionScheduleTests(unittest.TestCase):
+    def test_each_sport_gets_a_turn_and_late_starts_recover_a_current_window(self):
+        now=datetime(2030,1,1,18,tzinfo=timezone.utc)
+        rows=[dict(sport=sport,gameId=str(i),startTime=(now+timedelta(hours=2,minutes=i)).isoformat(),scheduleVerified=True,platformEligible=False) for sport in ('MLB','NFL','NBA','NHL') for i in range(3)]
+        checks=pregame_checks(rows,now,daily_calls=4)
+        self.assertEqual({s['sport'] for s in checks},{'MLB','NFL','NBA','NHL'})
+        from refresh_watch import delay
+        self.assertEqual(delay({'platformFeed':{'nextRefreshAt':(now+timedelta(seconds=60)).isoformat()}},now),65)
+        self.assertEqual(delay({'platformFeed':{'nextRefreshAt':'invalid'}},now),600)
+        self.assertTrue(any(s['at']<=now<=s['until'] for s in pregame_checks([dict(rows[0],startTime=(now+timedelta(hours=3)).isoformat())],now)))
 
 if __name__=='__main__':unittest.main()

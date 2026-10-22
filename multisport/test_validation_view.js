@@ -21,3 +21,9 @@ assert(reviewedHtml.includes('2.5 · 40 holdout player-games · does not beat re
 assert(validationMarkup(null).includes('after the automatic feed updates'));
 assert.equal(validationValue(null),'—');
 console.log('Validation rendering, support counts, missing metrics, filtering and escaping checks passed.');
+
+const {lineCoverageMarkup}=require('./validation_view');
+const lineData={lineValidation:{sports:{NHL:{recorded:10,graded:4,eligibleTargets:0}},groups:[]},platformFeed:{sportStatus:{NHL:{status:'OBSERVED_BOARD',fetchedAtEpoch:Date.now()/1000,observedLines:20,truncated:true}}},lineCollection:{excluded:{'<script>':3}}};
+const lineHTML=lineCoverageMarkup(lineData);assert(lineHTML.includes('Board fresh'));assert(lineHTML.includes('partial board'));assert(lineHTML.includes('20 lines'));assert(lineHTML.includes('&lt;script&gt;'));assert(!lineHTML.includes('<script>'));
+assert(lineCoverageMarkup({}).includes('next data refresh'));
+console.log('Observed-line coverage, partial boards, collection progress and escaping passed.');

@@ -157,3 +157,14 @@ New batches use the same player/game/prop/direction/line in at most two slips pe
 
 ### Multiple sports (v0.5.19)
 Check any combination of MLB, NFL, NBA and NHL in the Slips view. Both builders filter before ranking, and keep the per-batch two-use cap. Selected sports form the allowed pool; a slip does not have to include every selected sport. Clear sports disables generation with an explicit prompt; Select all restores the mixed pool. Weekly frozen tests are unaffected.
+
+### Observed Sleeper line pipeline (v0.6.0)
+Verified upcoming schedules now permit collection for experimental NBA/NHL models as well as MLB/NFL. Board calls rotate fairly across sports under the existing 24 daily / 900 monthly credit caps. Collection windows tolerate delayed starts for up to 90 minutes, stopping five minutes before kickoff. No expired board becomes usable.
+
+`line_pipeline.py` resolves actual player/game/full-period/standard-or-reviewable Sleeper offers before freezing exact half-point MORE predictions. NBA/NHL use their fitted count distributions at the observed threshold; NFL uses existing exact probabilities or the empirical exact-line collector; MLB uses existing exact targets or a separate same-team official game-log baseline with at least 25 distinct recent games. Unsupported markets, integer push lines and fractional fantasy-point models remain excluded. Limited provider boards are reported as partial; no unbudgeted pagination is added.
+
+`line_validation.py` evaluates only immutable `SLEEPER_LINE` observations with fresh timestamps and consistent final grades. Training and later whole-game holdout stay separate by sport/prop/direction/source/calibration version. Existing minimums apply (200 training and 100 holdout player-games, 25/10 games and 7/3 dates); exact thresholds also need 30/30 player-games, 10/5 games and 3/2 dates. Both group and exact threshold must beat a training-only target reference in Brier score and log loss; absolute holdout calibration bias must be <=5 percentage points. Qualifying current exact-line rows are automatically enabled, re-evaluated each refresh, and still pass the ordinary live line freshness/identity rules. This policy is evidence for model eligibility, not a profitability claim. Model-target results alone cannot promote a line.
+
+The live builder has a collapsible coverage/validation report. CSV results identify observed-line forecasts and model-performance exports add exact-line evidence without changing existing tab anchors.
+
+`refresh_watch.py` keeps a running Actions job refreshing at most every ten minutes (earlier for an upcoming planned board check) for 105 minutes. A newer scheduled run supersedes it. This reduces gaps without another hosting service but is still dependent on GitHub runner availability; it is not a continuous or guaranteed scheduler. All provider credit gates stay inside `platform_feed.fetch`.

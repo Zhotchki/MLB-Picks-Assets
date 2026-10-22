@@ -67,7 +67,7 @@ def collect(now,root,model,corrected,norm,fetch=get_json):
         for g in source['events']:
             if g.get('season',{}).get('type')==1:preseason+=1;continue
             if g.get('season',{}).get('type')!=2 or g.get('status',{}).get('type',{}).get('state')!='pre':continue
-            if now<iso(g['date'])<=now+timedelta(hours=48):games[g['id']]=g
+            if now<iso(g['date'])<=now+timedelta(hours=48):games[g['id']]=dict(g,officialGameDate=(today+timedelta(days=offset)).isoformat())
     status={'status':'BASELINE_FORECASTS' if games else 'PRESEASON_EXCLUDED' if preseason else 'WAITING_FOR_GAMES',
             'sourceStatus':'CURRENT','verifiedRows':0,'gamesChecked':len(games),'preseasonGamesExcluded':preseason,
             'validationStatus':'COLLECTING_PROSPECTIVE_RESULTS','modelVersion':'nba-counts-minutes-nb-1',
@@ -107,7 +107,7 @@ def collect(now,root,model,corrected,norm,fetch=get_json):
                        'teamId':str(team['id']),'opponentId':str(opponent['id']),'player':player['displayName'],
                        'team':team['abbreviation'],'opponent':opponent['abbreviation'],'homeTeam':home['displayName'],'awayTeam':away['displayName'],
                        'season':season,'prop':prop,'direction':'MORE','target':target,'modelLine':target-.5,
-                       'projection':estimate['projection'],'sourceProbability':exceedance(estimate['projection'],estimate['shape'],target),
+                       'distributionShape':estimate['shape'],'distributionModel':'COUNT_NB_V1','officialGameDate':g.get('officialGameDate'),'projection':estimate['projection'],'sourceProbability':exceedance(estimate['projection'],estimate['shape'],target),
                        'samples':estimate['samples'],'currentSeasonGames':len(current),'expectedPlayingTime':estimate['expectedMinutes'],
                        'playingTimeUnit':'minutes','startTime':g['date'],'capturedAt':now.isoformat(),'lineupStatus':'Active roster; lineup unconfirmed',
                        'scheduleVerified':True,'probabilityStatus':'UNVALIDATED_BASELINE','baselineVersion':'nba-counts-minutes-nb-1','modelVersion':model['version'],

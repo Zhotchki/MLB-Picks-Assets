@@ -8,7 +8,7 @@ from zoneinfo import ZoneInfo
 from collections import Counter, defaultdict
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '0.5.13'
+VERSION = '0.6.0'
 API = 'https://statsapi.mlb.com/api/v1/'
 MLB_FEED = 'https://script.google.com/macros/s/AKfycbw1_xLZM-fAaBm9c4hmvwrvdlWxbV-3S3gW3e8GCZ8DKsfpNf-FVlwHb4lhwMECXNoiAA/exec?api=mobile'
 STAT_KEYS = {'Hits': 'hits', 'Runs': 'runs', 'RBI': 'rbi', 'Bases': 'totalBases', 'Walks': 'baseOnBalls', 'Strikeouts': 'strikeOuts', 'Stolen Bases': 'stolenBases', 'Home Runs': 'homeRuns'}
@@ -188,7 +188,7 @@ def collect_mlb(now, today, model):
         player = identity[0]
         r = {'id':f"MLB:{g['gamePk']}:{player['person']['id']}:{row['Prop']}:MORE:{target}",
              'sport':'MLB','gameId':g['gamePk'],'playerId':player['person']['id'],'player':player['person']['fullName'],
-             'team':row['Team'],'opponent':row['Opponent'],'homeTeam':team_info[g['teams']['home']['team']['id']]['name'],'awayTeam':team_info[g['teams']['away']['team']['id']]['name'],'prop':row['Prop'],'direction':'MORE',
+             'teamId':g['teams'][side]['team']['id'],'team':row['Team'],'opponent':row['Opponent'],'homeTeam':team_info[g['teams']['home']['team']['id']]['name'],'awayTeam':team_info[g['teams']['away']['team']['id']]['name'],'prop':row['Prop'],'direction':'MORE',
              'target':target,'projection':number(row.get('Model Projection')), 'sourceProbability':p,
              'samples':row['Probability Samples'],'startTime':g['gameDate'],'officialGameDate':g.get('officialDate',today.isoformat()),'scheduleVerified':True, 'capturedAt':now.isoformat(),
              'lineupStatus':row.get('Lineup Status'), 'probabilityStatus':row.get('Probability Status'),
@@ -273,7 +273,7 @@ def run():
         rejected['NBA:unavailable_source'] += 1
     from platform_feed import fetch as fetch_board,match as match_offers,slip_sets as build_slip_sets
     board_time = datetime.now(timezone.utc)
-    eligible_sports={r['sport'] for r in verified if r.get('platformEligible') is not False}
+    eligible_sports={r['sport'] for r in verified if r.get('scheduleVerified')}
     board,feed_state=fetch_board(ROOT,board_time,eligible_sports,verified)
     from exact_lines import collect as collect_exact_lines
     exact_rows,exact_rejected=collect_exact_lines(verified,board,board_time,ROOT,norm)
@@ -281,13 +281,22 @@ def run():
         r['probability']=corrected(r,model)
         r['modelVersion']=model['version']
     verified.extend(exact_rows)
+    from line_pipeline import collect as collect_observed_lines,observed_valid
+    observed_rows,line_rejected=collect_observed_lines(verified,board,datetime.now(timezone.utc),ROOT,norm)
+    for r in observed_rows:
+        r['probability']=corrected(r,model)
+        r['modelVersion']=model['version']
+    verified.extend(observed_rows)
+    rejected.update({'observed_line:'+k:v for k,v in line_rejected.items()})
     rejected.update({'NFL:exact_line:'+k:v for k,v in exact_rejected.items()})
     nfl_status['exactLineCandidateRows']=len(exact_rows)
     # Recheck after network reads: a slow import must never backdate a prediction
     # for a game that started while its sources were being fetched.
     captured_at = datetime.now(timezone.utc)
-    active = [r for r in verified if iso(r['startTime']) > captured_at]
-    rejected['started_during_refresh'] += len(verified)-len(active)
+    upcoming = [r for r in verified if iso(r['startTime']) > captured_at]
+    rejected['started_during_refresh'] += len(verified)-len(upcoming)
+    active = [r for r in upcoming if r.get('forecastKind')!='SLEEPER_LINE' or observed_valid(r,captured_at)]
+    rejected['observed_line:expired_during_refresh'] += len(upcoming)-len(active)
     verified = active
     from validation import calibration_signature
     for r in verified:
@@ -322,14 +331,21 @@ def run():
     graded = [r for r in ledger if r.get('resultStatus')=='GRADED']
     frozen = {'n':len(graded), 'brier':sum((r['probability']-r['outcome'])**2 for r in graded)/len(graded) if graded else None}
     published_at = datetime.now(timezone.utc)
-    offers,offer_counts=match_offers(verified,board,published_at,norm)
+    from line_validation import report as line_report,apply as apply_line_validation
+    line_evidence=line_report(ledger,published_at)
+    promoted=apply_line_validation(verified,line_evidence,published_at)
+    # Prefer a newly validated observed-line estimate over a duplicate model-target row.
+    live_rows=[r for r in verified if r.get('platformEligible') is not False]
+    observed_keys={(r['sport'],str(r['gameId']),str(r['playerId']),r['prop'],r.get('modelLine')) for r in live_rows if r.get('forecastKind')=='SLEEPER_LINE'}
+    live_rows=[r for r in live_rows if r.get('forecastKind')=='SLEEPER_LINE' or (r['sport'],str(r['gameId']),str(r['playerId']),r['prop'],r.get('modelLine',r['target']-.5)) not in observed_keys]
+    offers,offer_counts=match_offers(live_rows,board,published_at,norm)
     from weekly_slips import update as update_weekly_slips
     weekly_saved,weekly_tracking=update_weekly_slips(read('weekly-slips.json',[]),verified,ledger,{'MLB':mlb_status,'NFL':nfl_status,'NBA':nba_status,'NHL':nhl_status},published_at)
-    data = {'weeklyTracking':weekly_tracking,'version':VERSION,'updatedAt':published_at.isoformat(),'sourceUpdatedAt':timestamp,'sourceRefresh':refresh,'sourceStatus':mlb_status['sourceStatus'],
+    data = {'lineValidation':line_evidence,'lineCollection':{'observedForecasts':len(observed_rows),'eligibleForecasts':promoted,'excluded':dict(line_rejected)},'weeklyTracking':weekly_tracking,'version':VERSION,'updatedAt':published_at.isoformat(),'sourceUpdatedAt':timestamp,'sourceRefresh':refresh,'sourceStatus':mlb_status['sourceStatus'],
             'sports':{'MLB':mlb_status, 'NFL':nfl_status,'NBA':nba_status,'NHL':nhl_status},
-            'picks':sorted(verified,key=lambda r:-r['probability']),'rejected':dict(rejected),'model':model,'validation':validation,
+            'picks':sorted([r for r in verified if r.get('forecastKind')!='SLEEPER_LINE'],key=lambda r:-r['probability']),'rejected':dict(rejected),'model':model,'validation':validation,
             'results':{'recorded':len(ledger),'graded':len(graded),'void':sum(r.get('resultStatus')=='VOID' for r in ledger),'frozenPredictionMetrics':frozen},
-            'slipStatus':('REVIEW_REQUIRED' if any(r.get('requiresPlatformReview') for r in offers) else 'READY') if offers else 'WAITING_FOR_VERIFIED_PLATFORM_LINES','platformFeed':{**{k:v for k,v in board.items() if k!='sports'},'sportStatus':{s:{k:v for k,v in entry.items() if k!='rows'} for s,entry in board.get('sports',{}).items()}},'offerCounts':offer_counts,'offers':offers,'slips':build_slip_sets(offers)}
+            'slipStatus':('REVIEW_REQUIRED' if any(r.get('requiresPlatformReview') for r in offers) else 'READY') if offers else 'WAITING_FOR_VERIFIED_PLATFORM_LINES','platformFeed':{**{k:v for k,v in board.items() if k!='sports'},'sportStatus':{s:{**{k:v for k,v in entry.items() if k!='rows'},'observedLines':len(entry.get('rows',[]))} for s,entry in board.get('sports',{}).items()}},'offerCounts':offer_counts,'offers':offers,'slips':build_slip_sets(offers)}
     write('weekly-slips.json',weekly_saved)
     write('feed-state.json',feed_state); write('ledger.json',ledger); write('model.json',model); write('data.json',data)
     print(json.dumps({'verifiedForecasts':len(verified),'rejected':dict(rejected),'ledger':len(ledger),'graded':len(graded)}))

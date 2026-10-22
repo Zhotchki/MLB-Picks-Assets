@@ -1,6 +1,6 @@
 """Optional credentialed Sleeper board via documented ParlayAPI /props.
 Default eight total board calls/day target at most 744 credits / 31 days.
-Only eligible sports are polled; no pagination is performed automatically. No API key is saved.
+Verified upcoming schedules allow experimental sport collection; no unbudgeted pagination. No API key is saved.
 """
 import os,json,urllib.request,urllib.parse,urllib.error,math
 from datetime import datetime,timezone,timedelta
@@ -10,11 +10,18 @@ MARKETS={'player_hits':'Hits','player_total_bases':'Bases','player_hits_runs_rbi
 MARKETS.update({'player_bat_walks':'Walks','player_passing_yards':'Pass Yards','player_passing_touchdowns':'Pass TDs','player_passing_attempts':'Pass Attempts','player_rushing_yards':'Rush Yards','player_rushing_attempts':'Rush Attempts','player_rushing_and_receiving_yards':'Rush + Receiving Yards'})
 NFL_NAMES=dict(zip('ARI ATL BAL BUF CAR CHI CIN CLE DAL DEN DET GB HOU IND JAX KC LAC LAR LV MIA MIN NE NO NYG NYJ PHI PIT SEA SF TB TEN WAS'.split(),['Arizona Cardinals','Atlanta Falcons','Baltimore Ravens','Buffalo Bills','Carolina Panthers','Chicago Bears','Cincinnati Bengals','Cleveland Browns','Dallas Cowboys','Denver Broncos','Detroit Lions','Green Bay Packers','Houston Texans','Indianapolis Colts','Jacksonville Jaguars','Kansas City Chiefs','Los Angeles Chargers','Los Angeles Rams','Las Vegas Raiders','Miami Dolphins','Minnesota Vikings','New England Patriots','New Orleans Saints','New York Giants','New York Jets','Philadelphia Eagles','Pittsburgh Steelers','Seattle Seahawks','San Francisco 49ers','Tampa Bay Buccaneers','Tennessee Titans','Washington Commanders']))
 
+SPORT_MARKETS={
+    'NBA':{'player_points':'Points','player_rebounds':'Rebounds','player_assists':'Assists','player_threes':'3-Pointers Made','player_threes_made':'3-Pointers Made','player_three_pointers_made':'3-Pointers Made'},
+    'NHL':{'player_shots':'Shots on Goal','player_shots_on_goal':'Shots on Goal'},
+}
+
+def market_prop(sport,key):return SPORT_MARKETS.get(sport,{}).get(key) or (MARKETS.get(key) if sport not in SPORT_MARKETS else None)
+
 def pregame_checks(forecasts,now,daily_calls=8,remaining_today=None,fetched=None):
     """Choose UTC-day calls near verified starts; batch identical sport/start windows."""
     events={}
     for row in forecasts:
-        if row.get('platformEligible') is False or not row.get('scheduleVerified'):continue
+        if not row.get('scheduleVerified'):continue
         if row.get('sport') not in SPORTS or row.get('gameId') is None:continue
         try:
             start=datetime.fromisoformat(row['startTime'].replace('Z','+00:00'))
@@ -26,7 +33,7 @@ def pregame_checks(forecasts,now,daily_calls=8,remaining_today=None,fetched=None
         for priority,lead in enumerate((20,90,240)):
             at=start-timedelta(minutes=lead)
             key=(sport,at.timestamp())
-            slot=slots.setdefault(key,{'sport':sport,'at':at,'until':min(at+timedelta(minutes=15),start-timedelta(minutes=5)),'leadMinutes':lead,'priority':priority,'games':set()})
+            slot=slots.setdefault(key,{'sport':sport,'at':at,'until':min(at+timedelta(minutes=90),start-timedelta(minutes=5)),'leadMinutes':lead,'priority':priority,'games':set()})
             slot['games'].add(event)
     by_day={}
     for slot in slots.values():
@@ -35,7 +42,11 @@ def pregame_checks(forecasts,now,daily_calls=8,remaining_today=None,fetched=None
     chosen=[]
     for day,entries in by_day.items():
         limit=remaining_today if day==now.astimezone(timezone.utc).strftime('%Y-%m-%d') and remaining_today is not None else daily_calls
-        chosen.extend(sorted(entries,key=lambda slot:(slot['priority'],slot['at'],slot['sport']))[:max(0,limit)])
+        # Give each available sport a turn before spending the remaining calls.
+        queues={sport:sorted([slot for slot in entries if slot['sport']==sport],key=lambda slot:(slot['priority'],slot['at'])) for sport in sorted({slot['sport'] for slot in entries})}
+        while limit>0 and any(queues.values()):
+            for sport in sorted(queues,key=lambda name:(queues[name][0]['priority'],queues[name][0]['at'],name) if queues[name] else (99,now,name)):
+                if limit>0 and queues[sport]:chosen.append(queues[sport].pop(0));limit-=1
     return sorted(chosen,key=lambda slot:(slot['at'],slot['sport']))
 
 def fetch(root,now,eligible_sports=None,forecasts=None):
@@ -167,7 +178,7 @@ def match(forecasts,board,now,norm):
                     start_source='OFFICIAL_SCHEDULE'
                 if start<=now:reject('game_started');continue
             except (ValueError,TypeError,KeyError,AttributeError):reject('invalid_line_or_kickoff');continue
-            prop=MARKETS.get(line.get('market_key'))
+            prop=market_prop(sport,line.get('market_key'))
             if not prop:reject('unsupported_market');continue
             candidates=[]
             for r in forecast_index.get((sport,prop,norm(line.get('player'))),[]):

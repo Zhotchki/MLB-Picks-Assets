@@ -104,7 +104,7 @@ def exceedance(mean, shape, target):
 def collect(now, root, model, corrected, norm, fetch=get_json):
     today=now.astimezone(ZoneInfo('America/Chicago')).date()
     schedule=cached(root,'schedule-'+today.isoformat(),API+'schedule/'+today.isoformat(),900,now,fetch)
-    games=[g for d in schedule.get('gameWeek',[]) for g in d.get('games',[])
+    games=[dict(g,officialGameDate=d.get('date')) for d in schedule.get('gameWeek',[]) for g in d.get('games',[])
            if g.get('gameType')==2 and g.get('gameState') in ('FUT','PRE')
            and g.get('gameScheduleState')=='OK' and now<iso(g['startTimeUTC'])<=now+timedelta(hours=48)]
     injuries=cached(root,'injuries',INJURIES,900,now,fetch)
@@ -155,7 +155,7 @@ def collect(now, root, model, corrected, norm, fetch=get_json):
                    'playerId':pid,'player':name,'team':team['abbrev'],'opponent':opponent['abbrev'],
                    'homeTeam':full_name(g['homeTeam']),'awayTeam':full_name(g['awayTeam']),
                    'season':season,'prop':'Shots on Goal','direction':'MORE','target':target,'modelLine':target-.5,
-                   'projection':estimate['projection'],'sourceProbability':exceedance(estimate['projection'],estimate['dispersionShape'],target),
+                   'distributionShape':estimate['dispersionShape'],'distributionModel':'COUNT_NB_V1','officialGameDate':g.get('officialGameDate'),'projection':estimate['projection'],'sourceProbability':exceedance(estimate['projection'],estimate['dispersionShape'],target),
                    'samples':estimate['samples'],'currentSeasonGames':estimate['currentSeasonGames'],
                    'expectedPlayingTime':estimate['expectedMinutes'],'playingTimeUnit':'minutes on ice',
                    'startTime':g['startTimeUTC'],'capturedAt':now.isoformat(),'lineupStatus':'Roster verified; lineup unconfirmed',
