@@ -23,8 +23,8 @@ assert.equal(forecastPool({...data,picks:[{...data.picks[0],startTime:new Date(n
 const fs=require('fs'),vm=require('vm'),path=require('path'),nodes={};
 const initial={'#sport':'All sports','#validationSport':'All sports','#playerSearch':'','#playerProp':'All props','#playerGame':'All games','#playerMinimum':'0','#size':'4'};
 const node=id=>nodes[id]||(nodes[id]={value:initial[id]||'',options:id==='#size'?[2,3,4,5,6,8].map(n=>({value:String(n)})):[],markup:'',writes:0,get innerHTML(){return this.markup},set innerHTML(value){this.markup=value;this.writes++},textContent:'',hidden:false});
-let openCards=[];
-const context=vm.createContext({document:{querySelector:node,querySelectorAll:selector=>selector==='#cards details[open]'?openCards:[],addEventListener:()=>{}},fetch:()=>new Promise(()=>{}),setInterval:()=>{},Date});
+let openCards=[];const sportInputs=['MLB','NFL','NBA','NHL'].map(value=>({value,checked:true}));
+const context=vm.createContext({document:{querySelector:node,querySelectorAll:selector=>selector==='#cards details[open]'?openCards:selector==='.slip-sport'?sportInputs:selector==='.slip-sport:checked'?sportInputs.filter(input=>input.checked):[],addEventListener:()=>{}},fetch:()=>new Promise(()=>{}),setInterval:()=>{},Date});
 for(const file of ['player_view.js','model_slips.js','eligibility.js','validation_view.js'])vm.runInContext(fs.readFileSync(path.join(__dirname,file),'utf8'),context);
 for(const match of fs.readFileSync(path.join(__dirname,'index.html'),'utf8').matchAll(/<script>([\s\S]*?)<\/script>/g))vm.runInContext(match[1],context);
 context.fixture={...data,sourceStatus:'CURRENT',results:{recorded:0,graded:0,frozenPredictionMetrics:{brier:null}},model:{version:'fixture'}};

@@ -154,3 +154,6 @@ The Slips view has one sport selector for both on-demand builders: All sports (m
 
 ### Pick reuse limit (v0.5.18)
 New batches use the same player/game/prop/direction/line in at most two slips per leg count. Model previews, live builders and future weekly fills enforce the cap; existing frozen weekly slips are retained. Selection greedily ranks remaining alternatives after a pick reaches two uses. A small pool can yield fewer slips; this is not a globally optimal batch search. Different model/provider IDs for the same pick share one cap.
+
+### Multiple sports (v0.5.19)
+Check any combination of MLB, NFL, NBA and NHL in the Slips view. Both builders filter before ranking, and keep the per-batch two-use cap. Selected sports form the allowed pool; a slip does not have to include every selected sport. Clear sports disables generation with an explicit prompt; Select all restores the mixed pool. Weekly frozen tests are unaffected.

@@ -1,7 +1,9 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
 const path=require('path'),root=__dirname,nodes={};
 const node=id=>nodes[id]||(nodes[id]={value:id==='#size'?'4':id==='#playerSearch'?'':id==='#playerProp'?'All props':id==='#playerGame'?'All games':id==='#playerMinimum'?'0':'All sports',options:id==='#size'?[2,3,4,5,6,8].map(value=>({value:String(value)})):[],innerHTML:'',textContent:'',hidden:false,disabled:false});
-const context=vm.createContext({document:{querySelector:node,querySelectorAll:()=>[],addEventListener:()=>{}},fetch:()=>new Promise(()=>{}),setInterval:()=>{},Date});
+const sportInputs=['MLB','NFL','NBA','NHL'].map(value=>({value,checked:true}));
+function setSports(sports){for(const input of sportInputs)input.checked=sports==='All sports'||sports.split(' + ').includes(input.value);sportInputs[0].onchange();}
+const context=vm.createContext({document:{querySelector:node,querySelectorAll:selector=>selector==='.slip-sport'?sportInputs:selector==='.slip-sport:checked'?sportInputs.filter(input=>input.checked):[],addEventListener:()=>{}},fetch:()=>new Promise(()=>{}),setInterval:()=>{},Date});
 for(const file of ['player_view.js','model_slips.js','eligibility.js','validation_view.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),context);
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
 for(const match of html.matchAll(/<script>([\s\S]*?)<\/script>/g))vm.runInContext(match[1],context);
@@ -89,8 +91,7 @@ console.log('On-demand model generation, unvalidated labels, unique players/game
 context.fixture.updatedAt=new Date(now-1000).toISOString();
 context.fixture.sports.NFL={sourceStatus:'CURRENT',status:'LIVE_FORECASTS'};
 context.fixture.picks=[paperLeg(21),paperLeg(22),{...paperLeg(23),sport:'NFL'},{...paperLeg(24),sport:'NFL'}];
-node('#slipSport').value='NFL';node('#modelSize').value='4';
-node('#slipSport').onchange();
+node('#modelSize').value='4';setSports('NFL');
 assert.equal(node('#modelSize').value,'2');
 assert.equal(node('#modelCards').innerHTML,'');
 node('#generateModel').onclick();
@@ -107,12 +108,12 @@ assert(node('#slipSupport').innerHTML.includes('2 fresh exact-line offers'));
 context.fixture.offers[3].offerObservedAt=new Date(now-16*60000).toISOString();vm.runInContext('expireDisplayedSlips()',context);
 assert.equal(node('#generate').disabled,true);
 assert(!node('#slipCards').innerHTML.includes('NFL ·'));
-node('#slipSport').value='NBA';node('#slipSport').onchange();
+setSports('NBA');
 assert.equal(node('#generateModel').disabled,true);
 assert.equal(node('#modelCards').innerHTML,'');
 assert.equal(node('#slipCards').innerHTML,'');
 assert(node('#modelAvailability').textContent.includes('No NBA model slips available'));
-node('#slipSport').value='All sports';node('#slipSport').onchange();
+setSports('All sports');
 assert.equal(node('#generateModel').disabled,false);
 assert.equal(vm.runInContext('modelSlips(data,4).length',context),1);
 console.log('Sport-specific model/live ranking, mixed mode, size fallback, expiry and empty-state clearing passed.');
@@ -131,3 +132,23 @@ if([...aliasCounts.values()].some(n=>n>2))throw Error('Alias bypassed cap');
 if(rankSlipPool(reusePool.slice(0,2),2).length!==1)throw Error('Duplicate slips');
 `,context);
 console.log('Two-use pick cap, alternate-pick reranking, aliases and exhausted pools passed.');
+
+context.fixture.sports.NHL={sourceStatus:'CURRENT',status:'BASELINE_FORECASTS'};
+context.fixture.picks=[{...paperLeg(31),sport:'NFL'},{...paperLeg(32),sport:'NFL'},{...paperLeg(33),sport:'NHL'},{...paperLeg(34),sport:'NHL'},paperLeg(35,.99)];
+context.fixture.offers=[{...leg(31),sport:'NFL'},{...leg(32),sport:'NFL'},{...leg(33),sport:'NHL'},{...leg(34),sport:'NHL'},leg(35)];
+node('#modelSize').value='4';node('#size').value='4';setSports('NFL + NHL');
+assert(node('#modelAvailability').textContent.includes('NFL + NHL · Available sizes'));
+node('#generateModel').onclick();node('#generate').onclick();
+for(const id of ['#modelCards','#slipCards']){
+ assert(node(id).innerHTML.includes('NFL ·'));assert(node(id).innerHTML.includes('NHL ·'));assert(!node(id).innerHTML.includes('MLB ·'));
+}
+assert.equal(vm.runInContext('modelSlips(data,4,Date.now(),["NFL","NHL"])[0].legs.length',context),4);
+node('#clearSlipSports').onclick();
+assert.equal(node('#generateModel').disabled,true);assert.equal(node('#generate').disabled,true);
+assert.equal(node('#modelCards').innerHTML,'');assert.equal(node('#slipCards').innerHTML,'');
+assert(node('#modelAvailability').textContent.includes('Select at least one sport'));
+assert(node('#slipMessage').textContent.includes('Select at least one sport'));
+assert.equal(vm.runInContext('modelSlips(data,2,Date.now(),[]).length',context),0);
+node('#allSlipSports').onclick();assert(sportInputs.every(input=>input.checked));assert.equal(node('#generateModel').disabled,false);
+setSports('NHL');assert.equal(sportInputs.filter(input=>input.checked).length,1);
+console.log('Multiple selected sports, model/live exclusion, clear/select all and empty-selection generation guards passed.');

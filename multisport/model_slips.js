@@ -1,6 +1,7 @@
 /* Shared bounded ranking; callers supply independently eligible pools. */
-function modelSlips(data,size,now=Date.now(),sport='All sports'){
- const pool=forecastPool(data,now).filter(r=>r.scheduleVerified===true&&r.direction==='MORE'&&Number.isFinite(r.target)&&(sport==='All sports'||r.sport===sport));
+function modelSlips(data,size,now=Date.now(),sports='All sports'){
+ const selected=Array.isArray(sports)?new Set(sports):sports==='All sports'?null:new Set([sports]);
+ const pool=forecastPool(data,now).filter(r=>r.scheduleVerified===true&&r.direction==='MORE'&&Number.isFinite(r.target)&&(!selected||selected.has(r.sport)));
  return rankSlipPool(pool,size).map(s=>({...s,kind:'MODEL_TEST',actionable:false}));
 }
 function slipPickKey(r){
