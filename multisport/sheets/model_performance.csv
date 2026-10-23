@@ -54,4 +54,10 @@ NBA,Points,,,WAITING_FOR_FORECASTS,0,0,0,,,,,0,0,No,Model-target report
 NBA,Rebounds,,,WAITING_FOR_FORECASTS,0,0,0,,,,,0,0,No,Model-target report
 NBA,Assists,,,WAITING_FOR_FORECASTS,0,0,0,,,,,0,0,No,Model-target report
 NBA,3-Pointers Made,,,WAITING_FOR_FORECASTS,0,0,0,,,,,0,0,No,Model-target report
+MLB,Bases,MORE,upstream-unspecified,COLLECTING_SEPARATE_GAMES,0,0,0,,,,,0,0,No,Observed Sleeper lines
+MLB,Hits,MORE,upstream-unspecified,COLLECTING_SEPARATE_GAMES,0,0,0,,,,,0,0,No,Observed Sleeper lines
+MLB,Hits + Runs + RBI,MORE,upstream-unspecified,COLLECTING_SEPARATE_GAMES,0,0,0,,,,,0,0,No,Observed Sleeper lines
+MLB,RBI,MORE,upstream-unspecified,COLLECTING_SEPARATE_GAMES,0,0,0,,,,,0,0,No,Observed Sleeper lines
+MLB,Runs,MORE,upstream-unspecified,COLLECTING_SEPARATE_GAMES,0,0,0,,,,,0,0,No,Observed Sleeper lines
+MLB,Walks,MORE,upstream-unspecified,COLLECTING_SEPARATE_GAMES,0,0,0,,,,,0,0,No,Observed Sleeper lines
 NHL,Shots on Goal,MORE,nhl-shots-toi-nb-1,COLLECTING_SEPARATE_GAMES,112,110,11,0.26122202109793896,0.7165102896614747,0.4949925574245459,0.4831267217630854,31,3,No,Observed Sleeper lines
