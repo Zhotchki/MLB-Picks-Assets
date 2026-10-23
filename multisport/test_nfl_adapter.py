@@ -27,6 +27,35 @@ class NFLTests(unittest.TestCase):
     def test_roster_team_mismatch_excluded(self):
         now,g,r,feed,roster=self.fixtures();roster['99']['team']='CC'
         rows,status,rejected=self.collect(now,g,feed,roster);self.assertEqual(rows,[]);self.assertEqual(rejected['player_team_mismatch'],1)
+    def test_fresh_public_board_rows_are_separate_ineligible_forecasts(self):
+        now,g,r,feed,roster=self.fixtures()
+        r.update({'Line Source':'Public Sleeper board','Platform':'Sleeper','Board ID':'board-1'})
+        feed['boardStatus']={'status':'ok','fetchedAt':now.isoformat(),'sources':{'Sleeper':{'status':'ok'}}}
+        rows,_,_=self.collect(now,g,feed,roster);self.assertEqual(len(rows),1)
+        row=rows[0]
+        self.assertTrue(row['id'].startswith('NFL_PUBLIC_BOARD:'))
+        self.assertEqual(row['baselineVersion'],'nfl-public-board-upstream-v1')
+        self.assertEqual(row['probabilityStatus'],'UNVALIDATED_BASELINE')
+        self.assertFalse(row['platformEligible']);self.assertFalse(row['actionable'])
+        self.assertIsNone(row['platformLine']);self.assertIsNone(row['platform'])
+        self.assertEqual(row['upstreamBoardId'],'board-1')
+        self.assertNotIn('forecastKind',row)
+    def test_public_board_requires_recent_metadata_and_supported_threshold(self):
+        from datetime import timedelta
+        now,g,r,feed,roster=self.fixtures()
+        r.update({'Line Source':'Public Sleeper board','Platform':'Sleeper','Board ID':'board-1'})
+        board={'status':'ok','fetchedAt':now.isoformat(),'sources':{'Sleeper':{'status':'ok'}}}
+        for change in ({'fetchedAt':(now-timedelta(minutes=16)).isoformat()},
+                       {'fetchedAt':(now+timedelta(minutes=6)).isoformat()},
+                       {'fetchedAt':'invalid'},{'status':'error'},{'sources':{}}):
+            feed['boardStatus']=dict(board,**change)
+            rows,_,rejected=self.collect(now,g,feed,roster)
+            self.assertFalse(rows);self.assertEqual(rejected['unverified_public_board'],1)
+        feed['boardStatus']=board
+        for field,value in [('Platform','Underdog'),('Board ID',''),('Line',3),('Line',3.25),('Model Side','Lower'),('Availability','Out')]:
+            original=r[field];r[field]=value
+            self.assertFalse(self.collect(now,g,feed,roster)[0]);r[field]=original
+        roster['99']['team']='CC';self.assertFalse(self.collect(now,g,feed,roster)[0])
     def test_started_game_excluded_even_if_feed_says_upcoming(self):
         now,g,r,feed,roster=self.fixtures();g['gametime']='08:00'
         rows,status,rejected=self.collect(now,g,feed,roster);self.assertEqual(rows,[]);self.assertEqual(rejected['game_started'],1)

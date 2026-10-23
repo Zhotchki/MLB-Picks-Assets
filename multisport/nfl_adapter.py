@@ -59,8 +59,17 @@ def collect(now,get_json,model,corrected,root,norm):
     projections={(norm(p['Player']),team(p['Team'])):p for p in feed.get('projections',[]) if p.get('Player') and p.get('Team')}
     rejected=Counter();out=[];roster=None
     for row in feed['picks']:
-        if row.get('Line Source')!='Automatic model target':
+        public_board=row.get('Line Source')=='Public Sleeper board'
+        if row.get('Line Source')!='Automatic model target' and not public_board:
             rejected['nonautomatic_line']+=1;continue
+        if public_board:
+            board=feed.get('boardStatus',{})
+            try:board_age=(now-instant(board['fetchedAt'])).total_seconds()
+            except (KeyError,ValueError,TypeError,AttributeError):board_age=None
+            if (row.get('Platform')!='Sleeper' or not row.get('Board ID') or
+                board.get('status')!='ok' or board.get('sources',{}).get('Sleeper',{}).get('status')!='ok' or
+                board_age is None or not -300<=board_age<=900):
+                rejected['unverified_public_board']+=1;continue
         matches=[g for g in games if {team(g['home_team']),team(g['away_team'])}=={team(row.get('Team')),team(row.get('Opponent'))}]
         if len(matches)!=1:rejected['unverified_game']+=1;continue
         g=matches[0]
@@ -72,6 +81,8 @@ def collect(now,get_json,model,corrected,root,norm):
         p,line,samples,snaps=[num(row.get(k)) for k in ('Probability','Line','History Sample','Expected Snap %')]
         if p is None or not 0<p<1 or line is None or samples is None or samples<4 or snaps is None or not 0<snaps<=1:
             rejected['missing_probability_or_usage']+=1;continue
+        if public_board and (line<.5 or abs(line-(math.floor(line)+.5))>1e-9):
+            rejected['unsupported_public_threshold']+=1;continue
         if any(s in str(row.get('Availability','')).upper() for s in ('OUT','INACTIVE','DOUBTFUL','SUSPEND','PUP','IR')):
             rejected['unavailable_player']+=1;continue
         pr=projections.get((norm(row.get('Player')),team(row.get('Team'))))
@@ -82,6 +93,12 @@ def collect(now,get_json,model,corrected,root,norm):
         if len(identity)!=1:rejected['player_team_mismatch']+=1;continue
         if row['Market'] not in METRICS and row['Market']!='Rush + Receiving Yards':rejected['unsupported_stat']+=1;continue
         r={'id':f"NFL:{g['game_id']}:{pr['Player ID']}:{row['Market']}:MORE:{line}", 'sport':'NFL', 'gameId':g['game_id'],'playerId':pr['Player ID'],'player':row['Player'],'team':team(row['Team']),'opponent':team(row['Opponent']),'prop':row['Market'],'direction':'MORE','target':line+.5,'modelLine':line,'projection':num(row.get('Model Projection')),'sourceProbability':p,'samples':samples,'startTime':start.isoformat(),'officialGameDate':g['gameday'],'scheduleVerified':True,'homeTeamAbbr':team(g['home_team']),'awayTeamAbbr':team(g['away_team']),'capturedAt':now.isoformat(),'lineupStatus':f'{snaps:.0%} expected snaps','expectedPlayingTime':snaps,'probabilityStatus':'UPSTREAM SHRUNK HISTORY ESTIMATE','platformLine':None,'platform':None,'actionable':False,'resultStatus':'PENDING','season':season,'week':week,'upstreamModelVersion':feed.get('appVersion')}
+        if public_board:
+            # New source semantics get separate immutable identities and validation.
+            # Upstream board metadata is not a verified offer from this app's provider.
+            r.update(id='NFL_PUBLIC_BOARD:'+r['id'],baselineVersion='nfl-public-board-upstream-v1',
+                     probabilityStatus='UNVALIDATED_BASELINE',platformEligible=False,
+                     upstreamBoardId=str(row['Board ID']),upstreamBoardObservedAt=board['fetchedAt'])
         r['probability']=corrected(r,model);r['modelVersion']=model['version'];out.append(r)
     return out,{'status':'LIVE_FORECASTS','sourceStatus':'CURRENT','verifiedRows':len(out),'modelVersion':feed.get('appVersion'),'sourceUpdatedAt':feed['generatedAt'],'sourceRefresh':feed['lastRefresh'],'week':week,'season':season,'usingCachedFeed':cached},rejected
 
