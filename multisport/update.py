@@ -8,7 +8,7 @@ from zoneinfo import ZoneInfo
 from collections import Counter, defaultdict
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '0.6.2'
+VERSION = '0.6.3'
 API = 'https://statsapi.mlb.com/api/v1/'
 MLB_FEED = 'https://script.google.com/macros/s/AKfycbw1_xLZM-fAaBm9c4hmvwrvdlWxbV-3S3gW3e8GCZ8DKsfpNf-FVlwHb4lhwMECXNoiAA/exec?api=mobile'
 STAT_KEYS = {'Hits': 'hits', 'Runs': 'runs', 'RBI': 'rbi', 'Bases': 'totalBases', 'Walks': 'baseOnBalls', 'Strikeouts': 'strikeOuts', 'Stolen Bases': 'stolenBases', 'Home Runs': 'homeRuns'}
@@ -326,7 +326,7 @@ def run():
     except Exception:
         nba_status['gradingStatus'] = 'AWAITING_RESULT_SOURCE'
     model = learn(ledger,model,today)
-    from validation import report as validation_report
+    from validation import report as validation_report,nhl_calibration_report
     validation = validation_report(ledger)
     graded = [r for r in ledger if r.get('resultStatus')=='GRADED']
     frozen = {'n':len(graded), 'brier':sum((r['probability']-r['outcome'])**2 for r in graded)/len(graded) if graded else None}
@@ -341,7 +341,7 @@ def run():
     offers,offer_counts=match_offers(live_rows,board,published_at,norm)
     from weekly_slips import update as update_weekly_slips
     weekly_saved,weekly_tracking=update_weekly_slips(read('weekly-slips.json',[]),verified,ledger,{'MLB':mlb_status,'NFL':nfl_status,'NBA':nba_status,'NHL':nhl_status},published_at)
-    data = {'lineValidation':line_evidence,'lineCollection':{'observedForecasts':len(observed_rows),'eligibleForecasts':promoted,'excluded':dict(line_rejected)},'weeklyTracking':weekly_tracking,'version':VERSION,'updatedAt':published_at.isoformat(),'sourceUpdatedAt':timestamp,'sourceRefresh':refresh,'sourceStatus':mlb_status['sourceStatus'],
+    data = {'nhlCalibration':nhl_calibration_report(ledger,published_at),'lineForecasts':[r for r in verified if r.get('forecastKind')=='SLEEPER_LINE'],'lineValidation':line_evidence,'lineCollection':{'observedForecasts':len(observed_rows),'eligibleForecasts':promoted,'excluded':dict(line_rejected)},'weeklyTracking':weekly_tracking,'version':VERSION,'updatedAt':published_at.isoformat(),'sourceUpdatedAt':timestamp,'sourceRefresh':refresh,'sourceStatus':mlb_status['sourceStatus'],
             'sports':{'MLB':mlb_status, 'NFL':nfl_status,'NBA':nba_status,'NHL':nhl_status},
             'picks':sorted([r for r in verified if r.get('forecastKind')!='SLEEPER_LINE'],key=lambda r:-r['probability']),'rejected':dict(rejected),'model':model,'validation':validation,
             'results':{'recorded':len(ledger),'graded':len(graded),'void':sum(r.get('resultStatus')=='VOID' for r in ledger),'frozenPredictionMetrics':frozen},

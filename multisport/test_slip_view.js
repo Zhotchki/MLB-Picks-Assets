@@ -1,6 +1,6 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
 const path=require('path'),root=__dirname,nodes={};
-const node=id=>nodes[id]||(nodes[id]={value:id==='#size'?'4':id==='#playerSearch'?'':id==='#playerProp'?'All props':id==='#playerGame'?'All games':id==='#playerMinimum'?'0':'All sports',options:id==='#size'?[2,3,4,5,6,8].map(value=>({value:String(value)})):[],innerHTML:'',textContent:'',hidden:false,disabled:false});
+const node=id=>nodes[id]||(nodes[id]={value:id==='#modelSource'?'targets':id==='#size'?'4':id==='#playerSearch'?'':id==='#playerProp'?'All props':id==='#playerGame'?'All games':id==='#playerMinimum'?'0':'All sports',options:id==='#size'?[2,3,4,5,6,8].map(value=>({value:String(value)})):[],innerHTML:'',textContent:'',hidden:false,disabled:false});
 const sportInputs=['MLB','NFL','NBA','NHL'].map(value=>({value,checked:value==='MLB'}));
 function setSports(sports){for(const input of sportInputs)input.checked=sports==='All sports'||sports.split(' + ').includes(input.value);sportInputs[0].onchange();}
 const context=vm.createContext({document:{querySelector:node,querySelectorAll:selector=>selector==='.slip-sport'?sportInputs:selector==='.slip-sport:checked'?sportInputs.filter(input=>input.checked):[],addEventListener:()=>{}},fetch:()=>new Promise(()=>{}),setInterval:()=>{},Date});
@@ -177,3 +177,21 @@ console.log('Required sport diversity, minority-sport search support, cached-sli
 assert.equal(vm.runInContext('modelSlipSizes(data,Date.now()+2*3600000,["NFL"]).length',context),0);
 assert.equal(vm.runInContext('modelSlips(data,4,Date.now()+2*3600000,["NFL"]).length',context),0);
 console.log('Cached availability and slips expire when games start.');
+
+// Default observed-line mode must never substitute easier model targets.
+context.fixture.sports.NHL.sourceStatus='CURRENT';
+const observed=(id,sport,line,p)=>({...paperLeg(id,p),id:'observed-'+id,sport,modelLine:line,target:line+.5,forecastKind:'SLEEPER_LINE',observedPlatform:'Sleeper',observedPlatformLine:line,observedEventId:'event-'+id,observedAt:new Date(now-1000).toISOString()});
+context.fixture.lineForecasts=[observed(501,'NFL',2.5,.55),observed(502,'NHL',3.5,.51)];
+node('#modelSource').value='observed';setSports('NFL + NHL');node('#modelSource').onchange();node('#generateModel').onclick();
+assert.equal(node('#modelSize').value,'2');assert(node('#modelCards').innerHTML.includes('MORE 3.5'));assert(!node('#modelCards').innerHTML.includes('MORE 0.5'));
+assert(node('#modelCards').innerHTML.includes('Observed in Sleeper'));
+assert.equal(vm.runInContext('observedLinePool(data).length',context),2);
+context.fixture.lineForecasts[1].observedAt=new Date(now-16*60000).toISOString();vm.runInContext('render()',context);
+assert.equal(node('#generateModel').disabled,true);assert(node('#modelAvailability').textContent.includes('No fresh observed Sleeper lines'));
+assert(!node('#modelCards').innerHTML.includes('MORE 0.5'));
+node('#modelSource').value='targets';node('#modelSource').onchange();assert.equal(node('#generateModel').disabled,false);
+assert(node('#modelAvailability').textContent.includes('not verified platform offers'));
+node('#generateModel').onclick();assert(node('#modelCards').innerHTML.includes('Model-target paper preview'));
+node('#modelSource').value='observed';context.fixture.lineForecasts[1].observedAt=new Date(now-1000).toISOString();context.fixture.lineForecasts[1].observedPlatformLine=4.5;node('#modelSource').onchange();
+assert.equal(node('#generateModel').disabled,true);
+console.log('Observed threshold selection, no synthetic fallback, expiry, metadata validation and explicit paper-target option passed.');

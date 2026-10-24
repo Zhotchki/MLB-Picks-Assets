@@ -48,4 +48,15 @@ function lineCoverageMarkup(data,now=Date.now()){
  const reasons=Object.entries(data.lineCollection?.excluded||{}).filter(([,n])=>n>0).map(([k,n])=>'<li>'+esc(k.replaceAll('_',' '))+': '+esc(n)+'</li>').join('');
  return '<details><summary>Sleeper line coverage and validation</summary><p>Fresh board lines and validated probabilities are checked separately. Only predictions frozen at observed Sleeper thresholds count here.</p><div style="overflow-x:auto"><table class="validation-table"><thead><tr><th>Sport</th><th>Board</th><th>Saved line forecasts</th><th>Graded</th><th>Validated thresholds</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+(groups?'<ul>'+groups+'</ul>':'<p>Waiting for fresh lines to record exact-threshold predictions.</p>')+(reasons?'<details><summary>Why other observed lines could not be evaluated</summary><ul>'+reasons+'</ul></details>':'')+'<small>Promotion requires separate later games, exact-threshold skill checks and calibration. It does not establish betting profitability. Provider credits remain capped.</small></details>';
 }
-if (typeof module !== 'undefined') module.exports = {validationMarkup, validationValue,lineCoverageMarkup};
+function nhlCalibrationMarkup(report){
+ const esc=validationEscape,pct=v=>v==null?'—':validationValue(v*100,1)+'%';
+ if(!report)return '<details class="panel"><summary>NHL estimates vs results</summary><p>Calibration comparisons will appear after the next data refresh.</p></details>';
+ const labels={LIMITED_RESULTS:'Limited results',ESTIMATES_ABOVE_RESULTS:'Estimates above observed hit rate',ESTIMATES_BELOW_RESULTS:'Estimates below observed hit rate',SMALL_OBSERVED_GAP:'Small observed gap'};
+ const groups=(report.groups||[]).map(g=>{
+  const gap=g.gapPercentagePoints,sign=gap>0?'+':'';
+  const bands=(g.bands||[]).map(b=>'<li>'+esc(b.label)+' estimates: '+pct(b.scores.meanProbability)+' average vs '+pct(b.scores.targetHitRate)+' hit rate · '+esc(b.support.playerGames)+' player-games / '+esc(b.support.games)+' games</li>').join('');
+  return '<article><h3>'+esc(g.prop)+' · MORE '+esc(g.modelLine)+'</h3><small>'+esc(g.cohort==='OBSERVED_SLEEPER_LINE'?'Observed Sleeper line':'Model target · not a verified platform line')+' · '+esc(g.sourceVersion)+' · '+esc(g.calibrationVersion)+'</small><p>Average estimate <strong>'+pct(g.scores.meanProbability)+'</strong> · Observed hit rate <strong>'+pct(g.scores.targetHitRate)+'</strong><br>Gap '+(gap==null?'—':sign+validationValue(gap,1)+' percentage points')+' · '+esc(labels[g.status]||g.status)+'</p><small>'+esc(g.support.playerGames)+' graded player-games across '+esc(g.support.games)+' games · '+esc(g.pending)+' pending</small>'+(bands?'<details><summary>Compare probability bands</summary><ul>'+bands+'</ul></details>':'')+'</article>';
+ }).join('');
+ return '<details class="panel"><summary>NHL estimates vs results</summary><p>Positive gaps mean estimates exceeded the observed hit rate. Thresholds and model versions are compared separately; scores are balanced by game.</p>'+(groups||'<p>No NHL forecasts saved yet.</p>')+'<small>These are descriptive comparisons, including limited samples. They do not automatically validate or change probabilities.</small></details>';
+}
+if (typeof module !== 'undefined') module.exports = {validationMarkup, validationValue,lineCoverageMarkup,nhlCalibrationMarkup};

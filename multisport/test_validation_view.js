@@ -27,3 +27,9 @@ const lineData={lineValidation:{sports:{NHL:{recorded:10,graded:4,eligibleTarget
 const lineHTML=lineCoverageMarkup(lineData);assert(lineHTML.includes('Board fresh'));assert(lineHTML.includes('partial board'));assert(lineHTML.includes('20 lines'));assert(lineHTML.includes('&lt;script&gt;'));assert(!lineHTML.includes('<script>'));
 assert(lineCoverageMarkup({}).includes('next data refresh'));
 console.log('Observed-line coverage, partial boards, collection progress and escaping passed.');
+
+const {nhlCalibrationMarkup}=require('./validation_view');
+assert(nhlCalibrationMarkup(null).includes('next data refresh'));
+const audit=nhlCalibrationMarkup({groups:[{prop:'<Shots>',modelLine:.5,cohort:'MODEL_TARGET',sourceVersion:'v1',calibrationVersion:'cal1',scores:{meanProbability:.98,targetHitRate:.8},gapPercentagePoints:18,status:'ESTIMATES_ABOVE_RESULTS',support:{playerGames:100,games:20},pending:0,bands:[]}]});
+assert(audit.includes('&lt;Shots&gt;'));assert(audit.includes('98.0%'));assert(audit.includes('80.0%'));assert(audit.includes('+18.0 percentage points'));assert(audit.includes('not a verified platform line'));
+console.log('NHL calibration gaps, cohort labels and escaping passed.');

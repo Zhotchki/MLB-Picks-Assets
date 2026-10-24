@@ -143,3 +143,34 @@ def report(ledger):
     return {'version':'prospective-targets-2','sports':sports,'groups':groups,'invalidForecasts':invalid,'duplicateForecasts':duplicate,
             'method':'Frozen pregame probabilities; versions separated; later whole-game holdout; scores balanced by player-game then event; exact targets reviewed separately.',
             'limitation':'Model-target accuracy is not platform wager win rate. Reviewable support is not proof of calibration, betting edge, or generalization. Reports never enable baseline offers.'}
+
+
+def nhl_calibration_report(ledger,now):
+    """Descriptive calibration audit: separate thresholds, source versions and observed/model cohorts."""
+    from line_pipeline import observed_valid
+    groups=defaultdict(list);seen=set()
+    candidates=[r for r in ledger if r.get('sport')=='NHL' and pregame(r)]
+    for r in sorted(candidates,key=lambda row:iso(row['capturedAt'])):
+        cohort='OBSERVED_SLEEPER_LINE' if r.get('forecastKind')=='SLEEPER_LINE' else 'MODEL_TARGET'
+        if cohort=='OBSERVED_SLEEPER_LINE' and not observed_valid(r):continue
+        threshold=r.get('modelLine') if finite(r.get('modelLine')) else r['target']-.5 if finite(r.get('target')) else None
+        if not finite(threshold):continue
+        k=key(r)+(threshold,cohort)
+        identity=k+player_game(r)
+        if identity in seen:continue
+        seen.add(identity);groups[k].append(r)
+    def summary(rows):
+        scores=score(rows);evidence=support(rows);bias=scores['calibrationBias']
+        enough=evidence['playerGames']>=30 and evidence['games']>=10 and evidence['days']>=3
+        return dict(support=evidence,scores=scores,gapPercentagePoints=bias*100 if bias is not None else None,
+                    status='LIMITED_RESULTS' if not enough else 'ESTIMATES_ABOVE_RESULTS' if bias>.05 else 'ESTIMATES_BELOW_RESULTS' if bias<-.05 else 'SMALL_OBSERVED_GAP')
+    bands=[(0,.5,'Below 50%'),(.5,.7,'50–70%'),(.7,.8,'70–80%'),(.8,.9,'80–90%'),(.9,.95,'90–95%'),(.95,1,'95–100%')]
+    out=[]
+    for k,rows in sorted(groups.items()):
+        complete=[r for r in rows if graded(r) and iso(r['gradedAt'])<=now]
+        out.append(dict(sport=k[0],prop=k[1],direction=k[2],sourceVersion=k[3],calibrationVersion=k[4],modelLine=k[5],cohort=k[6],
+                        recorded=support(rows),pending=sum(r.get('resultStatus')=='PENDING' for r in rows),
+                        **summary(complete),bands=[dict(label=label,**summary([r for r in complete if low<=r['probability']<high])) for low,high,label in bands if any(low<=r['probability']<high for r in complete)]))
+    return dict(evaluatedAt=now.isoformat(),groups=out,
+                method='Frozen pregame forecasts; first player/game/threshold per source and calibration version; final results only; separate model-target and observed-Sleeper cohorts; scores balanced by player-game then game.',
+                limitation='Descriptive results do not prove calibration or profitability, do not alter frozen probabilities, and do not enable live offers.')

@@ -1,20 +1,26 @@
 /* Shared bounded ranking; callers supply independently eligible pools. */
 const modelSlipCache=new WeakMap();
 function modelPoolFingerprint(pool){return JSON.stringify(pool.map(r=>[r.id,slipPickKey(r),r.probability,r.startTime]));}
-function modelSlipPool(data,now,sports){
- const selected=Array.isArray(sports)?new Set(sports):sports==='All sports'?null:new Set([sports]);
- return {pool:forecastPool(data,now).filter(r=>r.scheduleVerified===true&&r.direction==='MORE'&&Number.isFinite(r.target)&&(!selected||selected.has(r.sport))),minSports:!selected||selected.size>1?2:1};
+function observedLinePool(data,now=Date.now()){
+ return forecastPool({...data,picks:data.lineForecasts||[]},now).filter(r=>{
+  const age=now-Date.parse(r.observedAt);
+  return r.forecastKind==='SLEEPER_LINE'&&r.observedPlatform==='Sleeper'&&r.observedEventId!=null&&r.observedEventId!==''&&Number.isFinite(r.observedPlatformLine)&&r.modelLine===r.observedPlatformLine&&Number.isFinite(age)&&age>=0&&age<=15*60000;
+ });
 }
-function modelSlips(data,size,now=Date.now(),sports='All sports'){
- const {pool,minSports}=modelSlipPool(data,now,sports);
+function modelSlipPool(data,now,sports,source='targets'){
+ const selected=Array.isArray(sports)?new Set(sports):sports==='All sports'?null:new Set([sports]);
+ return {pool:(source==='observed'?observedLinePool(data,now):forecastPool(data,now)).filter(r=>r.scheduleVerified===true&&r.direction==='MORE'&&Number.isFinite(r.target)&&(!selected||selected.has(r.sport))),minSports:!selected||selected.size>1?2:1};
+}
+function modelSlips(data,size,now=Date.now(),sports='All sports',source='targets'){
+ const {pool,minSports}=modelSlipPool(data,now,sports,source);
  const fingerprint=modelPoolFingerprint(pool);
- if(!modelSlipCache.has(data))modelSlipCache.set(data,new Map());const cache=modelSlipCache.get(data),key=JSON.stringify([sports,Number(size),minSports]);
+ if(!modelSlipCache.has(data))modelSlipCache.set(data,new Map());const cache=modelSlipCache.get(data),key=JSON.stringify([sports,Number(size),minSports,source]);
  const saved=cache.get(key);if(saved?.fingerprint===fingerprint)return saved.slips;
  const slips=rankSlipPool(pool,size,minSports).map(s=>({...s,kind:'MODEL_TEST',actionable:false}));cache.set(key,{fingerprint,slips});return slips;
 }
-function modelSlipSizes(data,now=Date.now(),sports='All sports'){
- const {pool,minSports}=modelSlipPool(data,now,sports),fingerprint=modelPoolFingerprint(pool);
- if(!modelSlipCache.has(data))modelSlipCache.set(data,new Map());const cache=modelSlipCache.get(data),key=JSON.stringify([sports,'sizes',minSports]);
+function modelSlipSizes(data,now=Date.now(),sports='All sports',source='targets'){
+ const {pool,minSports}=modelSlipPool(data,now,sports,source),fingerprint=modelPoolFingerprint(pool);
+ if(!modelSlipCache.has(data))modelSlipCache.set(data,new Map());const cache=modelSlipCache.get(data),key=JSON.stringify([sports,'sizes',minSports,source]);
  const saved=cache.get(key);if(saved?.fingerprint===fingerprint)return saved.sizes;
  const sets=rankSlipCandidates(pool,8,minSports,true),sizes=[2,3,4,5,6,8].filter(size=>sets[size]?.length);cache.set(key,{fingerprint,sizes});return sizes;
 }
@@ -65,4 +71,4 @@ function rankSlipCandidates(pool,size,minSports=1,allSizes=false){
  const result=n=>states[n].filter(s=>s.sports.size>=minSports).sort((a,b)=>b.probability-a.probability).map(({legs,probability})=>({legs,probability,searchComplete:false}));
  return allSizes?Object.fromEntries([2,3,4,5,6,8].map(n=>[n,result(n)])):result(size);
 }
-if(typeof module!=='undefined')module.exports={modelSlips,modelSlipSizes,rankSlipPool,slipPickKey,limitSlipReuse};
+if(typeof module!=='undefined')module.exports={observedLinePool,modelSlips,modelSlipSizes,rankSlipPool,slipPickKey,limitSlipReuse};

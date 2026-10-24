@@ -57,7 +57,7 @@ class PipelineIntegrationTests(unittest.TestCase):
         board={'status':'CONFIGURED','eligibleSports':['NHL'],'sports':{'NHL':{'fetchedAtEpoch':now.timestamp(),'rows':[fixture.line]}}}
         with tempfile.TemporaryDirectory() as tmp,patch.object(update,'ROOT',Path(tmp)),patch.object(update,'datetime',Clock),patch.object(update,'collect_mlb',return_value=([],status,{},None,None)),patch.object(update,'grade_mlb'),patch('nfl_adapter.collect',return_value=([],status,{})),patch('nfl_adapter.grade'),patch('nhl_adapter.collect',return_value=([fixture.base],status,{})),patch('nhl_adapter.grade'),patch('nba_adapter.collect',return_value=([],status,{})),patch('nba_adapter.grade'),patch('platform_feed.fetch',return_value=(board,{})),redirect_stdout(io.StringIO()):
             update.run();data=json.loads((Path(tmp)/'data.json').read_text());ledger=json.loads((Path(tmp)/'ledger.json').read_text())
-            self.assertEqual(len(ledger),2);self.assertEqual(len(data['picks']),1);self.assertFalse(data['offers'])
+            self.assertEqual(len(ledger),2);self.assertEqual(len(data['picks']),1);self.assertEqual(len(data['lineForecasts']),1);self.assertFalse(data['offers']);self.assertIn('nhlCalibration',data)
             self.assertEqual(data['lineValidation']['sports']['NHL']['recorded'],1);self.assertEqual(data['lineValidation']['sports']['NHL']['eligibleTargets'],0)
             frozen=next(r for r in ledger if r.get('forecastKind')=='SLEEPER_LINE')
             fixture.base['projection']=1;update.run()

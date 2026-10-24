@@ -103,4 +103,32 @@ class ValidationTests(unittest.TestCase):
         self.assertEqual(report([a])['invalidForecasts'],1)
         self.assertFalse(graded(dict(row(),gradedAt=None)))
 
+class NHLCalibrationAuditTests(unittest.TestCase):
+    def test_threshold_cohort_versions_and_first_player_game_are_separate(self):
+        from validation import nhl_calibration_report
+        from copy import deepcopy
+        now=datetime(2031,1,1,tzinfo=timezone.utc)
+        base=dict(row(target=1),modelLine=.5)
+        observed=dict(base,id='observed',forecastKind='SLEEPER_LINE',observedPlatform='Sleeper',observedEventId='event',observedPlatformLine=.5,observedAt=base['capturedAt'],scheduleVerified=True)
+        higher=dict(base,id='higher',target=3,modelLine=2.5)
+        other=dict(base,id='other-version',baselineVersion='shots-2')
+        ledger=[base,dict(base,id='alias',probability=.99),observed,higher,other];before=deepcopy(ledger)
+        report=nhl_calibration_report(ledger,now)
+        self.assertEqual(len(report['groups']),4)
+        self.assertTrue(all(g['support']['playerGames']==1 for g in report['groups']))
+        self.assertEqual({g['cohort'] for g in report['groups']},{'MODEL_TARGET','OBSERVED_SLEEPER_LINE'})
+        self.assertEqual(ledger,before)
+    def test_high_probability_band_exposes_gap_without_changing_predictions(self):
+        from validation import nhl_calibration_report
+        now=datetime(2031,1,1,tzinfo=timezone.utc)
+        rows=[dict(row(day=day,player=player,target=1,outcome=int(player%5!=0),probability=.98),modelLine=.5) for day in range(20) for player in range(5)]
+        group=nhl_calibration_report(rows,now)['groups'][0]
+        self.assertAlmostEqual(group['scores']['meanProbability'],.98);self.assertAlmostEqual(group['scores']['targetHitRate'],.8)
+        self.assertAlmostEqual(group['gapPercentagePoints'],18);self.assertEqual(group['status'],'ESTIMATES_ABOVE_RESULTS')
+        self.assertEqual(group['bands'][0]['label'],'95–100%');self.assertEqual(rows[0]['probability'],.98)
+        pending=[dict(r,resultStatus='PENDING') for r in rows]
+        g=nhl_calibration_report(pending,now)['groups'][0];self.assertIsNone(g['scores']['meanProbability']);self.assertEqual(g['status'],'LIMITED_RESULTS')
+        future=[dict(r,gradedAt=(now+timedelta(days=1)).isoformat()) for r in rows]
+        self.assertEqual(nhl_calibration_report(future,now)['groups'][0]['support']['forecasts'],0)
+
 if __name__=='__main__':unittest.main()
