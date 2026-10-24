@@ -1,7 +1,7 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
 const path=require('path'),root=__dirname,nodes={};
 const node=id=>nodes[id]||(nodes[id]={value:id==='#size'?'4':id==='#playerSearch'?'':id==='#playerProp'?'All props':id==='#playerGame'?'All games':id==='#playerMinimum'?'0':'All sports',options:id==='#size'?[2,3,4,5,6,8].map(value=>({value:String(value)})):[],innerHTML:'',textContent:'',hidden:false,disabled:false});
-const sportInputs=['MLB','NFL','NBA','NHL'].map(value=>({value,checked:true}));
+const sportInputs=['MLB','NFL','NBA','NHL'].map(value=>({value,checked:value==='MLB'}));
 function setSports(sports){for(const input of sportInputs)input.checked=sports==='All sports'||sports.split(' + ').includes(input.value);sportInputs[0].onchange();}
 const context=vm.createContext({document:{querySelector:node,querySelectorAll:selector=>selector==='.slip-sport'?sportInputs:selector==='.slip-sport:checked'?sportInputs.filter(input=>input.checked):[],addEventListener:()=>{}},fetch:()=>new Promise(()=>{}),setInterval:()=>{},Date});
 for(const file of ['player_view.js','model_slips.js','eligibility.js','validation_view.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),context);
@@ -78,7 +78,7 @@ assert(node('#modelCards').innerHTML.includes('Model preview'));
 assert(node('#modelCards').innerHTML.includes('Unvalidated baseline'));
 assert.equal(node('#generate').disabled,true);
 vm.runInContext(`
-const paper=modelSlips(data,2);if(paper.length!==3)throw Error('Expected three alternatives');
+const paper=modelSlips(data,2,Date.now(),["MLB"]);if(paper.length!==3)throw Error('Expected three alternatives');
 for(const s of paper){if(new Set(s.legs.map(forecastGameKey)).size!==2)throw Error('Repeated game');if(s.actionable!==false)throw Error('Live contamination');}
 `,context);
 context.fixture.picks[1].playerId=10;context.fixture.picks[2].scheduleVerified=false;context.fixture.picks[3].startTime=new Date(now-1000).toISOString();
@@ -152,3 +152,28 @@ assert.equal(vm.runInContext('modelSlips(data,2,Date.now(),[]).length',context),
 node('#allSlipSports').onclick();assert(sportInputs.every(input=>input.checked));assert.equal(node('#generateModel').disabled,false);
 setSports('NHL');assert.equal(sportInputs.filter(input=>input.checked).length,1);
 console.log('Multiple selected sports, model/live exclusion, clear/select all and empty-selection generation guards passed.');
+
+// A dominant sport cannot crowd every minority-sport prefix out of the search.
+context.fixture.picks=[...Array.from({length:12},(_,i)=>({...paperLeg(200+i,.99-i*.001),sport:'NFL'})),{...paperLeg(300,.05),sport:'NHL'},{...paperLeg(301,.04),sport:'NHL'}];
+context.fixture.offers=context.fixture.picks.map(r=>({...r,platform:'Sleeper',actionable:true,platformEligible:true,platformLine:.5,offerObservedAt:new Date(now-1000).toISOString()}));
+context.fixture.slips={'4':[{legs:context.fixture.offers.slice(0,4),probability:.99,searchComplete:true}]};
+node('#modelSize').value='4';node('#size').value='4';setSports('NFL + NHL');
+vm.runInContext(`
+for(const batch of [modelSlips(data,4,Date.now(),['NFL','NHL']),selectedLiveSlips(4)]){
+ if(batch.length!==3)throw Error('Expected mixed alternatives');const uses=new Map();
+ for(const s of batch){if(new Set(s.legs.map(r=>r.sport)).size<2)throw Error('Single-sport slip leaked');
+  for(const r of s.legs){const k=slipPickKey(r);uses.set(k,(uses.get(k)||0)+1);}}
+ if([...uses.values()].some(n=>n>2))throw Error('Mixed ranking broke reuse cap');
+}
+`,context);
+setSports('All sports');assert(vm.runInContext('selectedLiveSlips(4).every(s=>new Set(s.legs.map(r=>r.sport)).size>=2)',context));
+context.fixture.sports.NHL.sourceStatus='STALE';vm.runInContext('render()',context);
+assert.equal(node('#generateModel').disabled,true);assert.equal(node('#generate').disabled,true);
+assert(node('#modelAvailability').textContent.includes('at least two selected sports'));
+assert(node('#slipMessage').textContent.includes('at least two selected sports'));
+setSports('NFL');assert.equal(node('#generateModel').disabled,false);assert.equal(node('#generate').disabled,false);
+console.log('Required sport diversity, minority-sport search support, cached-slip exclusion, stale-sport guards and reuse caps passed.');
+
+assert.equal(vm.runInContext('modelSlipSizes(data,Date.now()+2*3600000,["NFL"]).length',context),0);
+assert.equal(vm.runInContext('modelSlips(data,4,Date.now()+2*3600000,["NFL"]).length',context),0);
+console.log('Cached availability and slips expire when games start.');

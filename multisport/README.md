@@ -168,3 +168,6 @@ Verified upcoming schedules now permit collection for experimental NBA/NHL model
 The live builder has a collapsible coverage/validation report. CSV results identify observed-line forecasts and model-performance exports add exact-line evidence without changing existing tab anchors.
 
 `refresh_watch.py` keeps a running Actions job refreshing at most every ten minutes (earlier for an upcoming planned board check) for 105 minutes. A newer scheduled run supersedes it. This reduces gaps without another hosting service but is still dependent on GitHub runner availability; it is not a continuous or guaranteed scheduler. All provider credit gates stay inside `platform_feed.fetch`.
+
+### Required mixed sports (v0.6.2)
+Selecting two or more sports now requires at least two selected sports in every on-demand model or live slip, including Select all. Selecting a single sport permits single-sport slips. Missing, stale or insufficient secondary-sport picks disable mixed generation with a clear message; there is no single-sport fallback. It is not necessary to include every selected sport. The bounded search preserves minority-sport prefixes, and the two-use pick cap still applies. Weekly frozen tests are not rewritten. Availability uses one ranking pass; repeated preview rendering reuses results only while the eligible pool and probabilities match.
