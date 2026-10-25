@@ -1,4 +1,75 @@
 Sport,Player,Team,Prop,Direction,Model line,Frozen probability,Actual,Outcome,Status,Game time CT,Source version,Forecast type
+NHL,Jimmy Snuggerud,STL,Shots on Goal,MORE,2.5,0.4853862634244117,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Observed Sleeper line
+NHL,Jackson Blake,CAR,Shots on Goal,MORE,2.5,0.44764301581671617,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Observed Sleeper line
+NHL,Logan Stankoven,CAR,Shots on Goal,MORE,2.5,0.4250067212773103,5.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Observed Sleeper line
+NHL,Logan Stankoven,CAR,Shots on Goal,MORE,1.5,0.6723775136282185,5.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Observed Sleeper line
+NHL,Dylan Holloway,STL,Shots on Goal,MORE,2.5,0.526984190514138,4.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Observed Sleeper line
+NHL,Philip Broberg,STL,Shots on Goal,MORE,1.5,0.34942896621125463,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Observed Sleeper line
+NHL,Andrei Svechnikov,CAR,Shots on Goal,MORE,2.5,0.5226258374138726,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Observed Sleeper line
+NHL,Sebastian Aho,CAR,Shots on Goal,MORE,2.5,0.5203330810228876,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Observed Sleeper line
+NHL,Nikolaj Ehlers,CAR,Shots on Goal,MORE,2.5,0.44481009466180954,2.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Observed Sleeper line
+NHL,Pavel Buchnevich,STL,Shots on Goal,MORE,1.5,0.5523376970329368,0.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Observed Sleeper line
+NHL,Shayne Gostisbehere,CAR,Shots on Goal,MORE,1.5,0.5677526852033907,2.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Observed Sleeper line
+NHL,Jimmy Snuggerud,STL,Shots on Goal,MORE,4.5,0.15040224955707338,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Jimmy Snuggerud,STL,Shots on Goal,MORE,3.5,0.2876779930474166,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Jimmy Snuggerud,STL,Shots on Goal,MORE,2.5,0.4885115714145264,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Jimmy Snuggerud,STL,Shots on Goal,MORE,1.5,0.7221534682141164,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Jimmy Snuggerud,STL,Shots on Goal,MORE,0.5,0.9149788306345649,1.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Jackson Blake,CAR,Shots on Goal,MORE,4.5,0.16366686331792268,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Jackson Blake,CAR,Shots on Goal,MORE,3.5,0.2856512960164904,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Jackson Blake,CAR,Shots on Goal,MORE,2.5,0.4621310141699524,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Jackson Blake,CAR,Shots on Goal,MORE,1.5,0.6792531389271159,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Jackson Blake,CAR,Shots on Goal,MORE,0.5,0.8848571747315483,1.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Logan Stankoven,CAR,Shots on Goal,MORE,4.5,0.10075184265859827,5.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Logan Stankoven,CAR,Shots on Goal,MORE,3.5,0.2180756713933898,5.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Logan Stankoven,CAR,Shots on Goal,MORE,2.5,0.41203088620066697,5.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Logan Stankoven,CAR,Shots on Goal,MORE,1.5,0.6635602015371274,5.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Logan Stankoven,CAR,Shots on Goal,MORE,0.5,0.8914962746060092,5.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Jake Neighbours,STL,Shots on Goal,MORE,4.5,0.01,3.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Jake Neighbours,STL,Shots on Goal,MORE,3.5,0.03564632007565505,3.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Jake Neighbours,STL,Shots on Goal,MORE,2.5,0.12516489526376418,3.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Jake Neighbours,STL,Shots on Goal,MORE,1.5,0.3450578875701644,3.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Jake Neighbours,STL,Shots on Goal,MORE,0.5,0.705153938129925,3.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Dylan Holloway,STL,Shots on Goal,MORE,4.5,0.16003667653756848,4.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Dylan Holloway,STL,Shots on Goal,MORE,3.5,0.30433575051562145,4.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Dylan Holloway,STL,Shots on Goal,MORE,2.5,0.5105293436768067,4.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Dylan Holloway,STL,Shots on Goal,MORE,1.5,0.7421696755328002,4.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Dylan Holloway,STL,Shots on Goal,MORE,0.5,0.9244502662245692,4.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Philip Broberg,STL,Shots on Goal,MORE,4.5,0.016710639176253483,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Philip Broberg,STL,Shots on Goal,MORE,3.5,0.051218271654801195,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Philip Broberg,STL,Shots on Goal,MORE,2.5,0.14169369905765317,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Philip Broberg,STL,Shots on Goal,MORE,1.5,0.3412547652026099,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Philip Broberg,STL,Shots on Goal,MORE,0.5,0.675354597665287,1.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Andrei Svechnikov,CAR,Shots on Goal,MORE,4.5,0.14448897931120563,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Andrei Svechnikov,CAR,Shots on Goal,MORE,3.5,0.2896197761084812,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Andrei Svechnikov,CAR,Shots on Goal,MORE,2.5,0.5025441274597939,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Andrei Svechnikov,CAR,Shots on Goal,MORE,1.5,0.7424662934761955,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Andrei Svechnikov,CAR,Shots on Goal,MORE,0.5,0.9271349944866731,1.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Sebastian Aho,CAR,Shots on Goal,MORE,4.5,0.15946607647178912,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Sebastian Aho,CAR,Shots on Goal,MORE,3.5,0.2935225360747302,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Sebastian Aho,CAR,Shots on Goal,MORE,2.5,0.48714964000162353,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Sebastian Aho,CAR,Shots on Goal,MORE,1.5,0.7144802270849282,1.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Sebastian Aho,CAR,Shots on Goal,MORE,0.5,0.9086901842527269,1.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Nikolaj Ehlers,CAR,Shots on Goal,MORE,4.5,0.11652168253929662,2.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Nikolaj Ehlers,CAR,Shots on Goal,MORE,3.5,0.24783027684329317,2.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Nikolaj Ehlers,CAR,Shots on Goal,MORE,2.5,0.4545589910248662,2.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Nikolaj Ehlers,CAR,Shots on Goal,MORE,1.5,0.7048063712065178,2.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Nikolaj Ehlers,CAR,Shots on Goal,MORE,0.5,0.9119741771732187,2.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Pavel Buchnevich,STL,Shots on Goal,MORE,4.5,0.0408215453618157,0.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Pavel Buchnevich,STL,Shots on Goal,MORE,3.5,0.11836025647521287,0.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Pavel Buchnevich,STL,Shots on Goal,MORE,2.5,0.28520602568740083,0.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Pavel Buchnevich,STL,Shots on Goal,MORE,1.5,0.5544667952850744,0.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Pavel Buchnevich,STL,Shots on Goal,MORE,0.5,0.8441609337167059,0.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Jaccob Slavin,CAR,Shots on Goal,MORE,4.5,0.029222420197830723,3.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Jaccob Slavin,CAR,Shots on Goal,MORE,3.5,0.08809020534345624,3.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Jaccob Slavin,CAR,Shots on Goal,MORE,2.5,0.22623380380301705,3.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Jaccob Slavin,CAR,Shots on Goal,MORE,1.5,0.47774549341009864,3.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Jaccob Slavin,CAR,Shots on Goal,MORE,0.5,0.7939174792470376,3.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Shayne Gostisbehere,CAR,Shots on Goal,MORE,4.5,0.04753178026479943,2.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Shayne Gostisbehere,CAR,Shots on Goal,MORE,3.5,0.13248290819270103,2.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Shayne Gostisbehere,CAR,Shots on Goal,MORE,2.5,0.3075018945636304,2.0,0,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Shayne Gostisbehere,CAR,Shots on Goal,MORE,1.5,0.5779366110070494,2.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Shayne Gostisbehere,CAR,Shots on Goal,MORE,0.5,0.8565156664352898,2.0,1,GRADED,2026-10-24 18:00:00,nhl-shots-toi-nb-1,Model target
 NHL,Brandt Clarke,LAK,Shots on Goal,MORE,4.5,0.043803923604383566,1.0,0,GRADED,2026-10-24 14:30:00,nhl-shots-toi-nb-1,Model target
 NHL,Brandt Clarke,LAK,Shots on Goal,MORE,3.5,0.12087339337858483,1.0,0,GRADED,2026-10-24 14:30:00,nhl-shots-toi-nb-1,Model target
 NHL,Brandt Clarke,LAK,Shots on Goal,MORE,2.5,0.2831214550545562,1.0,0,GRADED,2026-10-24 14:30:00,nhl-shots-toi-nb-1,Model target
@@ -4928,74 +4999,3 @@ MLB,Andrew Vaughn,MIL,Bases,MORE,1.5,0.28590137195190024,0.0,0,GRADED,2026-10-14
 MLB,Andy Pages,LAD,Walks,MORE,0.5,0.2716526478290623,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
 MLB,Andy Pages,LAD,Runs,MORE,0.5,0.4192769407389737,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
 MLB,Andy Pages,LAD,RBI,MORE,0.5,0.4511754669648663,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Andy Pages,LAD,Hits,MORE,0.5,0.6447061887381172,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Andy Pages,LAD,Hits + Runs + RBI,MORE,1.5,0.6573720478604774,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Andy Pages,LAD,Bases,MORE,1.5,0.547234115177658,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Will Smith,LAD,Walks,MORE,0.5,0.33680159874536086,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Will Smith,LAD,Runs,MORE,0.5,0.36767921625100797,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Will Smith,LAD,RBI,MORE,0.5,0.3502021163117127,2.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Will Smith,LAD,Hits,MORE,0.5,0.5599763787346822,1.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Will Smith,LAD,Hits + Runs + RBI,MORE,1.5,0.5305205064869066,3.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Will Smith,LAD,Bases,MORE,1.5,0.4030212554740771,2.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Tommy Edman,LAD,Walks,MORE,0.5,0.18014347886971838,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Tommy Edman,LAD,Runs,MORE,0.5,0.3551651142316319,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Tommy Edman,LAD,RBI,MORE,0.5,0.3330247864874175,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Tommy Edman,LAD,Hits,MORE,0.5,0.5221957747701843,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Tommy Edman,LAD,Hits + Runs + RBI,MORE,1.5,0.49032583888972137,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Tommy Edman,LAD,Bases,MORE,1.5,0.32141688583909833,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Garrett Mitchell,MIL,Walks,MORE,0.5,0.3000019540068929,1.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Garrett Mitchell,MIL,Runs,MORE,0.5,0.3482193542940105,1.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Garrett Mitchell,MIL,RBI,MORE,0.5,0.303447813642423,1.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Garrett Mitchell,MIL,Hits,MORE,0.5,0.5135441852831863,1.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Garrett Mitchell,MIL,Hits + Runs + RBI,MORE,1.5,0.4665328732610122,3.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Garrett Mitchell,MIL,Bases,MORE,1.5,0.3086088528590286,4.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Brice Turang,MIL,Walks,MORE,0.5,0.42981097523858813,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Brice Turang,MIL,Runs,MORE,0.5,0.4742490057147307,1.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Brice Turang,MIL,RBI,MORE,0.5,0.45735578025943946,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Brice Turang,MIL,Hits,MORE,0.5,0.631560284674778,1.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Brice Turang,MIL,Hits + Runs + RBI,MORE,1.5,0.6741439498184996,2.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Brice Turang,MIL,Bases,MORE,1.5,0.5029324068947574,1.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Kyle Tucker,LAD,Walks,MORE,0.5,0.3614965517088792,1.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Kyle Tucker,LAD,Runs,MORE,0.5,0.42413513707174066,1.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Kyle Tucker,LAD,RBI,MORE,0.5,0.3373687544971037,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Kyle Tucker,LAD,Hits,MORE,0.5,0.5451996942479099,1.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Kyle Tucker,LAD,Hits + Runs + RBI,MORE,1.5,0.5424985024032939,2.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Kyle Tucker,LAD,Bases,MORE,1.5,0.3811917511430012,1.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,William Contreras,MIL,Walks,MORE,0.5,0.2878607498527146,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,William Contreras,MIL,Runs,MORE,0.5,0.3623596947267248,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,William Contreras,MIL,RBI,MORE,0.5,0.3954919683210123,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,William Contreras,MIL,Hits,MORE,0.5,0.5784176495531299,1.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,William Contreras,MIL,Hits + Runs + RBI,MORE,1.5,0.5625468534839856,1.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,William Contreras,MIL,Bases,MORE,1.5,0.38084149167697867,1.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Shohei Ohtani,LAD,Walks,MORE,0.5,0.3873763925270082,1.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Shohei Ohtani,LAD,Runs,MORE,0.5,0.4410592479353227,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Shohei Ohtani,LAD,RBI,MORE,0.5,0.4006108208458101,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Shohei Ohtani,LAD,Hits,MORE,0.5,0.6165627178933969,1.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Shohei Ohtani,LAD,Hits + Runs + RBI,MORE,1.5,0.6259299264635326,1.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Shohei Ohtani,LAD,Bases,MORE,1.5,0.5544804816149143,1.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Jake Bauers,MIL,Walks,MORE,0.5,0.4376557769035516,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Jake Bauers,MIL,Runs,MORE,0.5,0.43219754840582914,1.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Jake Bauers,MIL,RBI,MORE,0.5,0.3972272343477593,2.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Jake Bauers,MIL,Hits,MORE,0.5,0.5450247773988951,1.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Jake Bauers,MIL,Hits + Runs + RBI,MORE,1.5,0.5743592623827083,4.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Jake Bauers,MIL,Bases,MORE,1.5,0.42606447683708926,4.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Teoscar Hernández,LAD,Walks,MORE,0.5,0.23135630257021253,1.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Teoscar Hernández,LAD,Runs,MORE,0.5,0.3628326420064437,1.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Teoscar Hernández,LAD,RBI,MORE,0.5,0.3449759476795088,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Teoscar Hernández,LAD,Hits,MORE,0.5,0.5634271054396297,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Teoscar Hernández,LAD,Hits + Runs + RBI,MORE,1.5,0.5281451923761948,1.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Teoscar Hernández,LAD,Bases,MORE,1.5,0.3897983555907658,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Mookie Betts,LAD,Walks,MORE,0.5,0.282895658390492,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Mookie Betts,LAD,Runs,MORE,0.5,0.4266707285107183,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Mookie Betts,LAD,RBI,MORE,0.5,0.40777706633993815,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Mookie Betts,LAD,Hits,MORE,0.5,0.6257182600512092,1.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Mookie Betts,LAD,Hits + Runs + RBI,MORE,1.5,0.6288220360074418,1.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Mookie Betts,LAD,Bases,MORE,1.5,0.5388081989927843,1.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Christian Yelich,MIL,Walks,MORE,0.5,0.3028861414369688,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Christian Yelich,MIL,Runs,MORE,0.5,0.38509740578821006,1.0,1,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Christian Yelich,MIL,RBI,MORE,0.5,0.3296443837004802,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Christian Yelich,MIL,Hits,MORE,0.5,0.5279250825594761,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Christian Yelich,MIL,Hits + Runs + RBI,MORE,1.5,0.5075292163811025,1.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Christian Yelich,MIL,Bases,MORE,1.5,0.3316896350159865,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Max Muncy,LAD,Walks,MORE,0.5,0.29450467590652707,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
-MLB,Max Muncy,LAD,Runs,MORE,0.5,0.37857348823013937,0.0,0,GRADED,2026-10-14 19:00:00,,Model target
