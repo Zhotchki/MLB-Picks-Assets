@@ -60,6 +60,10 @@ MLB,Hits + Runs + RBI,MORE,upstream-unspecified,COLLECTING_SEPARATE_GAMES,10,10,
 MLB,RBI,MORE,upstream-unspecified,COLLECTING_SEPARATE_GAMES,13,13,1,0.18336282054162417,0.550279944798204,0.3594401506520938,0.23076923076923078,13,1,No,Observed Sleeper lines
 MLB,Runs,MORE,upstream-unspecified,COLLECTING_SEPARATE_GAMES,17,17,1,0.18406165263173735,0.5545698299668176,0.35160007799515897,0.23529411764705882,17,1,No,Observed Sleeper lines
 MLB,Walks,MORE,upstream-unspecified,COLLECTING_SEPARATE_GAMES,14,14,1,0.22241788195324186,0.633405159158607,0.26742515008899037,0.35714285714285715,14,1,No,Observed Sleeper lines
+NBA,3-Pointers Made,MORE,nba-counts-minutes-nb-1,COLLECTING_SEPARATE_GAMES,0,0,0,,,,,0,0,No,Observed Sleeper lines
+NBA,Assists,MORE,nba-counts-minutes-nb-1,COLLECTING_SEPARATE_GAMES,0,0,0,,,,,0,0,No,Observed Sleeper lines
+NBA,Points,MORE,nba-counts-minutes-nb-1,COLLECTING_SEPARATE_GAMES,0,0,0,,,,,0,0,No,Observed Sleeper lines
+NBA,Rebounds,MORE,nba-counts-minutes-nb-1,COLLECTING_SEPARATE_GAMES,0,0,0,,,,,0,0,No,Observed Sleeper lines
 NFL,Pass Attempts,MORE,nfl-public-board-upstream-v1,COLLECTING_SEPARATE_GAMES,0,0,0,,,,,0,0,No,Observed Sleeper lines
 NFL,Pass Completions,MORE,nfl-public-board-upstream-v1,COLLECTING_SEPARATE_GAMES,0,0,0,,,,,0,0,No,Observed Sleeper lines
 NFL,Pass TDs,MORE,nfl-public-board-upstream-v1,COLLECTING_SEPARATE_GAMES,0,0,0,,,,,0,0,No,Observed Sleeper lines
