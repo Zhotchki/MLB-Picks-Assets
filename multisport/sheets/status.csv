@@ -1,14 +1,14 @@
 Metric,Value,Detail
-Feed updated CT,2026-10-27 19:00:46,Compare this timestamp with current time; Sheets can lag the app.
+Feed updated CT,2026-10-27 20:38:50,Compare this timestamp with current time; Sheets can lag the app.
 App version,0.6.3,
 Model version,upstream-baseline,
-Saved forecasts,19829,Full immutable ledger
+Saved forecasts,19841,Full immutable ledger
 Graded forecasts,13423,"Full history; model targets, not wager results"
 Voided forecasts,332,
-Current forecasts,3356,Snapshot; check game time and source freshness
+Current forecasts,3308,Snapshot; check game time and source freshness
 Matched offers,0,Snapshot only; usable for at most 15 minutes from observation
 Slip status,WAITING_FOR_VERIFIED_PLATFORM_LINES,Use the live app to check current line eligibility
-Next board check CT,2026-10-27 19:40:00,Earliest planned check; may be delayed
+Next board check CT,2026-10-27 20:40:00,Earliest planned check; may be delayed
 Board check reason,PREGAME_WINDOW,
 Monthly credits used,330,
 Monthly credit cap,900,
