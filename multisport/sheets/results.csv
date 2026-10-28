@@ -1,4 +1,58 @@
 Sport,Player,Team,Prop,Direction,Model line,Frozen probability,Actual,Outcome,Status,Game time CT,Source version,Forecast type
+NHL,Matvei Michkov,PHI,Shots on Goal,MORE,2.5,0.3291364230710515,1.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Observed Sleeper line
+NHL,Adam Fantilli,CBJ,Shots on Goal,MORE,2.5,0.5155314649151704,2.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Observed Sleeper line
+NHL,Denton Mateychuk,CBJ,Shots on Goal,MORE,1.5,0.44225103608881144,1.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Observed Sleeper line
+NHL,Tyson Foerster,PHI,Shots on Goal,MORE,2.5,0.3725091410561612,3.0,1,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Observed Sleeper line
+NHL,Trevor Zegras,PHI,Shots on Goal,MORE,1.5,0.5281082480969408,3.0,1,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Observed Sleeper line
+NHL,Mathieu Olivier,CBJ,Shots on Goal,MORE,1.5,0.4647213422875135,1.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Observed Sleeper line
+NHL,Zach Werenski,CBJ,Shots on Goal,MORE,3.5,0.43468018929684604,1.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Observed Sleeper line
+NHL,Travis Sanheim,PHI,Shots on Goal,MORE,1.5,0.4038558086477748,2.0,1,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Observed Sleeper line
+NHL,Charlie Coyle,CBJ,Shots on Goal,MORE,1.5,0.5344777575493598,0.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Observed Sleeper line
+NHL,Matvei Michkov,PHI,Shots on Goal,MORE,4.5,0.09968981997757975,1.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Matvei Michkov,PHI,Shots on Goal,MORE,3.5,0.18611643974297365,1.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Matvei Michkov,PHI,Shots on Goal,MORE,2.5,0.3291364230710515,1.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Matvei Michkov,PHI,Shots on Goal,MORE,1.5,0.5402890956741667,1.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Matvei Michkov,PHI,Shots on Goal,MORE,0.5,0.7967308801177562,1.0,1,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Adam Fantilli,CBJ,Shots on Goal,MORE,4.5,0.19797920006907532,2.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Adam Fantilli,CBJ,Shots on Goal,MORE,3.5,0.33237516133132405,2.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Adam Fantilli,CBJ,Shots on Goal,MORE,2.5,0.5155314649151704,2.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Adam Fantilli,CBJ,Shots on Goal,MORE,1.5,0.7254396255028177,2.0,1,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Adam Fantilli,CBJ,Shots on Goal,MORE,0.5,0.9079512329870436,2.0,1,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Denton Mateychuk,CBJ,Shots on Goal,MORE,4.5,0.018586687554412507,1.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Denton Mateychuk,CBJ,Shots on Goal,MORE,3.5,0.06567112241530859,1.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Denton Mateychuk,CBJ,Shots on Goal,MORE,2.5,0.1912105011710361,1.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Denton Mateychuk,CBJ,Shots on Goal,MORE,1.5,0.44225103608881144,1.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Denton Mateychuk,CBJ,Shots on Goal,MORE,0.5,0.776920793612617,1.0,1,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Tyson Foerster,PHI,Shots on Goal,MORE,4.5,0.07058509412968428,3.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Tyson Foerster,PHI,Shots on Goal,MORE,3.5,0.17715854199069692,3.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Tyson Foerster,PHI,Shots on Goal,MORE,2.5,0.3725091410561612,3.0,1,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Tyson Foerster,PHI,Shots on Goal,MORE,1.5,0.6410693968316271,3.0,1,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Tyson Foerster,PHI,Shots on Goal,MORE,0.5,0.8872067223281783,3.0,1,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Trevor Zegras,PHI,Shots on Goal,MORE,4.5,0.06797288963827663,3.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Trevor Zegras,PHI,Shots on Goal,MORE,3.5,0.1483777656945242,3.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Trevor Zegras,PHI,Shots on Goal,MORE,2.5,0.29659377568748113,3.0,1,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Trevor Zegras,PHI,Shots on Goal,MORE,1.5,0.5281082480969408,3.0,1,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Trevor Zegras,PHI,Shots on Goal,MORE,0.5,0.8051597586029303,3.0,1,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Mathieu Olivier,CBJ,Shots on Goal,MORE,4.5,0.044925604500473004,1.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Mathieu Olivier,CBJ,Shots on Goal,MORE,3.5,0.10839861021761621,1.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Mathieu Olivier,CBJ,Shots on Goal,MORE,2.5,0.23859058100397545,1.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Mathieu Olivier,CBJ,Shots on Goal,MORE,1.5,0.4647213422875135,1.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Mathieu Olivier,CBJ,Shots on Goal,MORE,0.5,0.7653692691592282,1.0,1,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Zach Werenski,CBJ,Shots on Goal,MORE,4.5,0.2635873999745325,1.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Zach Werenski,CBJ,Shots on Goal,MORE,3.5,0.43468018929684604,1.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Zach Werenski,CBJ,Shots on Goal,MORE,2.5,0.6394216548661943,1.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Zach Werenski,CBJ,Shots on Goal,MORE,1.5,0.83136547291607,1.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Zach Werenski,CBJ,Shots on Goal,MORE,0.5,0.9569243139133768,1.0,1,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Travis Sanheim,PHI,Shots on Goal,MORE,4.5,0.018876648455344425,2.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Travis Sanheim,PHI,Shots on Goal,MORE,3.5,0.061577033858817076,2.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Travis Sanheim,PHI,Shots on Goal,MORE,2.5,0.17317814936602705,2.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Travis Sanheim,PHI,Shots on Goal,MORE,1.5,0.4038558086477748,2.0,1,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Travis Sanheim,PHI,Shots on Goal,MORE,0.5,0.740043091804727,2.0,1,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Charlie Coyle,CBJ,Shots on Goal,MORE,4.5,0.12252730911167775,0.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Charlie Coyle,CBJ,Shots on Goal,MORE,3.5,0.20795937700641054,0.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Charlie Coyle,CBJ,Shots on Goal,MORE,2.5,0.34139333294397733,0.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Charlie Coyle,CBJ,Shots on Goal,MORE,1.5,0.5344777575493598,0.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
+NHL,Charlie Coyle,CBJ,Shots on Goal,MORE,0.5,0.7780616533885025,0.0,0,GRADED,2026-10-27 18:00:00,nhl-shots-toi-nb-1,Model target
 NBA,Gui Santos,GS,Rebounds,MORE,3.5,0.5899795336445048,3.0,0,GRADED,2026-10-26 21:00:00,nba-counts-minutes-nb-1,Observed Sleeper line
 NBA,Gui Santos,GS,Points,MORE,9.5,0.503193279357971,13.0,1,GRADED,2026-10-26 21:00:00,nba-counts-minutes-nb-1,Observed Sleeper line
 NBA,Gui Santos,GS,Points,MORE,8.5,0.5860779420199511,13.0,1,GRADED,2026-10-26 21:00:00,nba-counts-minutes-nb-1,Observed Sleeper line
@@ -4945,57 +4999,3 @@ NHL,Pavel Zacha,BOS,Shots on Goal,MORE,0.5,0.8149600069731929,4.0,1,GRADED,2026-
 NHL,David Pastrnak,BOS,Shots on Goal,MORE,4.5,0.21275802284374845,0.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
 NHL,David Pastrnak,BOS,Shots on Goal,MORE,3.5,0.389144711451858,0.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
 NHL,David Pastrnak,BOS,Shots on Goal,MORE,2.5,0.6122356225216892,0.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,David Pastrnak,BOS,Shots on Goal,MORE,1.5,0.8238568409142394,0.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,David Pastrnak,BOS,Shots on Goal,MORE,0.5,0.9576843161773901,0.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Elias Lindholm,BOS,Shots on Goal,MORE,4.5,0.03629646254718433,3.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Elias Lindholm,BOS,Shots on Goal,MORE,3.5,0.09146023941400272,3.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Elias Lindholm,BOS,Shots on Goal,MORE,2.5,0.21061478464325245,3.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Elias Lindholm,BOS,Shots on Goal,MORE,1.5,0.4296464864083941,3.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Elias Lindholm,BOS,Shots on Goal,MORE,0.5,0.7398466356707877,3.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Tyler Seguin,DAL,Shots on Goal,MORE,4.5,0.09693711187415055,1.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Tyler Seguin,DAL,Shots on Goal,MORE,3.5,0.1388636593699556,1.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Tyler Seguin,DAL,Shots on Goal,MORE,2.5,0.20258659545099555,1.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Tyler Seguin,DAL,Shots on Goal,MORE,1.5,0.3046215918250579,1.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Tyler Seguin,DAL,Shots on Goal,MORE,0.5,0.48759153746061124,1.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Dalibor Dvorsky,STL,Shots on Goal,MORE,4.5,0.01,1.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Dalibor Dvorsky,STL,Shots on Goal,MORE,3.5,0.036019874690845666,1.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Dalibor Dvorsky,STL,Shots on Goal,MORE,2.5,0.12608093209108462,1.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Dalibor Dvorsky,STL,Shots on Goal,MORE,1.5,0.3465554361544234,1.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Dalibor Dvorsky,STL,Shots on Goal,MORE,0.5,0.7063780449871007,1.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Jimmy Snuggerud,STL,Shots on Goal,MORE,4.5,0.13881751639913642,2.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Jimmy Snuggerud,STL,Shots on Goal,MORE,3.5,0.27434466135134716,2.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Jimmy Snuggerud,STL,Shots on Goal,MORE,2.5,0.4772308715003052,2.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Jimmy Snuggerud,STL,Shots on Goal,MORE,1.5,0.7162967410769399,2.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Jimmy Snuggerud,STL,Shots on Goal,MORE,0.5,0.9138725815416013,2.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Cole Perfetti,WPG,Shots on Goal,MORE,4.5,0.10977837391030265,5.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Cole Perfetti,WPG,Shots on Goal,MORE,3.5,0.2420272670933501,5.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Cole Perfetti,WPG,Shots on Goal,MORE,2.5,0.4533967729405344,5.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Cole Perfetti,WPG,Shots on Goal,MORE,1.5,0.7085973483434677,5.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Cole Perfetti,WPG,Shots on Goal,MORE,0.5,0.915506721332004,5.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Dylan Holloway,STL,Shots on Goal,MORE,4.5,0.16070654057886646,1.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Dylan Holloway,STL,Shots on Goal,MORE,3.5,0.30696881712782587,1.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Dylan Holloway,STL,Shots on Goal,MORE,2.5,0.5152913183159209,1.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Dylan Holloway,STL,Shots on Goal,MORE,1.5,0.7472587391045336,1.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Dylan Holloway,STL,Shots on Goal,MORE,0.5,0.9270766438578258,1.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Philip Broberg,STL,Shots on Goal,MORE,4.5,0.01,6.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Philip Broberg,STL,Shots on Goal,MORE,3.5,0.028820986019253425,6.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Philip Broberg,STL,Shots on Goal,MORE,2.5,0.1078296357434535,6.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Philip Broberg,STL,Shots on Goal,MORE,1.5,0.3156938459823525,6.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Philip Broberg,STL,Shots on Goal,MORE,0.5,0.680274433458687,6.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Neal Pionk,WPG,Shots on Goal,MORE,4.5,0.06519646265687229,3.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Neal Pionk,WPG,Shots on Goal,MORE,3.5,0.15398180992366484,3.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Neal Pionk,WPG,Shots on Goal,MORE,2.5,0.3206416135783652,3.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Neal Pionk,WPG,Shots on Goal,MORE,1.5,0.5715690024119207,3.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Neal Pionk,WPG,Shots on Goal,MORE,0.5,0.8422395864312535,3.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Alex Iafallo,WPG,Shots on Goal,MORE,4.5,0.01269215627528908,5.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Alex Iafallo,WPG,Shots on Goal,MORE,3.5,0.04919894052850238,5.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Alex Iafallo,WPG,Shots on Goal,MORE,2.5,0.1566589764630405,5.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Alex Iafallo,WPG,Shots on Goal,MORE,1.5,0.3938955523339175,5.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Alex Iafallo,WPG,Shots on Goal,MORE,0.5,0.7430560096238159,5.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Gabriel Vilardi,WPG,Shots on Goal,MORE,4.5,0.020478849583648318,2.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Gabriel Vilardi,WPG,Shots on Goal,MORE,3.5,0.07065112215921021,2.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Gabriel Vilardi,WPG,Shots on Goal,MORE,2.5,0.20104122079645892,2.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Gabriel Vilardi,WPG,Shots on Goal,MORE,1.5,0.45518923348154694,2.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Gabriel Vilardi,WPG,Shots on Goal,MORE,0.5,0.7854352313338603,2.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Kyle Connor,WPG,Shots on Goal,MORE,4.5,0.2327508038681212,4.0,0,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Kyle Connor,WPG,Shots on Goal,MORE,3.5,0.40919151548199106,4.0,1,GRADED,2026-10-20 19:00:00,nhl-shots-toi-nb-1,Model target
