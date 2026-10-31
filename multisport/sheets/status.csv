@@ -1,10 +1,10 @@
 Metric,Value,Detail
-Feed updated CT,2026-10-30 21:41:09,Compare this timestamp with current time; Sheets can lag the app.
+Feed updated CT,2026-10-30 21:51:39,Compare this timestamp with current time; Sheets can lag the app.
 App version,0.6.3,
 Model version,upstream-baseline,
 Saved forecasts,26570,Full immutable ledger
-Graded forecasts,20773,"Full history; model targets, not wager results"
-Voided forecasts,430,
+Graded forecasts,21312,"Full history; model targets, not wager results"
+Voided forecasts,500,
 Current forecasts,3054,Snapshot; check game time and source freshness
 Matched offers,0,Snapshot only; usable for at most 15 minutes from observation
 Slip status,WAITING_FOR_VERIFIED_PLATFORM_LINES,Use the live app to check current line eligibility
@@ -13,7 +13,7 @@ Board check reason,PREGAME_WINDOW,
 Monthly credits used,381,
 Monthly credit cap,900,
 Results shown,5000,"Latest 5,000 settled forecast rows; full history stays in app ledger"
-Total settled forecasts,21203,Includes graded and void
+Total settled forecasts,21812,Includes graded and void
 Last weekly review,2026-W44,
 Weekly decision,KEPT_CURRENT_MODEL,
 MLB source,CURRENT,LIVE_FORECASTS
