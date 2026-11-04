@@ -20,8 +20,15 @@ def publish():
     run(['git','add',*PATHS,*[str(p.relative_to(ROOT)) for p in (ROOT/'multisport/sheets').glob('*.csv')]])
     if subprocess.run(['git','diff','--cached','--quiet'],cwd=ROOT).returncode==0:return
     run(['git','commit','-m','Refresh MultiSport forecasts and final results [skip ci]'])
-    run(['git','pull','--rebase','origin','main'])
-    run(['git','push','origin','main'])
+    # Retry the same frozen snapshot; never regenerate forecasts during publication.
+    for attempt in range(3):
+        try:
+            run(['git','pull','--rebase','origin','main'])
+            run(['git','push','origin','main'])
+            return
+        except subprocess.CalledProcessError:
+            if attempt == 2:raise
+            time.sleep(5 * (attempt + 1))
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--minutes',type=int,default=105);args=parser.parse_args()
