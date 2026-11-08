@@ -16,7 +16,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 130
+    timeout-minutes: 160
     env:
       PARLAY_API_KEY: ${{ secrets.PARLAY_API_KEY }}
     steps:
@@ -60,4 +60,4 @@ jobs:
           git pull --rebase origin main
           git push origin main
       - name: Keep forecasts fresh between delayed scheduled starts
-        run: python multisport/refresh_watch.py --minutes 105
+        run: python multisport/refresh_watch.py --minutes 150
