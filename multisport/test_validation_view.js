@@ -23,8 +23,8 @@ assert.equal(validationValue(null),'—');
 console.log('Validation rendering, support counts, missing metrics, filtering and escaping checks passed.');
 
 const {lineCoverageMarkup}=require('./validation_view');
-const lineData={lineValidation:{sports:{NHL:{recorded:10,graded:4,eligibleTargets:0}},groups:[]},platformFeed:{sportStatus:{NHL:{status:'OBSERVED_BOARD',fetchedAtEpoch:Date.now()/1000,observedLines:20,truncated:true}}},lineCollection:{excluded:{'<script>':3}}};
-const lineHTML=lineCoverageMarkup(lineData);assert(lineHTML.includes('Board fresh'));assert(lineHTML.includes('partial board'));assert(lineHTML.includes('20 lines'));assert(lineHTML.includes('&lt;script&gt;'));assert(!lineHTML.includes('<script>'));
+const lineData={lineValidation:{sports:{NHL:{recorded:10,graded:4,eligibleTargets:1,evidenceQualifiedTargets:1,platformEligibleTargets:0,platformPromotionPolicy:'REVIEW_ONLY'}},groups:[{sport:'NHL',prop:'Shots on Goal',graded:{playerGames:100},review:{training:{playerGames:200},holdout:{playerGames:100}},eligibleTargets:1,evidenceQualifiedTargets:1,platformEligibleTargets:0,platformPromotionPolicy:'REVIEW_ONLY'}]},platformFeed:{sportStatus:{NHL:{status:'OBSERVED_BOARD',fetchedAtEpoch:Date.now()/1000,observedLines:20,truncated:true}}},lineCollection:{excluded:{'<script>':3}}};
+const lineHTML=lineCoverageMarkup(lineData);assert(lineHTML.includes('Evidence-qualified thresholds'));assert(lineHTML.includes('Platform-enabled thresholds'));assert(lineHTML.includes('1 evidence-qualified thresholds'));assert(lineHTML.includes('0 platform-enabled'));assert(lineHTML.includes('review only'));assert(lineHTML.includes('Board fresh'));assert(lineHTML.includes('partial board'));assert(lineHTML.includes('20 lines'));assert(lineHTML.includes('&lt;script&gt;'));assert(!lineHTML.includes('<script>'));
 assert(lineCoverageMarkup({}).includes('next data refresh'));
 console.log('Observed-line coverage, partial boards, collection progress and escaping passed.');
 
