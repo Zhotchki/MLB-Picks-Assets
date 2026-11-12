@@ -1,6 +1,6 @@
 import unittest
 from datetime import datetime,timedelta,timezone
-from validation import report,score,chronological,graded,holdout,support,calibration_signature
+from validation import report,score,chronological,graded,holdout,support,calibration_signature,event
 
 def row(day=0,player=1,target=3,sport='NHL',outcome=1,probability=.8):
     start=datetime(2026,10,1,23,tzinfo=timezone.utc)+timedelta(days=day)
