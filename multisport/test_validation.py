@@ -47,6 +47,24 @@ class ValidationTests(unittest.TestCase):
         a,b=chronological(rows);self.assertFalse({r['gameId'] for r in a}&{r['gameId'] for r in b})
         self.assertEqual({r['gameId'] for r in b},{8,9})
 
+    def test_simultaneous_game_starts_stay_on_one_side_of_holdout(self):
+        rows=[]
+        for day in range(11):
+            for game_slot in range(3):
+                for player in range(2):
+                    for target in (1,2):
+                        item=row(day=day,player=player,target=target)
+                        item['gameId']=f'{day}:{game_slot}'
+                        item['id']=f'NHL:{day}:{game_slot}:{player}:{target}'
+                        rows.append(item)
+        train,test=chronological(rows)
+        train_events={event(r) for r in train}
+        test_events={event(r) for r in test}
+        self.assertFalse(train_events & test_events)
+        self.assertLess(max(r['startTime'] for r in train),min(r['startTime'] for r in test))
+        self.assertEqual(len(train_events),27)
+        self.assertEqual(len(test_events),6)
+
     def test_grade_must_be_final_consistent_and_pregame(self):
         a=row();b=dict(a,actual=0);c=dict(a,gradedAt=a['capturedAt'])
         self.assertTrue(graded(a));self.assertFalse(graded(b));self.assertFalse(graded(c))
