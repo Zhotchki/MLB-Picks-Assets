@@ -82,18 +82,17 @@ def learn(ledger, incumbent, today):
     week = today.strftime('%G-W%V')
     if today.weekday() != 0 or incumbent.get('lastReviewWeek') == week: return incumbent
     # Split by entire games so multiple props for one game never cross train/test.
-    from validation import pregame,graded,player_game,event
+    from validation import pregame,graded,player_game,event,chronological
     rows=[];seen=set()
     for r in sorted(ledger,key=lambda r:str(r.get('capturedAt',''))):
         if not pregame(r) or not graded(r) or r['id'] in seen:continue
         seen.add(r['id'])
         source_p=number(r.get('sourceProbability'))
         if source_p is not None and 0<source_p<1:rows.append(dict(r,sourceProbability=source_p))
-    games = sorted({(iso(r['startTime']),event(r)) for r in rows})
-    cut = int(len(games)*.8)
-    train_games = {g for _,g in games[:cut]}
-    train = [r for r in rows if event(r) in train_games]
-    test = [r for r in rows if event(r) not in train_games]
+    games = sorted({event(r) for r in rows})
+    # Reuse the report splitter so simultaneous kickoff slates cannot cross
+    # the training/holdout boundary in weekly calibration either.
+    train,test = chronological(rows)
     updated = dict(incumbent, lastReviewWeek=week)
     training_players=len({player_game(r) for r in train});holdout_players=len({player_game(r) for r in test})
     if training_players < 200 or holdout_players < 50 or len(games) < 10:
