@@ -37,4 +37,21 @@ class LearningTests(unittest.TestCase):
         self.assertEqual(updated['version'],'baseline');self.assertFalse(updated['review']['freshHoldout'])
         self.assertEqual(updated['review']['acceptedGroups'],[])
 
+    def test_weekly_learning_keeps_simultaneous_games_together(self):
+        rows=[]
+        for day in range(11):
+            for game_slot in range(3):
+                for player in range(10):
+                    outcome=(day+game_slot+player)%2
+                    item=row(day,player,sport='MLB',outcome=outcome,probability=.5)
+                    item['gameId']=f'{day}:{game_slot}'
+                    item['id']=f'MLB:{day}:{game_slot}:{player}'
+                    item['probability']=.5
+                    item['sourceProbability']=.5
+                    rows.append(item)
+        updated=learn(rows,{'version':'baseline','offsets':{}},date(2026,12,7))
+        review=updated['review']['groupReviews'][group(rows[0])]
+        self.assertEqual(review['trainingGames'],27)
+        self.assertEqual(review['holdoutGames'],6)
+
 if __name__=='__main__':unittest.main()
