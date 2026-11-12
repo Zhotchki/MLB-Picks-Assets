@@ -69,8 +69,27 @@ def projection_errors(rows):
             'rmse':math.sqrt(sum(v*v for v in values)/len(values)),'bias':sum(values)/len(values)}
 
 def chronological(rows):
-    games=sorted({(iso(r['startTime']),event(r)) for r in rows})
-    cut=int(len(games)*.8);train_ids={g for _,g in games[:cut]}
+    rows=list(rows)
+    # A game is assigned by its earliest verified kickoff. Games sharing an
+    # identical kickoff instant stay in the same split, so a slate cannot leak
+    # contemporaneous results from training into the later holdout.
+    event_times={}
+    for r in rows:
+        identity=event(r);start=iso(r['startTime'])
+        event_times[identity]=min(start,event_times.get(identity,start))
+    by_time=defaultdict(set)
+    for identity,start in event_times.items():
+        by_time[start].add(identity)
+    times=sorted(by_time)
+    if len(times)<2:return [],rows
+    target=len(event_times)*.8
+    cumulative=0;best_cut=1;best_distance=float('inf')
+    for index,start in enumerate(times[:-1],start=1):
+        cumulative+=len(by_time[start])
+        distance=abs(cumulative-target)
+        if distance<best_distance:
+            best_cut=index;best_distance=distance
+    train_ids={identity for start in times[:best_cut] for identity in by_time[start]}
     return ([r for r in rows if event(r) in train_ids],[r for r in rows if event(r) not in train_ids])
 
 def holdout(rows):
