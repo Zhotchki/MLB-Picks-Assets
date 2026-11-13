@@ -1,5 +1,5 @@
 Metric,Value,Detail
-Feed updated CT,2026-11-13 04:48:18,Compare this timestamp with current time; Sheets can lag the app.
+Feed updated CT,2026-11-13 04:59:15,Compare this timestamp with current time; Sheets can lag the app.
 App version,0.6.3,
 Model version,upstream-baseline,
 Saved forecasts,56088,Full immutable ledger
@@ -16,7 +16,7 @@ Results shown,5000,"Latest 5,000 settled forecast rows; full history stays in ap
 Total settled forecasts,49801,Includes graded and void
 Last weekly review,2026-W46,
 Weekly decision,KEPT_CURRENT_MODEL,
-MLB source,STALE,STALE
+MLB source,CURRENT,LIVE_FORECASTS
 NFL source,CURRENT,LIVE_FORECASTS
 NBA source,CURRENT,BASELINE_FORECASTS
 NHL source,CURRENT,BASELINE_FORECASTS
