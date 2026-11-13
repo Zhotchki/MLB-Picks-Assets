@@ -67,6 +67,11 @@ def mlb_source():
         snapshot = ROOT.parent / 'mobile-data.json'
         return json.loads(snapshot.read_text()), True
 
+def eligible_board_sports(forecasts):
+    return {row.get('sport') for row in forecasts
+            if row.get('sport') and row.get('scheduleVerified') and row.get('platformEligible') is not False}
+
+
 def corrected(row, model):
     p = row['sourceProbability'] + model.get('offsets', {}).get(group(row), 0)
     return max(.01, min(.99, p))
@@ -272,7 +277,7 @@ def run():
         rejected['NBA:unavailable_source'] += 1
     from platform_feed import fetch as fetch_board,match as match_offers,slip_sets as build_slip_sets
     board_time = datetime.now(timezone.utc)
-    eligible_sports={r['sport'] for r in verified if r.get('scheduleVerified')}
+    eligible_sports=eligible_board_sports(verified)
     board,feed_state=fetch_board(ROOT,board_time,eligible_sports,verified)
     from exact_lines import collect as collect_exact_lines
     exact_rows,exact_rejected=collect_exact_lines(verified,board,board_time,ROOT,norm)
