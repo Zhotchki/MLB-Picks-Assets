@@ -1,6 +1,6 @@
 import unittest
 from datetime import date
-from update import number, prob, actual, learn, corrected
+from update import number, prob, actual, learn, corrected, eligible_board_sports
 class SecretFreeTests(unittest.TestCase):
     def setUp(self):
         from unittest.mock import patch
@@ -9,6 +9,18 @@ class SecretFreeTests(unittest.TestCase):
         key.start();self.addCleanup(key.stop)
 
 class AdapterTests(SecretFreeTests):
+
+    def test_only_platform_eligible_verified_sports_enable_board_polling(self):
+        rows=[
+            {'sport':'NBA','scheduleVerified':True,'platformEligible':False},
+            {'sport':'NHL','scheduleVerified':True,'platformEligible':False},
+            {'sport':'NFL','scheduleVerified':True,'platformEligible':False},
+            {'sport':'MLB','scheduleVerified':True},
+            {'sport':'NFL','scheduleVerified':True,'platformEligible':True},
+            {'sport':'NBA','scheduleVerified':False},
+        ]
+        self.assertEqual(eligible_board_sports(rows),{'MLB','NFL'})
+        self.assertEqual(eligible_board_sports(rows[:3]),set())
 
     def test_mlb_source_falls_back_to_synced_snapshot_without_changing_timestamps(self):
         import update, tempfile, json
