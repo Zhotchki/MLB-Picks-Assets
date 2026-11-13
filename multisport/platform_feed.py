@@ -21,7 +21,7 @@ def pregame_checks(forecasts,now,daily_calls=8,remaining_today=None,fetched=None
     """Choose UTC-day calls near verified starts; batch identical sport/start windows."""
     events={}
     for row in forecasts:
-        if not row.get('scheduleVerified'):continue
+        if not row.get('scheduleVerified') or row.get('platformEligible') is False:continue
         if row.get('sport') not in SPORTS or row.get('gameId') is None:continue
         try:
             start=datetime.fromisoformat(row['startTime'].replace('Z','+00:00'))
