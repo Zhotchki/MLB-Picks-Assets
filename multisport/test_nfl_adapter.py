@@ -23,6 +23,9 @@ class NFLTests(unittest.TestCase):
     def test_capture_retains_ids_snaps_and_forecast_line(self):
         now,g,r,feed,roster=self.fixtures();rows,status,rejected=self.collect(now,g,feed,roster)
         self.assertEqual(len(rows),1);self.assertEqual(rows[0]['playerId'],'00-test');self.assertEqual(rows[0]['expectedPlayingTime'],.8)
+        self.assertEqual(status['status'],'LIVE_FORECASTS')
+        self.assertEqual(status['automaticModelTargetRows'],1)
+        self.assertEqual(status['publicBoardBaselineRows'],0)
         self.assertEqual(rows[0]['target'],4);self.assertIsNone(rows[0]['platformLine']);self.assertFalse(rows[0]['actionable'])
     def test_roster_team_mismatch_excluded(self):
         now,g,r,feed,roster=self.fixtures();roster['99']['team']='CC'
@@ -31,7 +34,10 @@ class NFLTests(unittest.TestCase):
         now,g,r,feed,roster=self.fixtures()
         r.update({'Line Source':'Public Sleeper board','Platform':'Sleeper','Board ID':'board-1'})
         feed['boardStatus']={'status':'ok','fetchedAt':now.isoformat(),'sources':{'Sleeper':{'status':'ok'}}}
-        rows,_,_=self.collect(now,g,feed,roster);self.assertEqual(len(rows),1)
+        rows,status,_=self.collect(now,g,feed,roster);self.assertEqual(len(rows),1)
+        self.assertEqual(status['status'],'BASELINE_FORECASTS')
+        self.assertEqual(status['automaticModelTargetRows'],0)
+        self.assertEqual(status['publicBoardBaselineRows'],1)
         row=rows[0]
         self.assertTrue(row['id'].startswith('NFL_PUBLIC_BOARD:'))
         self.assertEqual(row['baselineVersion'],'nfl-public-board-upstream-v1')
@@ -40,6 +46,17 @@ class NFLTests(unittest.TestCase):
         self.assertIsNone(row['platformLine']);self.assertIsNone(row['platform'])
         self.assertEqual(row['upstreamBoardId'],'board-1')
         self.assertNotIn('forecastKind',row)
+    def test_mixed_automatic_and_public_rows_keep_separate_status_counts(self):
+        now,g,r,feed,roster=self.fixtures()
+        public=dict(r,**{'Line Source':'Public Sleeper board','Platform':'Sleeper','Board ID':'board-1'})
+        feed['picks']=[dict(r),public]
+        feed['boardStatus']={'status':'ok','fetchedAt':now.isoformat(),'sources':{'Sleeper':{'status':'ok'}}}
+        rows,status,_=self.collect(now,g,feed,roster)
+        self.assertEqual(len(rows),2)
+        self.assertEqual(status['status'],'LIVE_FORECASTS')
+        self.assertEqual(status['automaticModelTargetRows'],1)
+        self.assertEqual(status['publicBoardBaselineRows'],1)
+
     def test_public_board_requires_recent_metadata_and_supported_threshold(self):
         from datetime import timedelta
         now,g,r,feed,roster=self.fixtures()
