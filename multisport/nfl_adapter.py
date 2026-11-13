@@ -100,7 +100,13 @@ def collect(now,get_json,model,corrected,root,norm):
                      probabilityStatus='UNVALIDATED_BASELINE',platformEligible=False,
                      upstreamBoardId=str(row['Board ID']),upstreamBoardObservedAt=board['fetchedAt'])
         r['probability']=corrected(r,model);r['modelVersion']=model['version'];out.append(r)
-    return out,{'status':'LIVE_FORECASTS','sourceStatus':'CURRENT','verifiedRows':len(out),'modelVersion':feed.get('appVersion'),'sourceUpdatedAt':feed['generatedAt'],'sourceRefresh':feed['lastRefresh'],'week':week,'season':season,'usingCachedFeed':cached},rejected
+    public_board_rows=sum(r.get('baselineVersion')=='nfl-public-board-upstream-v1' for r in out)
+    model_target_rows=len(out)-public_board_rows
+    status='LIVE_FORECASTS' if model_target_rows else 'BASELINE_FORECASTS' if public_board_rows else 'LIVE_FORECASTS'
+    return out,{'status':status,'sourceStatus':'CURRENT','verifiedRows':len(out),
+                'automaticModelTargetRows':model_target_rows,'publicBoardBaselineRows':public_board_rows,
+                'modelVersion':feed.get('appVersion'),'sourceUpdatedAt':feed['generatedAt'],
+                'sourceRefresh':feed['lastRefresh'],'week':week,'season':season,'usingCachedFeed':cached},rejected
 
 def grade(ledger,now,root):
     pending=[r for r in ledger if r['sport']=='NFL' and r.get('resultStatus')=='PENDING' and instant(r['startTime'])<=now]
