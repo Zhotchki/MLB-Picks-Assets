@@ -3,7 +3,7 @@ from urllib.error import HTTPError
 from pathlib import Path
 from datetime import datetime,timezone
 from unittest.mock import patch
-from platform_feed import fetch,match,slips
+from platform_feed import fetch,match,slips,pregame_checks
 from update import norm
 class PlatformTests(unittest.TestCase):
     def setUp(self):
@@ -14,6 +14,12 @@ class PlatformTests(unittest.TestCase):
         self.forecast.update(scheduleVerified=True,officialGameDate='2030-01-01')
         self.row.update(commence_time=None,commence_time_reported=False,game_date='2030-01-01',is_dfs_flat_payout=True)
         self.row.pop('odds_type')
+    def test_unvalidated_baselines_do_not_create_pregame_board_checks(self):
+        nba=dict(self.forecast,sport='NBA',gameId='nba',scheduleVerified=True,platformEligible=False)
+        nfl=dict(self.forecast,sport='NFL',gameId='nfl',scheduleVerified=True)
+        checks=pregame_checks([nba,nfl],self.now)
+        self.assertEqual({slot['sport'] for slot in checks},{'NFL'})
+
     def board(self):return {'sports':{'MLB':{'fetchedAtEpoch':self.now.timestamp(),'rows':[self.row]}}}
     def test_missing_key_makes_no_request(self):
         with tempfile.TemporaryDirectory() as tmp,patch.dict(os.environ,{'PARLAY_API_KEY':''}),patch('urllib.request.urlopen') as request:
