@@ -174,12 +174,32 @@ class OutageTests(SecretFreeTests):
         old={'id':'MLB:old','sport':'MLB','resultStatus':'PENDING','startTime':'2020-01-01T12:00:00Z','gameId':10}
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp); (root/'ledger.json').write_text(json.dumps([old]))
-            with patch.object(update,'ROOT',root), patch.object(update,'get',side_effect=TimeoutError), patch('nfl_adapter.collect',return_value=([row],{'status':'LIVE_FORECASTS','sourceStatus':'CURRENT','verifiedRows':1},{})),patch('nfl_adapter.grade'),patch('nhl_adapter.collect',return_value=([],{'status':'NOT_CONNECTED'},{})),patch('nhl_adapter.grade'),patch('nba_adapter.collect',return_value=([],{'status':'NOT_CONNECTED'},{})),patch('nba_adapter.grade'),redirect_stdout(io.StringIO()):
+            with patch.object(update,'ROOT',root), patch.object(update,'get',side_effect=TimeoutError), patch('nfl_adapter.collect',return_value=([row],{'status':'LIVE_FORECASTS','sourceStatus':'CURRENT','verifiedRows':1},{})),patch('nfl_adapter.grade',return_value={'gradingStatus':'CURRENT','gradingGamesChecked':0,'gradingGamesUnavailable':0}),patch('nhl_adapter.collect',return_value=([],{'status':'NOT_CONNECTED'},{})),patch('nhl_adapter.grade'),patch('nba_adapter.collect',return_value=([],{'status':'NOT_CONNECTED'},{})),patch('nba_adapter.grade'),redirect_stdout(io.StringIO()):
                 update.run()
             data=json.loads((root/'data.json').read_text()); ledger=json.loads((root/'ledger.json').read_text())
             self.assertEqual(data['sports']['MLB']['sourceStatus'],'UNAVAILABLE')
             self.assertEqual(data['sports']['NFL']['sourceStatus'],'CURRENT')
+            self.assertEqual(data['sports']['NFL']['gradingStatus'],'CURRENT')
             self.assertEqual(data['picks'],[row]); self.assertEqual(ledger,[old,row])
             self.assertEqual(data['sports']['MLB']['gradingStatus'],'AWAITING_RESULT_SOURCE')
+
+class WorkflowCredentialScopeTests(SecretFreeTests):
+    def test_provider_key_is_only_scoped_to_live_update_steps(self):
+        from pathlib import Path
+        path = Path(__file__).resolve().parents[1] / '.github' / 'workflows' / 'update-multisport.yml'
+        workflow = path.read_text(encoding='utf-8')
+        self.assertNotIn("    env:\\n      PARLAY_API_KEY:", workflow)
+
+        test_step = workflow.split("      - name: Verify adapter and forecast tests\\n", 1)[1].split("      - name: Update forecasts", 1)[0]
+        self.assertIn("PARLAY_API_KEY: ''", test_step)
+
+        update_step = workflow.split("      - name: Update forecasts with transient retry and diagnostics\\n", 1)[1].split("      - name: Save failure diagnostics", 1)[0]
+        self.assertIn("PARLAY_API_KEY: ${{ secrets.PARLAY_API_KEY }}", update_step)
+
+        publish_step = workflow.split("      - name: Preserve predictions and publish current data\\n", 1)[1].split("      - name: Keep forecasts fresh", 1)[0]
+        self.assertNotIn("PARLAY_API_KEY", publish_step)
+
+        watcher_step = workflow.split("      - name: Keep forecasts fresh between delayed scheduled starts\\n", 1)[1]
+        self.assertIn("PARLAY_API_KEY: ${{ secrets.PARLAY_API_KEY }}", watcher_step)
 
 if __name__=='__main__': unittest.main()
