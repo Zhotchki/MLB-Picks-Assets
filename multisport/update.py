@@ -318,7 +318,7 @@ def run():
     except Exception:
         mlb_status['gradingStatus'] = 'AWAITING_RESULT_SOURCE'
     try:
-        grade_nfl(ledger,now,ROOT)
+        nfl_status.update(grade_nfl(ledger,now,ROOT) or {})
     except Exception:
         nfl_status['gradingStatus'] = 'AWAITING_RESULT_SOURCE'
     try:
