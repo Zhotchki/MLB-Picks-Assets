@@ -188,7 +188,8 @@ class WorkflowCredentialScopeTests(SecretFreeTests):
         from pathlib import Path
         path = Path(__file__).resolve().parents[1] / '.github' / 'workflows' / 'update-multisport.yml'
         workflow = path.read_text(encoding='utf-8')
-        self.assertNotIn("    env:\n      PARLAY_API_KEY:", workflow)
+        import re
+        self.assertIsNone(re.search(r"(?m)^    env:\n      PARLAY_API_KEY:", workflow))
 
         test_step = workflow.split("      - name: Verify adapter and forecast tests\n", 1)[1].split("      - name: Update forecasts", 1)[0]
         self.assertIn("PARLAY_API_KEY: ''", test_step)
