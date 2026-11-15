@@ -188,18 +188,18 @@ class WorkflowCredentialScopeTests(SecretFreeTests):
         from pathlib import Path
         path = Path(__file__).resolve().parents[1] / '.github' / 'workflows' / 'update-multisport.yml'
         workflow = path.read_text(encoding='utf-8')
-        self.assertNotIn("    env:\\n      PARLAY_API_KEY:", workflow)
+        self.assertNotIn("    env:\n      PARLAY_API_KEY:", workflow)
 
-        test_step = workflow.split("      - name: Verify adapter and forecast tests\\n", 1)[1].split("      - name: Update forecasts", 1)[0]
+        test_step = workflow.split("      - name: Verify adapter and forecast tests\n", 1)[1].split("      - name: Update forecasts", 1)[0]
         self.assertIn("PARLAY_API_KEY: ''", test_step)
 
-        update_step = workflow.split("      - name: Update forecasts with transient retry and diagnostics\\n", 1)[1].split("      - name: Save failure diagnostics", 1)[0]
+        update_step = workflow.split("      - name: Update forecasts with transient retry and diagnostics\n", 1)[1].split("      - name: Save failure diagnostics", 1)[0]
         self.assertIn("PARLAY_API_KEY: ${{ secrets.PARLAY_API_KEY }}", update_step)
 
-        publish_step = workflow.split("      - name: Preserve predictions and publish current data\\n", 1)[1].split("      - name: Keep forecasts fresh", 1)[0]
+        publish_step = workflow.split("      - name: Preserve predictions and publish current data\n", 1)[1].split("      - name: Keep forecasts fresh", 1)[0]
         self.assertNotIn("PARLAY_API_KEY", publish_step)
 
-        watcher_step = workflow.split("      - name: Keep forecasts fresh between delayed scheduled starts\\n", 1)[1]
+        watcher_step = workflow.split("      - name: Keep forecasts fresh between delayed scheduled starts\n", 1)[1]
         self.assertIn("PARLAY_API_KEY: ${{ secrets.PARLAY_API_KEY }}", watcher_step)
 
 if __name__=='__main__': unittest.main()
