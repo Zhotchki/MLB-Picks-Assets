@@ -17,8 +17,6 @@ jobs:
   update:
     runs-on: ubuntu-latest
     timeout-minutes: 160
-    env:
-      PARLAY_API_KEY: ${{ secrets.PARLAY_API_KEY }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -33,6 +31,8 @@ jobs:
           key: multisport-sources-${{ github.run_id }}
           restore-keys: multisport-sources-
       - name: Verify adapter and forecast tests
+        env:
+          PARLAY_API_KEY: ''
         run: |
           node multisport/test_player_view.js
           node multisport/test_eligibility.js
@@ -40,6 +40,8 @@ jobs:
           node multisport/test_slip_view.js
           python -m unittest discover -s multisport -p 'test_*.py'
       - name: Update forecasts with transient retry and diagnostics
+        env:
+          PARLAY_API_KEY: ${{ secrets.PARLAY_API_KEY }}
         run: python multisport/update_with_retry.py
       - name: Save failure diagnostics
         if: failure()
@@ -60,4 +62,6 @@ jobs:
           git pull --rebase origin main
           git push origin main
       - name: Keep forecasts fresh between delayed scheduled starts
+        env:
+          PARLAY_API_KEY: ${{ secrets.PARLAY_API_KEY }}
         run: python multisport/refresh_watch.py --minutes 150

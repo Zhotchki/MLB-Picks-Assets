@@ -93,6 +93,34 @@ class NFLTests(unittest.TestCase):
         now,g,r,feed,roster=self.fixtures();rows,_,_=self.collect(now,g,feed,roster)
         now=datetime(2030,1,4,14,tzinfo=timezone.utc);g.update(home_score='20',away_score='10')
         stats={'player_id':'00-test','week':'1','season_type':'REG','team':'AA','opponent_team':'BB','receptions':'4'}
-        with patch('nfl_adapter.cache_read',side_effect=lambda root,name,*args:[g] if name=='nfl-schedule.csv' else [stats]):nfl_adapter.grade(rows,now,Path('.'))
+        with patch('nfl_adapter.cache_read',side_effect=lambda root,name,*args:[g] if name=='nfl-schedule.csv' else [stats]):health=nfl_adapter.grade(rows,now,Path('.'))
         self.assertEqual(rows[0]['resultStatus'],'GRADED');self.assertEqual(rows[0]['outcome'],1)
+        self.assertEqual(health,{'gradingStatus':'CURRENT','gradingGamesChecked':1,'gradingGamesUnavailable':0})
+
+    def test_no_pending_results_reports_current_without_source_reads(self):
+        now=datetime(2030,1,4,14,tzinfo=timezone.utc)
+        with patch('nfl_adapter.cache_read') as source:
+            health=nfl_adapter.grade([],now,Path('.'))
+        source.assert_not_called()
+        self.assertEqual(health,{'gradingStatus':'CURRENT','gradingGamesChecked':0,'gradingGamesUnavailable':0})
+
+    def test_schedule_source_failure_reports_unavailable_and_keeps_pending(self):
+        now,g,r,feed,roster=self.fixtures();rows,_,_=self.collect(now,g,feed,roster)
+        now=datetime(2030,1,4,14,tzinfo=timezone.utc)
+        with patch('nfl_adapter.cache_read',side_effect=RuntimeError('offline')):
+            health=nfl_adapter.grade(rows,now,Path('.'))
+        self.assertEqual(health['gradingStatus'],'AWAITING_RESULT_SOURCE')
+        self.assertEqual(health['gradingGamesChecked'],1);self.assertEqual(health['gradingGamesUnavailable'],1)
+        self.assertEqual(rows[0]['resultStatus'],'PENDING')
+
+    def test_stats_source_failure_reports_unavailable_and_keeps_pending(self):
+        now,g,r,feed,roster=self.fixtures();rows,_,_=self.collect(now,g,feed,roster)
+        now=datetime(2030,1,4,14,tzinfo=timezone.utc);g.update(home_score='20',away_score='10')
+        def cache(root,name,*args):
+            if name=='nfl-schedule.csv':return [g]
+            raise RuntimeError('offline')
+        with patch('nfl_adapter.cache_read',side_effect=cache):health=nfl_adapter.grade(rows,now,Path('.'))
+        self.assertEqual(health['gradingStatus'],'AWAITING_RESULT_SOURCE')
+        self.assertEqual(health['gradingGamesChecked'],1);self.assertEqual(health['gradingGamesUnavailable'],1)
+        self.assertEqual(rows[0]['resultStatus'],'PENDING')
 if __name__=='__main__':unittest.main()

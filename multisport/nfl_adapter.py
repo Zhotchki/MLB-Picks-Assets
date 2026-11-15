@@ -108,24 +108,66 @@ def collect(now,get_json,model,corrected,root,norm):
                 'modelVersion':feed.get('appVersion'),'sourceUpdatedAt':feed['generatedAt'],
                 'sourceRefresh':feed['lastRefresh'],'week':week,'season':season,'usingCachedFeed':cached},rejected
 
-def grade(ledger,now,root):
-    pending=[r for r in ledger if r['sport']=='NFL' and r.get('resultStatus')=='PENDING' and instant(r['startTime'])<=now]
-    if not pending:return
-    schedule={g['game_id']:g for g in cache_read(root,'nfl-schedule.csv',SCHEDULE,3600)}
-    stats={}
+def grade(ledger, now, root):
+    pending = [r for r in ledger if r['sport'] == 'NFL' and r.get('resultStatus') == 'PENDING' and instant(r['startTime']) <= now]
+    game_ids = list(dict.fromkeys(r['gameId'] for r in pending))
+    checked = len(game_ids)
+    if not pending:
+        return {'gradingStatus': 'CURRENT', 'gradingGamesChecked': 0, 'gradingGamesUnavailable': 0}
+
+    try:
+        schedule_rows = cache_read(root, 'nfl-schedule.csv', SCHEDULE, 3600)
+        schedule = {g['game_id']: g for g in schedule_rows if g.get('game_id')}
+    except Exception:
+        return {'gradingStatus': 'AWAITING_RESULT_SOURCE',
+                'gradingGamesChecked': checked, 'gradingGamesUnavailable': checked}
+
+    missing_schedule = {gid for gid in game_ids if gid not in schedule}
+    final_rows = []
     for r in pending:
-        g=schedule.get(r['gameId'])
-        if not g or num(g.get('home_score')) is None or num(g.get('away_score')) is None:continue
-        season=r['season']
-        if season not in stats:
-            rows=cache_read(root,f'nfl-stats-{season}.csv',STATS.format(season=season),3600)
-            stats[season]={(x.get('player_id'),int(x['week']),x.get('season_type')):x for x in rows}
-        s=stats[season].get((r['playerId'],r['week'],'REG'))
-        if not s or team(s.get('team') or s.get('recent_team'))!=r['team'] or team(s.get('opponent_team'))!=r['opponent']:continue
-        if s.get('game_id') and s['game_id']!=r['gameId']:continue
-        if r['prop']=='Rush + Receiving Yards':
-            vals=[num(s.get(k)) for k in ('rushing_yards','receiving_yards')]
-            val=sum(vals) if all(v is not None for v in vals) else None
-        else:val=num(s.get(METRICS.get(r['prop'],'')))
-        if val is None:continue
-        r.update(resultStatus='GRADED',actual=val,outcome=int(val>r['modelLine']),gradedAt=now.isoformat())
+        game = schedule.get(r['gameId'])
+        if game and num(game.get('home_score')) is not None and num(game.get('away_score')) is not None:
+            final_rows.append(r)
+
+    stats = {}
+    failed_seasons = set()
+    for season in sorted({r['season'] for r in final_rows}):
+        try:
+            rows = cache_read(root, f'nfl-stats-{season}.csv', STATS.format(season=season), 3600)
+            indexed = {}
+            for row in rows:
+                week = num(row.get('week'))
+                if week is None or int(week) != week:
+                    continue
+                indexed[(row.get('player_id'), int(week), row.get('season_type'))] = row
+            stats[season] = indexed
+        except Exception:
+            failed_seasons.add(season)
+
+    unavailable_games = set(missing_schedule)
+    unavailable_games.update(r['gameId'] for r in final_rows if r['season'] in failed_seasons)
+
+    for r in pending:
+        game = schedule.get(r['gameId'])
+        if not game or num(game.get('home_score')) is None or num(game.get('away_score')) is None:
+            continue
+        if r['season'] in failed_seasons:
+            continue
+        row = stats.get(r['season'], {}).get((r['playerId'], r['week'], 'REG'))
+        if not row or team(row.get('team') or row.get('recent_team')) != r['team'] or team(row.get('opponent_team')) != r['opponent']:
+            continue
+        if row.get('game_id') and row['game_id'] != r['gameId']:
+            continue
+        if r['prop'] == 'Rush + Receiving Yards':
+            values = [num(row.get(k)) for k in ('rushing_yards', 'receiving_yards')]
+            value = sum(values) if all(v is not None for v in values) else None
+        else:
+            value = num(row.get(METRICS.get(r['prop'], '')))
+        if value is None:
+            continue
+        r.update(resultStatus='GRADED', actual=value, outcome=int(value > r['modelLine']), gradedAt=now.isoformat())
+
+    unavailable = len(unavailable_games)
+    status = 'CURRENT' if unavailable == 0 else 'AWAITING_RESULT_SOURCE' if unavailable >= checked else 'PARTIAL_RESULT_SOURCE'
+    return {'gradingStatus': status, 'gradingGamesChecked': checked,
+            'gradingGamesUnavailable': unavailable}
