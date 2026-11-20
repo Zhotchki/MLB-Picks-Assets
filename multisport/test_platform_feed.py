@@ -16,11 +16,16 @@ class PlatformTests(unittest.TestCase):
         self.row.pop('odds_type')
     def test_unvalidated_baselines_do_not_create_pregame_board_checks(self):
         nba=dict(self.forecast,sport='NBA',gameId='nba',scheduleVerified=True,platformEligible=False)
-        nfl=dict(self.forecast,sport='NFL',gameId='nfl',scheduleVerified=True)
+        nfl=dict(self.forecast,sport='NFL',gameId='nfl',scheduleVerified=True,platformEligible=True)
         checks=pregame_checks([nba,nfl],self.now)
         self.assertEqual({slot['sport'] for slot in checks},{'NFL'})
 
     def board(self):return {'sports':{'MLB':{'fetchedAtEpoch':self.now.timestamp(),'rows':[self.row]}}}
+    def test_missing_platform_eligibility_is_not_playable_or_pollable(self):
+        missing=dict(self.forecast,scheduleVerified=True)
+        self.assertEqual(pregame_checks([missing],self.now),[])
+        self.assertEqual(match([missing],self.board(),self.now,norm)[0],[])
+
     def test_missing_key_makes_no_request(self):
         with tempfile.TemporaryDirectory() as tmp,patch.dict(os.environ,{'PARLAY_API_KEY':''}),patch('urllib.request.urlopen') as request:
             board,state=fetch(Path(tmp),self.now);self.assertEqual(board['status'],'NEEDS_API_KEY');request.assert_not_called()
