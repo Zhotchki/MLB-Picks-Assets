@@ -21,7 +21,7 @@ def pregame_checks(forecasts,now,daily_calls=8,remaining_today=None,fetched=None
     """Choose UTC-day calls near verified starts; batch identical sport/start windows."""
     events={}
     for row in forecasts:
-        if not row.get('scheduleVerified') or row.get('platformEligible') is False:continue
+        if not row.get('scheduleVerified') or row.get('platformEligible') is not True:continue
         if row.get('sport') not in SPORTS or row.get('gameId') is None:continue
         try:
             start=datetime.fromisoformat(row['startTime'].replace('Z','+00:00'))
@@ -131,7 +131,7 @@ def match(forecasts,board,now,norm):
     # Resolve a provider's dated fixture only from explicit official-schedule metadata.
     fixtures={};forecast_index={}
     for r in forecasts:
-        if r.get('platformEligible') is not False:
+        if r.get('platformEligible') is True:
             forecast_index.setdefault((r.get('sport'),r.get('prop'),norm(r.get('player'))),[]).append(r)
         home,away=teams(r)
         if not r.get('scheduleVerified') or not r.get('officialGameDate') or not home or not away:continue
@@ -182,7 +182,7 @@ def match(forecasts,board,now,norm):
             if not prop:reject('unsupported_market');continue
             candidates=[]
             for r in forecast_index.get((sport,prop,norm(line.get('player'))),[]):
-                if r.get('platformEligible') is False:continue
+                if r.get('platformEligible') is not True:continue
                 if r['sport']!=sport or r['prop']!=prop or norm(r['player'])!=norm(line.get('player')):continue
                 if abs((datetime.fromisoformat(r['startTime'].replace('Z','+00:00'))-start).total_seconds())>300:continue
                 home,away=teams(r)
@@ -225,7 +225,7 @@ def slip_sets(picks,sizes=(2,3,4,5,6,8),count=5):
         try:p=float(row['probability'])
         except (KeyError,ValueError,TypeError):continue
         if isinstance(row['probability'],bool) or not math.isfinite(p) or not 0<p<=1:continue
-        if row.get('actionable') is not True or row.get('platform')!='Sleeper' or row.get('platformEligible') is False:continue
+        if row.get('actionable') is not True or row.get('platform')!='Sleeper' or row.get('platformEligible') is not True:continue
         if any(row.get(key) is None for key in ('sport','gameId','playerId')):continue
         pool.append(dict(row,probability=p))
     return {str(size):diverse_slips(pool,size,count) for size in sizes}
