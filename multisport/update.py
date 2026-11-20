@@ -69,7 +69,7 @@ def mlb_source():
 
 def eligible_board_sports(forecasts):
     return {row.get('sport') for row in forecasts
-            if row.get('sport') and row.get('scheduleVerified') and row.get('platformEligible') is not False}
+            if row.get('sport') and row.get('scheduleVerified') and row.get('platformEligible') is True}
 
 
 def corrected(row, model):
@@ -339,7 +339,7 @@ def run():
     line_evidence=line_report(ledger,published_at)
     promoted=apply_line_validation(verified,line_evidence,published_at)
     # Prefer a newly validated observed-line estimate over a duplicate model-target row.
-    live_rows=[r for r in verified if r.get('platformEligible') is not False]
+    live_rows=[r for r in verified if r.get('platformEligible') is True]
     observed_keys={(r['sport'],str(r['gameId']),str(r['playerId']),r['prop'],r.get('modelLine')) for r in live_rows if r.get('forecastKind')=='SLEEPER_LINE'}
     live_rows=[r for r in live_rows if r.get('forecastKind')=='SLEEPER_LINE' or (r['sport'],str(r['gameId']),str(r['playerId']),r['prop'],r.get('modelLine',r['target']-.5)) not in observed_keys]
     offers,offer_counts=match_offers(live_rows,board,published_at,norm)
