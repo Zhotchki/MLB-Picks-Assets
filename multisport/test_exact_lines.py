@@ -9,7 +9,7 @@ from platform_feed import match
 class ExactLinesTests(unittest.TestCase):
     def setUp(self):
         self.now=datetime(2030,10,10,14,tzinfo=timezone.utc)
-        self.forecast=dict(sport='NFL',gameId='future',playerId='p1',player='Test Player',team='GB',opponent='CHI',homeTeamAbbr='GB',awayTeamAbbr='CHI',prop='Receptions',direction='MORE',target=4,modelLine=3.5,probability=.7,sourceProbability=.7,scheduleVerified=True,officialGameDate='2030-10-10',startTime='2030-10-10T20:00:00Z',season=2030,week=8,expectedPlayingTime=.8)
+        self.forecast=dict(sport='NFL',gameId='future',playerId='p1',player='Test Player',team='GB',opponent='CHI',homeTeamAbbr='GB',awayTeamAbbr='CHI',prop='Receptions',direction='MORE',target=4,modelLine=3.5,probability=.7,sourceProbability=.7,scheduleVerified=True,officialGameDate='2030-10-10',startTime='2030-10-10T20:00:00Z',season=2030,week=8,expectedPlayingTime=.8,platformEligible=True)
         self.line=dict(bookmaker='sleeper',sport_key='americanfootball_nfl',player='Test Player',market_key='player_receptions',line=5.5,home_team='Green Bay Packers',away_team='Chicago Bears',commence_time_reported=False,game_date='2030-10-10',canonical_event_id='event',age_seconds=1,period='FULL',is_dfs_flat_payout=True)
         self.board=dict(eligibleSports=['NFL'],sports={'NFL':dict(rows=[self.line],fetchedAtEpoch=self.now.timestamp())})
         self.games=[];self.stats=[]

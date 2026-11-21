@@ -15,7 +15,7 @@ class AdapterTests(SecretFreeTests):
             {'sport':'NBA','scheduleVerified':True,'platformEligible':False},
             {'sport':'NHL','scheduleVerified':True,'platformEligible':False},
             {'sport':'NFL','scheduleVerified':True,'platformEligible':False},
-            {'sport':'MLB','scheduleVerified':True},
+            {'sport':'MLB','scheduleVerified':True,'platformEligible':True},
             {'sport':'NFL','scheduleVerified':True,'platformEligible':True},
             {'sport':'NBA','scheduleVerified':False},
         ]

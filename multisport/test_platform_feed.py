@@ -8,7 +8,7 @@ from update import norm
 class PlatformTests(unittest.TestCase):
     def setUp(self):
         self.now=datetime(2030,1,1,14,tzinfo=timezone.utc)
-        self.forecast={'sport':'MLB','gameId':1,'playerId':99,'player':'Fixture Player','team':'AA','opponent':'BB','homeTeam':'Team A','awayTeam':'Team B','prop':'Hits','direction':'MORE','target':2,'probability':.7,'startTime':'2030-01-01T16:00:00Z'}
+        self.forecast={'sport':'MLB','gameId':1,'playerId':99,'player':'Fixture Player','team':'AA','opponent':'BB','homeTeam':'Team A','awayTeam':'Team B','prop':'Hits','direction':'MORE','target':2,'probability':.7,'startTime':'2030-01-01T16:00:00Z','platformEligible':True}
         self.row={'bookmaker':'sleeper','player':'Fixture Player','market_key':'player_hits','line':1.5,'home_team':'Team A','away_team':'Team B','commence_time':'2030-01-01T16:00:00Z','commence_time_reported':True,'canonical_event_id':'abc','age_seconds':3,'period':'FULL','odds_type':'standard'}
     def scheduled(self):
         self.forecast.update(scheduleVerified=True,officialGameDate='2030-01-01')
@@ -23,6 +23,7 @@ class PlatformTests(unittest.TestCase):
     def board(self):return {'sports':{'MLB':{'fetchedAtEpoch':self.now.timestamp(),'rows':[self.row]}}}
     def test_missing_platform_eligibility_is_not_playable_or_pollable(self):
         missing=dict(self.forecast,scheduleVerified=True)
+        missing.pop('platformEligible',None)
         self.assertEqual(pregame_checks([missing],self.now),[])
         self.assertEqual(match([missing],self.board(),self.now,norm)[0],[])
 

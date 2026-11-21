@@ -4,7 +4,7 @@ from platform_feed import slip_sets,slips,rank_pool,pick_key,diverse_slips
 def offer(event,player,probability,variant=0):
     return {'offerId':f'{event}:{player}:{variant}','sport':'MLB','gameId':event,'playerId':player,
             'prop':'Hits','platformLine':variant+0.5,'probability':probability,
-            'actionable':True,'platform':'Sleeper'}
+            'actionable':True,'platform':'Sleeper','platformEligible':True}
 
 class SlipRankingTests(unittest.TestCase):
     def exhaustive(self,pool,size,count=5):

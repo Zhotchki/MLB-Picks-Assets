@@ -61,7 +61,7 @@ class PregameTests(unittest.TestCase):
 class CollectionScheduleTests(unittest.TestCase):
     def test_each_eligible_sport_gets_a_turn_and_late_starts_recover_a_current_window(self):
         now=datetime(2030,1,1,18,tzinfo=timezone.utc)
-        rows=[dict(sport=sport,gameId=str(i),startTime=(now+timedelta(hours=2,minutes=i)).isoformat(),scheduleVerified=True) for sport in ('MLB','NFL','NBA','NHL') for i in range(3)]
+        rows=[dict(sport=sport,gameId=str(i),startTime=(now+timedelta(hours=2,minutes=i)).isoformat(),scheduleVerified=True,platformEligible=True) for sport in ('MLB','NFL','NBA','NHL') for i in range(3)]
         checks=pregame_checks(rows,now,daily_calls=4)
         self.assertEqual({s['sport'] for s in checks},{'MLB','NFL','NBA','NHL'})
         baseline_rows=[dict(row,platformEligible=False) for row in rows]
