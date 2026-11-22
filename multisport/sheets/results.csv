@@ -1,4 +1,305 @@
 Sport,Player,Team,Prop,Direction,Model line,Frozen probability,Actual,Outcome,Status,Game time CT,Source version,Forecast type
+NFL,Saquon Barkley,PHI,Rush Yards,MORE,66.5,0.29881754961568496,75.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Saquon Barkley,PHI,Rush Yards,MORE,60.5,0.32624392580767697,75.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Saquon Barkley,PHI,Rush Yards,MORE,59.5,0.33129030299462636,75.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Saquon Barkley,PHI,Rush Yards,MORE,58.5,0.33646955398239825,75.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Saquon Barkley,PHI,Rush Yards,MORE,55.5,0.3527852298778515,75.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Saquon Barkley,PHI,Rush Yards,MORE,54.5,0.3584751090190387,75.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Saquon Barkley,PHI,Rush Attempts,MORE,16.5,0.26828447918515336,17.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Saquon Barkley,PHI,Rush Attempts,MORE,15.5,0.2862006968475564,17.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Saquon Barkley,PHI,Rush Attempts,MORE,14.5,0.3078951884852459,17.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Saquon Barkley,PHI,Rush + Receiving Yards,MORE,82.5,0.25635801746702336,75.0,0,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Saquon Barkley,PHI,Rush + Receiving Yards,MORE,76.5,0.27550003933926515,75.0,0,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Saquon Barkley,PHI,Rush + Receiving Yards,MORE,75.5,0.2792215920634008,75.0,0,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Saquon Barkley,PHI,Rush + Receiving Yards,MORE,74.5,0.28310168993094614,75.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Saquon Barkley,PHI,Rush + Receiving Yards,MORE,73.5,0.28714225991783904,75.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Saquon Barkley,PHI,Rush + Receiving Yards,MORE,69.5,0.3049365255524997,75.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Saquon Barkley,PHI,Rush + Receiving Yards,MORE,68.5,0.309796838598241,75.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Saquon Barkley,PHI,Receptions,MORE,2.5,0.29180918587469484,0.0,0,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Saquon Barkley,PHI,Receptions,MORE,1.5,0.41420234345525614,0.0,0,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Saquon Barkley,PHI,Receiving Yards,MORE,9.5,0.45452248848066124,0.0,0,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Saquon Barkley,PHI,Receiving Yards,MORE,11.5,0.41807029133915613,0.0,0,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Saquon Barkley,PHI,Receiving Yards,MORE,10.5,0.43608073577724615,0.0,0,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Dallas Goedert,PHI,Receptions,MORE,3.5,0.6926269685156576,1.0,0,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Dallas Goedert,PHI,Receiving Yards,MORE,32.5,0.6457208857950045,38.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Dallas Goedert,PHI,Receiving Yards,MORE,31.5,0.6527893033369389,38.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Dallas Goedert,PHI,Receiving Yards,MORE,30.5,0.659654742353667,38.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Aaron Rodgers,PIT,Pass Yards,MORE,210.5,0.4742269000002332,227.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Aaron Rodgers,PIT,Pass Yards,MORE,209.5,0.47827216742795226,227.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Aaron Rodgers,PIT,Pass Yards,MORE,208.5,0.4823243324848461,227.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Aaron Rodgers,PIT,Pass Yards,MORE,201.5,0.5107747799789885,227.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Aaron Rodgers,PIT,Pass TDs,MORE,1.5,0.5714285714285714,1.0,0,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Aaron Rodgers,PIT,Pass Completions,MORE,19.5,0.5202700651626765,30.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Aaron Rodgers,PIT,Pass Attempts,MORE,33.5,0.50622528928686,44.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Aaron Rodgers,PIT,Pass Attempts,MORE,32.5,0.5357259120109549,44.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Aaron Rodgers,PIT,Pass Attempts,MORE,31.5,0.5646297485042108,44.0,1,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NFL,Aaron Rodgers,PIT,Interceptions,MORE,0.5,0.5714285714285714,0.0,0,GRADED,2026-11-22 15:25:00,nfl-public-board-upstream-v1,Model target
+NBA,Dyson Daniels,ATL,Rebounds,MORE,7.5,0.47135769200615474,14.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Dyson Daniels,ATL,Rebounds,MORE,5.5,0.7427631133629815,14.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Dyson Daniels,ATL,Rebounds,MORE,3.5,0.9301219997811426,14.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Dyson Daniels,ATL,Rebounds,MORE,1.5,0.99,14.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Dyson Daniels,ATL,Rebounds,MORE,11.5,0.09141264449521236,14.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Dyson Daniels,ATL,Rebounds,MORE,9.5,0.23351475759535578,14.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Dyson Daniels,ATL,Points,MORE,34.5,0.01,5.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Dyson Daniels,ATL,Points,MORE,29.5,0.01,5.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Dyson Daniels,ATL,Points,MORE,24.5,0.02381408703023613,5.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Dyson Daniels,ATL,Points,MORE,19.5,0.09183255310488847,5.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Dyson Daniels,ATL,Points,MORE,14.5,0.28167634590157753,5.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Dyson Daniels,ATL,Points,MORE,9.5,0.6301703936896303,5.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Dyson Daniels,ATL,Assists,MORE,7.5,0.2959534577726388,8.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Dyson Daniels,ATL,Assists,MORE,5.5,0.5539579194882456,8.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Dyson Daniels,ATL,Assists,MORE,3.5,0.8207311648064142,8.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Dyson Daniels,ATL,Assists,MORE,1.5,0.9714047745460034,8.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Dyson Daniels,ATL,Assists,MORE,9.5,0.12841511407919448,8.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Dyson Daniels,ATL,3-Pointers Made,MORE,4.5,0.01,0.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Dyson Daniels,ATL,3-Pointers Made,MORE,3.5,0.01,0.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Dyson Daniels,ATL,3-Pointers Made,MORE,2.5,0.01,0.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Dyson Daniels,ATL,3-Pointers Made,MORE,1.5,0.05004368815679716,0.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Dyson Daniels,ATL,3-Pointers Made,MORE,0.5,0.24932755377287275,0.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Jalen Johnson,ATL,Rebounds,MORE,7.5,0.7977114252600341,11.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Jalen Johnson,ATL,Rebounds,MORE,5.5,0.9368822376847429,11.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Jalen Johnson,ATL,Rebounds,MORE,3.5,0.9897380217005681,11.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Jalen Johnson,ATL,Rebounds,MORE,1.5,0.99,11.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Jalen Johnson,ATL,Rebounds,MORE,11.5,0.3494715579041323,11.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Jalen Johnson,ATL,Rebounds,MORE,9.5,0.5793212226429728,11.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Jalen Johnson,ATL,Points,MORE,34.5,0.041354192894568875,12.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Jalen Johnson,ATL,Points,MORE,29.5,0.13852394767645804,12.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Jalen Johnson,ATL,Points,MORE,24.5,0.35170564907664825,12.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Jalen Johnson,ATL,Points,MORE,19.5,0.655691137234449,12.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Jalen Johnson,ATL,Points,MORE,14.5,0.9006153566336585,12.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Jalen Johnson,ATL,Points,MORE,9.5,0.9899135366470531,12.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Jalen Johnson,ATL,Assists,MORE,7.5,0.5359248594433347,0.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Jalen Johnson,ATL,Assists,MORE,5.5,0.792747074914168,0.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Jalen Johnson,ATL,Assists,MORE,3.5,0.9495448911066567,0.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Jalen Johnson,ATL,Assists,MORE,1.5,0.99,0.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Jalen Johnson,ATL,Assists,MORE,9.5,0.2846938416826299,0.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Jalen Johnson,ATL,3-Pointers Made,MORE,4.5,0.031691360529494506,0.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Jalen Johnson,ATL,3-Pointers Made,MORE,3.5,0.08895298716773292,0.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Jalen Johnson,ATL,3-Pointers Made,MORE,2.5,0.21926641214106002,0.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Jalen Johnson,ATL,3-Pointers Made,MORE,1.5,0.45818959269936244,0.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Jalen Johnson,ATL,3-Pointers Made,MORE,0.5,0.7736288748780826,0.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Ausar Thompson,DET,Rebounds,MORE,7.5,0.4483041381516705,11.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Ausar Thompson,DET,Rebounds,MORE,5.5,0.6841422884559836,11.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Ausar Thompson,DET,Rebounds,MORE,3.5,0.8841518647617672,11.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Ausar Thompson,DET,Rebounds,MORE,1.5,0.9825459872632955,11.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Ausar Thompson,DET,Rebounds,MORE,11.5,0.1241178893347783,11.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Ausar Thompson,DET,Rebounds,MORE,9.5,0.2520251607796177,11.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Ausar Thompson,DET,Points,MORE,34.5,0.01,18.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Ausar Thompson,DET,Points,MORE,29.5,0.01,18.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Ausar Thompson,DET,Points,MORE,24.5,0.01,18.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Ausar Thompson,DET,Points,MORE,19.5,0.027634817899809705,18.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Ausar Thompson,DET,Points,MORE,14.5,0.17947092679925403,18.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Ausar Thompson,DET,Points,MORE,9.5,0.6024837215791361,18.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Ausar Thompson,DET,Assists,MORE,7.5,0.13315618948457386,5.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Ausar Thompson,DET,Assists,MORE,5.5,0.32248576125124884,5.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Ausar Thompson,DET,Assists,MORE,3.5,0.6211604633796122,5.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Ausar Thompson,DET,Assists,MORE,1.5,0.9027756346802754,5.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Ausar Thompson,DET,Assists,MORE,9.5,0.046016991711562705,5.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Ausar Thompson,DET,3-Pointers Made,MORE,4.5,0.01,0.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Ausar Thompson,DET,3-Pointers Made,MORE,3.5,0.01,0.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Ausar Thompson,DET,3-Pointers Made,MORE,2.5,0.01,0.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Ausar Thompson,DET,3-Pointers Made,MORE,1.5,0.01,0.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Ausar Thompson,DET,3-Pointers Made,MORE,0.5,0.017058029707454403,0.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Cade Cunningham,DET,Rebounds,MORE,7.5,0.24489070474477614,4.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Cade Cunningham,DET,Rebounds,MORE,5.5,0.4902771019177451,4.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Cade Cunningham,DET,Rebounds,MORE,3.5,0.7748270410934507,4.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Cade Cunningham,DET,Rebounds,MORE,1.5,0.9590871890704039,4.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Cade Cunningham,DET,Rebounds,MORE,11.5,0.03450629625358148,4.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Cade Cunningham,DET,Rebounds,MORE,9.5,0.0999399583170818,4.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Cade Cunningham,DET,Points,MORE,34.5,0.13406898007355172,5.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Cade Cunningham,DET,Points,MORE,29.5,0.28893216741651273,5.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Cade Cunningham,DET,Points,MORE,24.5,0.5189549109018601,5.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Cade Cunningham,DET,Points,MORE,19.5,0.7646604732422715,5.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Cade Cunningham,DET,Points,MORE,14.5,0.932184572803845,5.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Cade Cunningham,DET,Points,MORE,9.5,0.99,5.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Cade Cunningham,DET,Assists,MORE,7.5,0.7811883706327174,15.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Cade Cunningham,DET,Assists,MORE,5.5,0.9188539808570988,15.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Cade Cunningham,DET,Assists,MORE,3.5,0.9828226799948123,15.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Cade Cunningham,DET,Assists,MORE,1.5,0.99,15.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Cade Cunningham,DET,Assists,MORE,9.5,0.5872918361627777,15.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Cade Cunningham,DET,3-Pointers Made,MORE,4.5,0.10036235984036912,1.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Cade Cunningham,DET,3-Pointers Made,MORE,3.5,0.20105315653813083,1.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Cade Cunningham,DET,3-Pointers Made,MORE,2.5,0.36831341254074157,1.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Cade Cunningham,DET,3-Pointers Made,MORE,1.5,0.6017661204533256,1.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Cade Cunningham,DET,3-Pointers Made,MORE,0.5,0.8487046603849384,1.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Onyeka Okongwu,ATL,Rebounds,MORE,7.5,0.6136949714395369,9.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Onyeka Okongwu,ATL,Rebounds,MORE,5.5,0.8317553322383751,9.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Onyeka Okongwu,ATL,Rebounds,MORE,3.5,0.9585026032834512,9.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Onyeka Okongwu,ATL,Rebounds,MORE,1.5,0.99,9.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Onyeka Okongwu,ATL,Rebounds,MORE,11.5,0.19221558150909157,9.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Onyeka Okongwu,ATL,Rebounds,MORE,9.5,0.37619716315630014,9.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Onyeka Okongwu,ATL,Points,MORE,34.5,0.01308210351231398,6.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Onyeka Okongwu,ATL,Points,MORE,29.5,0.04304845658523315,6.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Onyeka Okongwu,ATL,Points,MORE,24.5,0.12349991823025896,6.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Onyeka Okongwu,ATL,Points,MORE,19.5,0.29782550414615416,6.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Onyeka Okongwu,ATL,Points,MORE,14.5,0.5766107105615765,6.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Onyeka Okongwu,ATL,Points,MORE,9.5,0.8574651531728275,6.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Onyeka Okongwu,ATL,Assists,MORE,7.5,0.04609259997486714,2.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Onyeka Okongwu,ATL,Assists,MORE,5.5,0.14782344495219313,2.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Onyeka Okongwu,ATL,Assists,MORE,3.5,0.38865318151318473,2.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Onyeka Okongwu,ATL,Assists,MORE,1.5,0.7634586774570157,2.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Onyeka Okongwu,ATL,Assists,MORE,9.5,0.012486907681163784,2.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Onyeka Okongwu,ATL,3-Pointers Made,MORE,4.5,0.10784707134075577,1.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Onyeka Okongwu,ATL,3-Pointers Made,MORE,3.5,0.20957899988189188,1.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Onyeka Okongwu,ATL,3-Pointers Made,MORE,2.5,0.37521044865890396,1.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Onyeka Okongwu,ATL,3-Pointers Made,MORE,1.5,0.6042233071752823,1.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Onyeka Okongwu,ATL,3-Pointers Made,MORE,0.5,0.8475151381162922,1.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Nickeil Alexander-Walker,ATL,Rebounds,MORE,7.5,0.03335482905590814,2.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Nickeil Alexander-Walker,ATL,Rebounds,MORE,5.5,0.16379107297211748,2.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Nickeil Alexander-Walker,ATL,Rebounds,MORE,3.5,0.49639591924092596,2.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Nickeil Alexander-Walker,ATL,Rebounds,MORE,1.5,0.8794246228484252,2.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Nickeil Alexander-Walker,ATL,Rebounds,MORE,11.5,0.01,2.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Nickeil Alexander-Walker,ATL,Rebounds,MORE,9.5,0.01,2.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Nickeil Alexander-Walker,ATL,Points,MORE,34.5,0.035921912468456774,27.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Nickeil Alexander-Walker,ATL,Points,MORE,29.5,0.12172532093089483,27.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Nickeil Alexander-Walker,ATL,Points,MORE,24.5,0.3173910005846555,27.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Nickeil Alexander-Walker,ATL,Points,MORE,19.5,0.6146120178628065,27.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Nickeil Alexander-Walker,ATL,Points,MORE,14.5,0.8771125580763554,27.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Nickeil Alexander-Walker,ATL,Points,MORE,9.5,0.9855364753204657,27.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Nickeil Alexander-Walker,ATL,Assists,MORE,7.5,0.05585088176691877,1.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Nickeil Alexander-Walker,ATL,Assists,MORE,5.5,0.2054903383571557,1.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Nickeil Alexander-Walker,ATL,Assists,MORE,3.5,0.5266421909035818,1.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Nickeil Alexander-Walker,ATL,Assists,MORE,1.5,0.8800990995067922,1.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Nickeil Alexander-Walker,ATL,Assists,MORE,9.5,0.011350023574008272,1.0,0,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Nickeil Alexander-Walker,ATL,3-Pointers Made,MORE,4.5,0.2844236509030229,6.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Nickeil Alexander-Walker,ATL,3-Pointers Made,MORE,3.5,0.4745625520076473,6.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Nickeil Alexander-Walker,ATL,3-Pointers Made,MORE,2.5,0.6886781016259164,6.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Nickeil Alexander-Walker,ATL,3-Pointers Made,MORE,1.5,0.8695148543445521,6.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NBA,Nickeil Alexander-Walker,ATL,3-Pointers Made,MORE,0.5,0.9713350512495189,6.0,1,GRADED,2026-11-22 14:30:00,nba-counts-minutes-nb-1,Model target
+NFL,Dak Prescott,DAL,Rush Yards,MORE,8.5,0.5272906285902694,9.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Dak Prescott,DAL,Rush Yards,MORE,7.5,0.5460359086115009,9.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Dak Prescott,DAL,Rush Attempts,MORE,3.5,0.49316190206485294,4.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Dak Prescott,DAL,Rush Attempts,MORE,2.5,0.5681040650627249,4.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Dak Prescott,DAL,Pass Yards,MORE,283.5,0.46574087987681845,325.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Dak Prescott,DAL,Pass Yards,MORE,282.5,0.4696314437997204,325.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Dak Prescott,DAL,Pass Yards,MORE,281.5,0.473530980177452,325.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Dak Prescott,DAL,Pass Yards,MORE,280.5,0.4773210247577661,325.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Dak Prescott,DAL,Pass Yards,MORE,279.5,0.4813524027796534,325.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Dak Prescott,DAL,Pass Yards,MORE,278.5,0.48515433220258036,325.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Dak Prescott,DAL,Pass Yards,MORE,277.5,0.48907817930345004,325.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Dak Prescott,DAL,Pass TDs,MORE,2.5,0.35714285714285715,4.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Dak Prescott,DAL,Pass Completions,MORE,24.5,0.4465428429891936,28.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Dak Prescott,DAL,Pass Completions,MORE,23.5,0.4804345938817426,28.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Dak Prescott,DAL,Pass Attempts,MORE,36.5,0.5023276021503916,33.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Dak Prescott,DAL,Pass Attempts,MORE,35.5,0.5255493726329661,33.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Dak Prescott,DAL,Interceptions,MORE,0.5,0.42857142857142855,0.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Baker Mayfield,TB,Rush Yards,MORE,9.5,0.4724409373546467,36.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Baker Mayfield,TB,Rush Yards,MORE,8.5,0.4899731368332363,36.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Baker Mayfield,TB,Rush Yards,MORE,7.5,0.5075652016833703,36.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Baker Mayfield,TB,Rush Yards,MORE,11.5,0.4379666849258956,36.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Baker Mayfield,TB,Rush Yards,MORE,10.5,0.45507191650711576,36.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Baker Mayfield,TB,Pass Yards,MORE,215.5,0.33133793955715335,187.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Baker Mayfield,TB,Pass Yards,MORE,213.5,0.3344038918897206,187.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Baker Mayfield,TB,Pass Yards,MORE,211.5,0.3375009069139642,187.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Baker Mayfield,TB,Pass TDs,MORE,1.5,0.2857142857142857,2.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Baker Mayfield,TB,Pass Completions,MORE,20.5,0.31134147880044605,20.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Baker Mayfield,TB,Pass Completions,MORE,19.5,0.3264926351060153,20.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Baker Mayfield,TB,Pass Attempts,MORE,32.5,0.3092010971403711,33.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Baker Mayfield,TB,Pass Attempts,MORE,31.5,0.32019311981553644,33.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Baker Mayfield,TB,Interceptions,MORE,0.5,0.5714285714285714,0.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Chris Godwin Jr.,TB,Receptions,MORE,3.5,0.4161770799883523,3.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Chris Godwin Jr.,TB,Receiving Yards,MORE,32.5,0.3749606946756407,13.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jared Goff,DET,Pass Yards,MORE,253.5,0.4976367283021487,279.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jared Goff,DET,Pass Yards,MORE,252.5,0.5005188429512374,279.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jared Goff,DET,Pass Yards,MORE,250.5,0.5062820126542348,279.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jared Goff,DET,Pass Yards,MORE,249.5,0.5091047228514107,279.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jared Goff,DET,Pass Yards,MORE,248.5,0.5119835934696432,279.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jared Goff,DET,Pass TDs,MORE,1.5,0.5714285714285714,2.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jared Goff,DET,Pass Completions,MORE,21.5,0.4679971181545417,20.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jared Goff,DET,Pass Attempts,MORE,32.5,0.45107540166565013,28.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jared Goff,DET,Interceptions,MORE,0.5,0.42857142857142855,0.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Alvin Kamara,NO,Rush Yards,MORE,6.5,0.7120545648241493,1.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Alvin Kamara,NO,Rush Yards,MORE,11.5,0.6555950756625978,1.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Alvin Kamara,NO,Rush Attempts,MORE,2.5,0.7206969646954445,1.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Alvin Kamara,NO,Rush + Receiving Yards,MORE,28.5,0.6749789241587966,2.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Alvin Kamara,NO,Rush + Receiving Yards,MORE,27.5,0.6815169106901784,2.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Alvin Kamara,NO,Rush + Receiving Yards,MORE,24.5,0.6996453290272372,2.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Alvin Kamara,NO,Rush + Receiving Yards,MORE,23.5,0.7051907721649923,2.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Alvin Kamara,NO,Rush + Receiving Yards,MORE,22.5,0.7104886795725518,2.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Alvin Kamara,NO,Receptions,MORE,2.5,0.6782410075256402,1.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Alvin Kamara,NO,Receiving Yards,MORE,14.5,0.6550351158550222,1.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Alvin Kamara,NO,Receiving Yards,MORE,12.5,0.6531892309311134,1.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Kalif Raymond,CHI,Receptions,MORE,2.5,0.5259666771947915,1.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Kalif Raymond,CHI,Receiving Yards,MORE,21.5,0.5158566846496317,14.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Kalif Raymond,CHI,Receiving Yards,MORE,20.5,0.5236062394961527,14.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Josh Allen,BUF,Rush Yards,MORE,29.5,0.4543846383076212,0.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Josh Allen,BUF,Rush Yards,MORE,28.5,0.4597608179346016,0.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Josh Allen,BUF,Rush Yards,MORE,27.5,0.4651599493603614,0.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Josh Allen,BUF,Rush Yards,MORE,24.5,0.481464631323471,0.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Josh Allen,BUF,Rush Yards,MORE,23.5,0.48692499906161857,0.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Josh Allen,BUF,Rush Attempts,MORE,6.5,0.4963955718807585,0.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Josh Allen,BUF,Rush Attempts,MORE,5.5,0.5674687148687647,0.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Josh Allen,BUF,Pass Yards,MORE,231.5,0.5645706125508471,304.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Josh Allen,BUF,Pass Yards,MORE,230.5,0.5707944819827386,304.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Josh Allen,BUF,Pass Yards,MORE,229.5,0.5769624687323461,304.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Josh Allen,BUF,Pass Yards,MORE,228.5,0.5830700866883566,304.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Josh Allen,BUF,Pass Yards,MORE,227.5,0.5891129915971008,304.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Josh Allen,BUF,Pass Yards,MORE,226.5,0.595205739390021,304.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Josh Allen,BUF,Pass TDs,MORE,1.5,0.42857142857142855,1.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Josh Allen,BUF,Pass Completions,MORE,18.5,0.5047698953087412,27.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Josh Allen,BUF,Pass Attempts,MORE,26.5,0.5795817917157622,45.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Josh Allen,BUF,Pass Attempts,MORE,25.5,0.6151443610903541,45.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Josh Allen,BUF,Interceptions,MORE,0.5,0.6428571428571429,2.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,DJ Moore,BUF,Receptions,MORE,3.5,0.4850834870280855,8.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,DJ Moore,BUF,Receiving Yards,MORE,48.5,0.5440478486393656,91.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,DJ Moore,BUF,Receiving Yards,MORE,47.5,0.5495398879200251,91.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Mark Andrews,BAL,Receptions,MORE,3.5,0.5414332353251647,2.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Mark Andrews,BAL,Receiving Yards,MORE,33.5,0.4959937455108888,14.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Mark Andrews,BAL,Receiving Yards,MORE,32.5,0.5057647398243456,14.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Mark Andrews,BAL,Receiving Yards,MORE,31.5,0.5155249432264987,14.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jacoby Brissett,BAL,Rush Yards,MORE,6.5,0.5254036151709697,7.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jacoby Brissett,BAL,Rush Attempts,MORE,2.5,0.5651953835848926,2.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jacoby Brissett,BAL,Pass Yards,MORE,237.5,0.46719543612362224,276.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jacoby Brissett,BAL,Pass Yards,MORE,227.5,0.4929525729312199,276.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jacoby Brissett,BAL,Pass Yards,MORE,226.5,0.49553358785074775,276.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jacoby Brissett,BAL,Pass TDs,MORE,1.5,0.42857142857142855,1.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jacoby Brissett,BAL,Pass Completions,MORE,23.5,0.49821400401708354,24.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jacoby Brissett,BAL,Pass Completions,MORE,22.5,0.523684545826388,24.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jacoby Brissett,BAL,Pass Attempts,MORE,35.5,0.545198687980093,37.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jacoby Brissett,BAL,Pass Attempts,MORE,34.5,0.5656293944012158,37.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jacoby Brissett,BAL,Pass Attempts,MORE,33.5,0.5855166679486583,37.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jacoby Brissett,BAL,Interceptions,MORE,0.5,0.6428571428571429,1.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Derrick Henry,BAL,Rush Yards,MORE,69.5,0.3779153804693882,94.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Derrick Henry,BAL,Rush Yards,MORE,68.5,0.3848857592678869,94.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Derrick Henry,BAL,Rush Yards,MORE,67.5,0.3919881496741369,94.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Derrick Henry,BAL,Rush Yards,MORE,66.5,0.3992159381794694,94.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Derrick Henry,BAL,Rush Yards,MORE,65.5,0.4065620757778642,94.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Derrick Henry,BAL,Rush Yards,MORE,64.5,0.41401909744806176,94.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Derrick Henry,BAL,Rush Yards,MORE,63.5,0.4215791440890731,94.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Derrick Henry,BAL,Rush Attempts,MORE,16.5,0.46516085145374425,13.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Derrick Henry,BAL,Rush Attempts,MORE,15.5,0.5038861163479188,13.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Derrick Henry,BAL,Rush + Receiving Yards,MORE,77.5,0.37215662551550965,111.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Derrick Henry,BAL,Rush + Receiving Yards,MORE,76.5,0.3786584200252345,111.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Derrick Henry,BAL,Rush + Receiving Yards,MORE,75.5,0.38528408906258804,111.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Derrick Henry,BAL,Receptions,MORE,1.5,0.5495580135258048,4.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Derrick Henry,BAL,Receiving Yards,MORE,8.5,0.4618059432607254,17.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Derrick Henry,BAL,Receiving Yards,MORE,7.5,0.48064599655111145,17.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Darren Waller,CAR,Receptions,MORE,2.5,0.5702085271660302,3.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Darren Waller,CAR,Receiving Yards,MORE,30.5,0.6199509410331607,42.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Darren Waller,CAR,Receiving Yards,MORE,29.5,0.6269201308079698,42.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Darren Waller,CAR,Receiving Yards,MORE,27.5,0.6085840858868102,42.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Darren Waller,CAR,Receiving Yards,MORE,26.5,0.6157729923941263,42.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Patrick Mahomes,KC,Rush Yards,MORE,9.5,0.5191647095568499,0.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Patrick Mahomes,KC,Rush Yards,MORE,8.5,0.5380067441558914,0.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Patrick Mahomes,KC,Rush Yards,MORE,11.5,0.48121391794803536,0.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Patrick Mahomes,KC,Rush Yards,MORE,10.5,0.5001900592750426,0.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Patrick Mahomes,KC,Rush Attempts,MORE,2.5,0.486330061514233,0.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Patrick Mahomes,KC,Pass Yards,MORE,252.5,0.541990935153204,324.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Patrick Mahomes,KC,Pass Yards,MORE,251.5,0.5451364023964448,324.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Patrick Mahomes,KC,Pass Yards,MORE,250.5,0.5482730710992404,324.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Patrick Mahomes,KC,Pass Yards,MORE,249.5,0.5514003481051282,324.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Patrick Mahomes,KC,Pass Yards,MORE,248.5,0.554579885866777,324.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Patrick Mahomes,KC,Pass TDs,MORE,1.5,0.6428571428571429,3.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Patrick Mahomes,KC,Pass Completions,MORE,22.5,0.5052859504312208,27.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Patrick Mahomes,KC,Pass Completions,MORE,21.5,0.5456410686061035,27.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Patrick Mahomes,KC,Pass Attempts,MORE,32.5,0.5391751394693923,39.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Patrick Mahomes,KC,Pass Attempts,MORE,31.5,0.5699828336555087,39.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Patrick Mahomes,KC,Pass Attempts,MORE,30.5,0.5994827317906893,39.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Patrick Mahomes,KC,Interceptions,MORE,0.5,0.42857142857142855,0.0,0,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Travis Kelce,KC,Receptions,MORE,3.5,0.48533358010040456,6.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Travis Kelce,KC,Receiving Yards,MORE,46.5,0.5165040010440227,74.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Travis Kelce,KC,Receiving Yards,MORE,41.5,0.6021400362368609,74.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Travis Kelce,KC,Receiving Yards,MORE,40.5,0.6098713963997663,74.0,1,GRADED,2026-11-22 12:00:00,nfl-public-board-upstream-v1,Model target
 NHL,Gabe Perreault,NYR,Shots on Goal,MORE,4.5,0.04057911339764342,4.0,0,GRADED,2026-11-22 11:30:00,nhl-shots-toi-nb-1,Model target
 NHL,Gabe Perreault,NYR,Shots on Goal,MORE,3.5,0.10727357208559551,4.0,1,GRADED,2026-11-22 11:30:00,nhl-shots-toi-nb-1,Model target
 NHL,Gabe Perreault,NYR,Shots on Goal,MORE,2.5,0.24955778874563128,4.0,1,GRADED,2026-11-22 11:30:00,nhl-shots-toi-nb-1,Model target
@@ -4698,304 +4999,3 @@ NBA,Donovan Clingan,POR,Points,MORE,14.5,0.2610900598099566,7.0,0,GRADED,2026-11
 NBA,Donovan Clingan,POR,Points,MORE,9.5,0.6432691805827573,7.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
 NBA,Donovan Clingan,POR,Assists,MORE,7.5,0.01,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
 NBA,Donovan Clingan,POR,Assists,MORE,5.5,0.018006809224502707,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Clingan,POR,Assists,MORE,3.5,0.14995374892110191,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Clingan,POR,Assists,MORE,1.5,0.6044070617317705,2.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Clingan,POR,Assists,MORE,9.5,0.01,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Clingan,POR,3-Pointers Made,MORE,4.5,0.01,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Clingan,POR,3-Pointers Made,MORE,3.5,0.029941301192071057,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Clingan,POR,3-Pointers Made,MORE,2.5,0.10533949342833582,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Clingan,POR,3-Pointers Made,MORE,1.5,0.3017098530774548,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Clingan,POR,3-Pointers Made,MORE,0.5,0.6589006672691925,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Scoot Henderson,POR,Rebounds,MORE,7.5,0.01,7.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Scoot Henderson,POR,Rebounds,MORE,5.5,0.02718746544432349,7.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Scoot Henderson,POR,Rebounds,MORE,3.5,0.18986302246642806,7.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Scoot Henderson,POR,Rebounds,MORE,1.5,0.6566169969049913,7.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Scoot Henderson,POR,Rebounds,MORE,11.5,0.01,7.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Scoot Henderson,POR,Rebounds,MORE,9.5,0.01,7.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Scoot Henderson,POR,Points,MORE,34.5,0.01,27.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Scoot Henderson,POR,Points,MORE,29.5,0.01,27.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Scoot Henderson,POR,Points,MORE,24.5,0.016489876598891562,27.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Scoot Henderson,POR,Points,MORE,19.5,0.07545593729303923,27.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Scoot Henderson,POR,Points,MORE,14.5,0.26259372056730523,27.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Scoot Henderson,POR,Points,MORE,9.5,0.6291062566222516,27.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Scoot Henderson,POR,Assists,MORE,7.5,0.02284378867312764,3.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Scoot Henderson,POR,Assists,MORE,5.5,0.09577550277853597,3.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Scoot Henderson,POR,Assists,MORE,3.5,0.31416076786231084,3.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Scoot Henderson,POR,Assists,MORE,1.5,0.719539846806595,3.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Scoot Henderson,POR,Assists,MORE,9.5,0.01,3.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Scoot Henderson,POR,3-Pointers Made,MORE,4.5,0.022592040364324495,5.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Scoot Henderson,POR,3-Pointers Made,MORE,3.5,0.07132195199827152,5.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Scoot Henderson,POR,3-Pointers Made,MORE,2.5,0.193260351478579,5.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Scoot Henderson,POR,3-Pointers Made,MORE,1.5,0.43283636947660353,5.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Scoot Henderson,POR,3-Pointers Made,MORE,0.5,0.7620722458126203,5.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Toumani Camara,POR,Rebounds,MORE,7.5,0.09059520580452107,6.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Toumani Camara,POR,Rebounds,MORE,5.5,0.2812190049177925,6.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Toumani Camara,POR,Rebounds,MORE,3.5,0.6163374507902487,6.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Toumani Camara,POR,Rebounds,MORE,1.5,0.916814091103971,6.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Toumani Camara,POR,Rebounds,MORE,11.5,0.01,6.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Toumani Camara,POR,Rebounds,MORE,9.5,0.021874338518277248,6.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Toumani Camara,POR,Points,MORE,34.5,0.01,18.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Toumani Camara,POR,Points,MORE,29.5,0.019130774981328313,18.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Toumani Camara,POR,Points,MORE,24.5,0.05666747248763859,18.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Toumani Camara,POR,Points,MORE,19.5,0.1508523362221451,18.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Toumani Camara,POR,Points,MORE,14.5,0.34717618148491347,18.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Toumani Camara,POR,Points,MORE,9.5,0.6517964439237693,18.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Toumani Camara,POR,Assists,MORE,7.5,0.01,4.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Toumani Camara,POR,Assists,MORE,5.5,0.012314882530047644,4.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Toumani Camara,POR,Assists,MORE,3.5,0.1202080550765029,4.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Toumani Camara,POR,Assists,MORE,1.5,0.5576561675774692,4.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Toumani Camara,POR,Assists,MORE,9.5,0.01,4.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Toumani Camara,POR,3-Pointers Made,MORE,4.5,0.153025493351433,4.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Toumani Camara,POR,3-Pointers Made,MORE,3.5,0.27114307353165146,4.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Toumani Camara,POR,3-Pointers Made,MORE,2.5,0.4454499749806635,4.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Toumani Camara,POR,3-Pointers Made,MORE,1.5,0.6646521017627467,4.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Toumani Camara,POR,3-Pointers Made,MORE,0.5,0.8774116309682072,4.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jrue Holiday,POR,Rebounds,MORE,7.5,0.049874516798494306,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jrue Holiday,POR,Rebounds,MORE,5.5,0.20092359161428763,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jrue Holiday,POR,Rebounds,MORE,3.5,0.5347400282406651,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jrue Holiday,POR,Rebounds,MORE,1.5,0.8900959949537531,2.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jrue Holiday,POR,Rebounds,MORE,11.5,0.01,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jrue Holiday,POR,Rebounds,MORE,9.5,0.01,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jrue Holiday,POR,Points,MORE,34.5,0.01,22.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jrue Holiday,POR,Points,MORE,29.5,0.01,22.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jrue Holiday,POR,Points,MORE,24.5,0.039738090135151616,22.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jrue Holiday,POR,Points,MORE,19.5,0.14590553610632584,22.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jrue Holiday,POR,Points,MORE,14.5,0.4011705614402117,22.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jrue Holiday,POR,Points,MORE,9.5,0.7628003745204461,22.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jrue Holiday,POR,Assists,MORE,7.5,0.12330188168213119,7.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jrue Holiday,POR,Assists,MORE,5.5,0.34732672578601353,7.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jrue Holiday,POR,Assists,MORE,3.5,0.6869168381756676,7.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jrue Holiday,POR,Assists,MORE,1.5,0.9420997518977597,7.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jrue Holiday,POR,Assists,MORE,9.5,0.03226744607423393,7.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jrue Holiday,POR,3-Pointers Made,MORE,4.5,0.08581454303106206,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jrue Holiday,POR,3-Pointers Made,MORE,3.5,0.19781891024502274,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jrue Holiday,POR,3-Pointers Made,MORE,2.5,0.391830039416739,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jrue Holiday,POR,3-Pointers Made,MORE,1.5,0.6509040055433193,2.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jrue Holiday,POR,3-Pointers Made,MORE,0.5,0.8881569618235683,2.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jaylen Wells,MEM,Rebounds,MORE,7.5,0.01487850578889538,7.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jaylen Wells,MEM,Rebounds,MORE,5.5,0.0972195922306982,7.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jaylen Wells,MEM,Rebounds,MORE,3.5,0.3811144987953512,7.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jaylen Wells,MEM,Rebounds,MORE,1.5,0.8189842627582451,7.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jaylen Wells,MEM,Rebounds,MORE,11.5,0.01,7.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jaylen Wells,MEM,Rebounds,MORE,9.5,0.01,7.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jaylen Wells,MEM,Points,MORE,34.5,0.01,22.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jaylen Wells,MEM,Points,MORE,29.5,0.01,22.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jaylen Wells,MEM,Points,MORE,24.5,0.03143749337857715,22.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jaylen Wells,MEM,Points,MORE,19.5,0.11656201041673409,22.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jaylen Wells,MEM,Points,MORE,14.5,0.3362462668421401,22.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jaylen Wells,MEM,Points,MORE,9.5,0.6937623349010152,22.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jaylen Wells,MEM,Assists,MORE,7.5,0.01,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jaylen Wells,MEM,Assists,MORE,5.5,0.01,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jaylen Wells,MEM,Assists,MORE,3.5,0.08310344354541987,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jaylen Wells,MEM,Assists,MORE,1.5,0.4656391213771245,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jaylen Wells,MEM,Assists,MORE,9.5,0.01,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jaylen Wells,MEM,3-Pointers Made,MORE,4.5,0.05103559609618291,4.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jaylen Wells,MEM,3-Pointers Made,MORE,3.5,0.13962702315858522,4.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jaylen Wells,MEM,3-Pointers Made,MORE,2.5,0.31842716499852486,4.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jaylen Wells,MEM,3-Pointers Made,MORE,1.5,0.5890754527227744,4.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Jaylen Wells,MEM,3-Pointers Made,MORE,0.5,0.8621941609232088,4.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Gui Santos,GS,Rebounds,MORE,7.5,0.027223803795039303,3.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Gui Santos,GS,Rebounds,MORE,5.5,0.14404297000260247,3.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Gui Santos,GS,Rebounds,MORE,3.5,0.46606222642655926,3.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Gui Santos,GS,Rebounds,MORE,1.5,0.8654270269272624,3.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Gui Santos,GS,Rebounds,MORE,11.5,0.01,3.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Gui Santos,GS,Rebounds,MORE,9.5,0.01,3.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Gui Santos,GS,Points,MORE,34.5,0.01,8.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Gui Santos,GS,Points,MORE,29.5,0.01,8.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Gui Santos,GS,Points,MORE,24.5,0.01,8.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Gui Santos,GS,Points,MORE,19.5,0.01,8.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Gui Santos,GS,Points,MORE,14.5,0.05927633315549552,8.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Gui Santos,GS,Points,MORE,9.5,0.30666629033345505,8.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Gui Santos,GS,Assists,MORE,7.5,0.01,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Gui Santos,GS,Assists,MORE,5.5,0.02079744556283991,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Gui Santos,GS,Assists,MORE,3.5,0.1618447896434161,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Gui Santos,GS,Assists,MORE,1.5,0.619572018219736,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Gui Santos,GS,Assists,MORE,9.5,0.01,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Gui Santos,GS,3-Pointers Made,MORE,4.5,0.01,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Gui Santos,GS,3-Pointers Made,MORE,3.5,0.01539293302465472,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Gui Santos,GS,3-Pointers Made,MORE,2.5,0.06917178190299933,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Gui Santos,GS,3-Pointers Made,MORE,1.5,0.241264098313702,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Gui Santos,GS,3-Pointers Made,MORE,0.5,0.608394373323201,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cedric Coward,MEM,Rebounds,MORE,7.5,0.39768737565562595,4.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cedric Coward,MEM,Rebounds,MORE,5.5,0.6093303343539298,4.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cedric Coward,MEM,Rebounds,MORE,3.5,0.8216650994481173,4.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cedric Coward,MEM,Rebounds,MORE,1.5,0.9615438784200803,4.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cedric Coward,MEM,Rebounds,MORE,11.5,0.12594794375754392,4.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cedric Coward,MEM,Rebounds,MORE,9.5,0.2335705842049577,4.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cedric Coward,MEM,Points,MORE,34.5,0.01,19.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cedric Coward,MEM,Points,MORE,29.5,0.027576528151261326,19.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cedric Coward,MEM,Points,MORE,24.5,0.0847447971186559,19.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cedric Coward,MEM,Points,MORE,19.5,0.22278135172863134,19.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cedric Coward,MEM,Points,MORE,14.5,0.4776385340014566,19.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cedric Coward,MEM,Points,MORE,9.5,0.7886627760413878,19.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cedric Coward,MEM,Assists,MORE,7.5,0.024630866701569998,4.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cedric Coward,MEM,Assists,MORE,5.5,0.11595150897811435,4.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cedric Coward,MEM,Assists,MORE,3.5,0.38291404817871255,4.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cedric Coward,MEM,Assists,MORE,1.5,0.7973602390753272,4.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cedric Coward,MEM,Assists,MORE,9.5,0.01,4.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cedric Coward,MEM,3-Pointers Made,MORE,4.5,0.04504265218084447,5.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cedric Coward,MEM,3-Pointers Made,MORE,3.5,0.11382305232305923,5.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cedric Coward,MEM,3-Pointers Made,MORE,2.5,0.25611175982036716,5.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cedric Coward,MEM,3-Pointers Made,MORE,1.5,0.4967626250163478,5.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cedric Coward,MEM,3-Pointers Made,MORE,0.5,0.7949573204011394,5.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Will Richard,GS,Rebounds,MORE,7.5,0.026026655942924193,5.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Will Richard,GS,Rebounds,MORE,5.5,0.08370401622716872,5.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Will Richard,GS,Rebounds,MORE,3.5,0.2428448072137701,5.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Will Richard,GS,Rebounds,MORE,1.5,0.5903558823433246,5.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Will Richard,GS,Rebounds,MORE,11.5,0.01,5.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Will Richard,GS,Rebounds,MORE,9.5,0.01,5.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Will Richard,GS,Points,MORE,34.5,0.01,15.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Will Richard,GS,Points,MORE,29.5,0.01,15.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Will Richard,GS,Points,MORE,24.5,0.01,15.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Will Richard,GS,Points,MORE,19.5,0.021016927442504496,15.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Will Richard,GS,Points,MORE,14.5,0.0641602732799571,15.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Will Richard,GS,Points,MORE,9.5,0.18682940511414192,15.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Will Richard,GS,Assists,MORE,7.5,0.01,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Will Richard,GS,Assists,MORE,5.5,0.01,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Will Richard,GS,Assists,MORE,3.5,0.06655307875891148,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Will Richard,GS,Assists,MORE,1.5,0.3686205639548772,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Will Richard,GS,Assists,MORE,9.5,0.01,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Will Richard,GS,3-Pointers Made,MORE,4.5,0.01714866245458535,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Will Richard,GS,3-Pointers Made,MORE,3.5,0.04368000526054594,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Will Richard,GS,3-Pointers Made,MORE,2.5,0.10773859169880518,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Will Richard,GS,3-Pointers Made,MORE,1.5,0.2531370475341812,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Will Richard,GS,3-Pointers Made,MORE,0.5,0.5478406459791652,1.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Javon Small,MEM,Rebounds,MORE,7.5,0.022430200556169844,7.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Javon Small,MEM,Rebounds,MORE,5.5,0.12364592483666315,7.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Javon Small,MEM,Rebounds,MORE,3.5,0.4253121655626666,7.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Javon Small,MEM,Rebounds,MORE,1.5,0.8411154590916606,7.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Javon Small,MEM,Rebounds,MORE,11.5,0.01,7.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Javon Small,MEM,Rebounds,MORE,9.5,0.01,7.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Javon Small,MEM,Points,MORE,34.5,0.01,14.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Javon Small,MEM,Points,MORE,29.5,0.01,14.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Javon Small,MEM,Points,MORE,24.5,0.020352363509135052,14.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Javon Small,MEM,Points,MORE,19.5,0.07317469347693772,14.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Javon Small,MEM,Points,MORE,14.5,0.22241602121104398,14.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Javon Small,MEM,Points,MORE,9.5,0.5301056267623061,14.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Javon Small,MEM,Assists,MORE,7.5,0.12385036920320491,7.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Javon Small,MEM,Assists,MORE,5.5,0.29123463658421156,7.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Javon Small,MEM,Assists,MORE,3.5,0.5693140935527872,7.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Javon Small,MEM,Assists,MORE,1.5,0.869222852043948,7.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Javon Small,MEM,Assists,MORE,9.5,0.045918031621578925,7.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Javon Small,MEM,3-Pointers Made,MORE,4.5,0.0241105576813323,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Javon Small,MEM,3-Pointers Made,MORE,3.5,0.07988160539187794,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Javon Small,MEM,3-Pointers Made,MORE,2.5,0.21863940803960702,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Javon Small,MEM,3-Pointers Made,MORE,1.5,0.4775604152558499,2.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Javon Small,MEM,3-Pointers Made,MORE,0.5,0.7996568388978006,2.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Brandin Podziemski,GS,Rebounds,MORE,7.5,0.23076484708372247,3.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Brandin Podziemski,GS,Rebounds,MORE,5.5,0.4839334866843785,3.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Brandin Podziemski,GS,Rebounds,MORE,3.5,0.7787746202713394,3.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Brandin Podziemski,GS,Rebounds,MORE,1.5,0.9624796001518109,3.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Brandin Podziemski,GS,Rebounds,MORE,11.5,0.027231033067159127,3.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Brandin Podziemski,GS,Rebounds,MORE,9.5,0.08734258614211254,3.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Brandin Podziemski,GS,Points,MORE,34.5,0.01,15.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Brandin Podziemski,GS,Points,MORE,29.5,0.02088288084201917,15.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Brandin Podziemski,GS,Points,MORE,24.5,0.07918858782575144,15.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Brandin Podziemski,GS,Points,MORE,19.5,0.23832331170023346,15.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Brandin Podziemski,GS,Points,MORE,14.5,0.5360015487015154,15.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Brandin Podziemski,GS,Points,MORE,9.5,0.8535754124691108,15.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Brandin Podziemski,GS,Assists,MORE,7.5,0.09627647881604151,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Brandin Podziemski,GS,Assists,MORE,5.5,0.25762509454392757,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Brandin Podziemski,GS,Assists,MORE,3.5,0.5487308790635028,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Brandin Podziemski,GS,Assists,MORE,1.5,0.8688123275859045,2.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Brandin Podziemski,GS,Assists,MORE,9.5,0.030287264279358794,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Brandin Podziemski,GS,3-Pointers Made,MORE,4.5,0.059246422227918316,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Brandin Podziemski,GS,3-Pointers Made,MORE,3.5,0.15583342328442606,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Brandin Podziemski,GS,3-Pointers Made,MORE,2.5,0.34242194805267967,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Brandin Podziemski,GS,3-Pointers Made,MORE,1.5,0.612763276552138,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Brandin Podziemski,GS,3-Pointers Made,MORE,0.5,0.8738884233982058,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,LJ Cryer,GS,Rebounds,MORE,7.5,0.01,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,LJ Cryer,GS,Rebounds,MORE,5.5,0.019914984387744195,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,LJ Cryer,GS,Rebounds,MORE,3.5,0.0970673760788332,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,LJ Cryer,GS,Rebounds,MORE,1.5,0.3909167750906525,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,LJ Cryer,GS,Rebounds,MORE,11.5,0.01,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,LJ Cryer,GS,Rebounds,MORE,9.5,0.01,0.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,LJ Cryer,GS,Points,MORE,34.5,0.01015202860560438,9.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,LJ Cryer,GS,Points,MORE,29.5,0.021980236568274747,9.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,LJ Cryer,GS,Points,MORE,24.5,0.04688693636611807,9.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,LJ Cryer,GS,Points,MORE,19.5,0.0980155247258806,9.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,LJ Cryer,GS,Points,MORE,14.5,0.19902447675280455,9.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,LJ Cryer,GS,Points,MORE,9.5,0.38610571931102533,9.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,LJ Cryer,GS,Assists,MORE,7.5,0.03441742592900987,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,LJ Cryer,GS,Assists,MORE,5.5,0.07069252639447565,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,LJ Cryer,GS,Assists,MORE,3.5,0.14952998971423093,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,LJ Cryer,GS,Assists,MORE,1.5,0.3363280785323821,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,LJ Cryer,GS,Assists,MORE,9.5,0.01705366893374194,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,LJ Cryer,GS,3-Pointers Made,MORE,4.5,0.15762705406656052,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,LJ Cryer,GS,3-Pointers Made,MORE,3.5,0.2376695030762903,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,LJ Cryer,GS,3-Pointers Made,MORE,2.5,0.3544617202470657,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,LJ Cryer,GS,3-Pointers Made,MORE,1.5,0.5200899651552497,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,LJ Cryer,GS,3-Pointers Made,MORE,0.5,0.7424816954789364,1.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cam Spencer,MEM,Rebounds,MORE,7.5,0.014078402375941601,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cam Spencer,MEM,Rebounds,MORE,5.5,0.08889247027539227,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cam Spencer,MEM,Rebounds,MORE,3.5,0.35329849969694405,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cam Spencer,MEM,Rebounds,MORE,1.5,0.7941745928404667,2.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cam Spencer,MEM,Rebounds,MORE,11.5,0.01,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cam Spencer,MEM,Rebounds,MORE,9.5,0.01,2.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cam Spencer,MEM,Points,MORE,34.5,0.01,9.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cam Spencer,MEM,Points,MORE,29.5,0.01,9.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cam Spencer,MEM,Points,MORE,24.5,0.02548379301277892,9.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cam Spencer,MEM,Points,MORE,19.5,0.08487308972797691,9.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cam Spencer,MEM,Points,MORE,14.5,0.24146186759195487,9.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cam Spencer,MEM,Points,MORE,9.5,0.5470954289056172,9.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cam Spencer,MEM,Assists,MORE,7.5,0.33663671265334416,11.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cam Spencer,MEM,Assists,MORE,5.5,0.5928659516068634,11.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cam Spencer,MEM,Assists,MORE,3.5,0.8416730031057194,11.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cam Spencer,MEM,Assists,MORE,1.5,0.975443660173592,11.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cam Spencer,MEM,Assists,MORE,9.5,0.1574364981419628,11.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cam Spencer,MEM,3-Pointers Made,MORE,4.5,0.04191794332832721,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cam Spencer,MEM,3-Pointers Made,MORE,3.5,0.12031190279386139,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cam Spencer,MEM,3-Pointers Made,MORE,2.5,0.287706664631322,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cam Spencer,MEM,3-Pointers Made,MORE,1.5,0.5564656667036086,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,Cam Spencer,MEM,3-Pointers Made,MORE,0.5,0.8448663879115168,1.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,De'Anthony Melton,GS,Rebounds,MORE,7.5,0.026720431664100874,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,De'Anthony Melton,GS,Rebounds,MORE,5.5,0.12705530959484024,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,De'Anthony Melton,GS,Rebounds,MORE,3.5,0.41104257582080894,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,De'Anthony Melton,GS,Rebounds,MORE,1.5,0.8207856932177007,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,De'Anthony Melton,GS,Rebounds,MORE,11.5,0.01,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,De'Anthony Melton,GS,Rebounds,MORE,9.5,0.01,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,De'Anthony Melton,GS,Points,MORE,34.5,0.01,9.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,De'Anthony Melton,GS,Points,MORE,29.5,0.016320247147763478,9.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,De'Anthony Melton,GS,Points,MORE,24.5,0.043756785975465395,9.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,De'Anthony Melton,GS,Points,MORE,19.5,0.11015788772936097,9.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,De'Anthony Melton,GS,Points,MORE,14.5,0.2538312302117929,9.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,De'Anthony Melton,GS,Points,MORE,9.5,0.5126169445873133,9.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,De'Anthony Melton,GS,Assists,MORE,7.5,0.01,5.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,De'Anthony Melton,GS,Assists,MORE,5.5,0.03344564042039211,5.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,De'Anthony Melton,GS,Assists,MORE,3.5,0.2134221533376448,5.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,De'Anthony Melton,GS,Assists,MORE,1.5,0.6832461469963808,5.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,De'Anthony Melton,GS,Assists,MORE,9.5,0.01,5.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,De'Anthony Melton,GS,3-Pointers Made,MORE,4.5,0.032273673678666626,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,De'Anthony Melton,GS,3-Pointers Made,MORE,3.5,0.0879011477513163,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,De'Anthony Melton,GS,3-Pointers Made,MORE,2.5,0.21320412326791016,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,De'Anthony Melton,GS,3-Pointers Made,MORE,1.5,0.4448942690620903,1.0,0,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NBA,De'Anthony Melton,GS,3-Pointers Made,MORE,0.5,0.7603006890323325,1.0,1,GRADED,2026-11-19 19:00:00,nba-counts-minutes-nb-1,Model target
-NHL,Matvei Gridin,CGY,Shots on Goal,MORE,4.5,0.07340905561402589,1.0,0,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Matvei Gridin,CGY,Shots on Goal,MORE,3.5,0.18230395009062217,1.0,0,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Matvei Gridin,CGY,Shots on Goal,MORE,2.5,0.37954063011779815,1.0,0,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Matvei Gridin,CGY,Shots on Goal,MORE,1.5,0.6474754226656492,1.0,0,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Matvei Gridin,CGY,Shots on Goal,MORE,0.5,0.8901248563232855,1.0,1,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Zayne Parekh,CGY,Shots on Goal,MORE,4.5,0.046205537162142485,2.0,0,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Zayne Parekh,CGY,Shots on Goal,MORE,3.5,0.1142335513912458,2.0,0,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Zayne Parekh,CGY,Shots on Goal,MORE,2.5,0.2536461866931228,2.0,0,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Zayne Parekh,CGY,Shots on Goal,MORE,1.5,0.49001775708750717,2.0,1,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Zayne Parekh,CGY,Shots on Goal,MORE,0.5,0.7879079976590821,2.0,1,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Danila Yurov,MIN,Shots on Goal,MORE,4.5,0.02940419131619776,1.0,0,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Danila Yurov,MIN,Shots on Goal,MORE,3.5,0.08083865992356454,1.0,0,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Danila Yurov,MIN,Shots on Goal,MORE,2.5,0.19908775139534252,1.0,0,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Danila Yurov,MIN,Shots on Goal,MORE,1.5,0.42430098737944033,1.0,0,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Danila Yurov,MIN,Shots on Goal,MORE,0.5,0.7436493444386919,1.0,1,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Matt Coronato,CGY,Shots on Goal,MORE,4.5,0.14274041402885929,0.0,0,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Matt Coronato,CGY,Shots on Goal,MORE,3.5,0.2751301481166123,0.0,0,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Matt Coronato,CGY,Shots on Goal,MORE,2.5,0.47237278094440327,0.0,0,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Matt Coronato,CGY,Shots on Goal,MORE,1.5,0.7075666377501214,0.0,0,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Matt Coronato,CGY,Shots on Goal,MORE,0.5,0.9079856400489777,0.0,0,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Brock Faber,MIN,Shots on Goal,MORE,4.5,0.057870470806205776,1.0,0,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Brock Faber,MIN,Shots on Goal,MORE,3.5,0.15316610797839036,1.0,0,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Brock Faber,MIN,Shots on Goal,MORE,2.5,0.3385439407314891,1.0,0,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Brock Faber,MIN,Shots on Goal,MORE,1.5,0.6090044405191941,1.0,0,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Brock Faber,MIN,Shots on Goal,MORE,0.5,0.8720667526236512,1.0,1,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Matt Boldy,MIN,Shots on Goal,MORE,4.5,0.3187579750041273,3.0,0,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Matt Boldy,MIN,Shots on Goal,MORE,3.5,0.5120496515121058,3.0,0,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Matt Boldy,MIN,Shots on Goal,MORE,2.5,0.7193892557327582,3.0,1,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
-NHL,Matt Boldy,MIN,Shots on Goal,MORE,1.5,0.8862957664145171,3.0,1,GRADED,2026-11-19 19:00:00,nhl-shots-toi-nb-1,Model target
