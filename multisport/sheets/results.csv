@@ -1,4 +1,14 @@
 Sport,Player,Team,Prop,Direction,Model line,Frozen probability,Actual,Outcome,Status,Game time CT,Source version,Forecast type
+NFL,Jared Goff,DET,Pass Yards,MORE,279.5,0.41021586791725706,313.0,1,GRADED,2026-11-26 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jared Goff,DET,Pass TDs,MORE,2.5,0.35714285714285715,1.0,0,GRADED,2026-11-26 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jared Goff,DET,Pass TDs,MORE,1.5,0.5714285714285714,1.0,0,GRADED,2026-11-26 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jared Goff,DET,Pass Completions,MORE,23.5,0.3550377887966797,25.0,1,GRADED,2026-11-26 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jared Goff,DET,Pass Attempts,MORE,34.5,0.3744649951144109,36.0,1,GRADED,2026-11-26 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Jared Goff,DET,Interceptions,MORE,0.5,0.42857142857142855,1.0,1,GRADED,2026-11-26 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Kalif Raymond,CHI,Receptions,MORE,2.5,0.5172199859163863,3.0,1,GRADED,2026-11-26 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Kalif Raymond,CHI,Receiving Yards,MORE,25.5,0.48582920126476764,20.0,0,GRADED,2026-11-26 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Kalif Raymond,CHI,Receiving Yards,MORE,24.5,0.4936985497804653,20.0,0,GRADED,2026-11-26 12:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Kalif Raymond,CHI,Receiving Yards,MORE,23.5,0.5015756170145169,20.0,0,GRADED,2026-11-26 12:00:00,nfl-public-board-upstream-v1,Model target
 NBA,Harrison Barnes,SA,Rebounds,MORE,7.5,0.01,0.0,0,GRADED,2026-11-25 21:00:00,nba-counts-minutes-nb-1,Model target
 NBA,Harrison Barnes,SA,Rebounds,MORE,5.5,0.01,0.0,0,GRADED,2026-11-25 21:00:00,nba-counts-minutes-nb-1,Model target
 NBA,Harrison Barnes,SA,Rebounds,MORE,3.5,0.0960775529296406,0.0,0,GRADED,2026-11-25 21:00:00,nba-counts-minutes-nb-1,Model target
@@ -4989,13 +4999,3 @@ NBA,Kyle Kuzma,MIL,Rebounds,MORE,7.5,0.14524340728474172,5.0,0,GRADED,2026-11-23
 NBA,Kyle Kuzma,MIL,Rebounds,MORE,5.5,0.38437168010429246,5.0,0,GRADED,2026-11-23 18:30:00,nba-counts-minutes-nb-1,Model target
 NBA,Kyle Kuzma,MIL,Rebounds,MORE,3.5,0.7194590503298686,5.0,1,GRADED,2026-11-23 18:30:00,nba-counts-minutes-nb-1,Model target
 NBA,Kyle Kuzma,MIL,Rebounds,MORE,1.5,0.9515093346739695,5.0,1,GRADED,2026-11-23 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Kyle Kuzma,MIL,Rebounds,MORE,11.5,0.01,5.0,0,GRADED,2026-11-23 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Kyle Kuzma,MIL,Rebounds,MORE,9.5,0.04051914978004878,5.0,0,GRADED,2026-11-23 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Kyle Kuzma,MIL,Points,MORE,34.5,0.01,18.0,0,GRADED,2026-11-23 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Kyle Kuzma,MIL,Points,MORE,29.5,0.01620372128882097,18.0,0,GRADED,2026-11-23 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Kyle Kuzma,MIL,Points,MORE,24.5,0.053709619307749756,18.0,0,GRADED,2026-11-23 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Kyle Kuzma,MIL,Points,MORE,19.5,0.1551708862922181,18.0,0,GRADED,2026-11-23 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Kyle Kuzma,MIL,Points,MORE,14.5,0.37269871791339393,18.0,1,GRADED,2026-11-23 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Kyle Kuzma,MIL,Points,MORE,9.5,0.6967632600549469,18.0,1,GRADED,2026-11-23 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Kyle Kuzma,MIL,Assists,MORE,7.5,0.024144824645075058,3.0,0,GRADED,2026-11-23 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Kyle Kuzma,MIL,Assists,MORE,5.5,0.10451921501021466,3.0,0,GRADED,2026-11-23 18:30:00,nba-counts-minutes-nb-1,Model target
