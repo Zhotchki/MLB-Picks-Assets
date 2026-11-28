@@ -2905,6 +2905,23 @@ NHL,Nikita Kucherov,TBL,Shots on Goal,MORE,3.5,0.3695058599607589,2.0,0,GRADED,2
 NHL,Nikita Kucherov,TBL,Shots on Goal,MORE,2.5,0.559201181416519,2.0,0,GRADED,2026-11-27 14:00:00,nhl-shots-toi-nb-1,Model target
 NHL,Nikita Kucherov,TBL,Shots on Goal,MORE,1.5,0.7633834652686217,2.0,1,GRADED,2026-11-27 14:00:00,nhl-shots-toi-nb-1,Model target
 NHL,Nikita Kucherov,TBL,Shots on Goal,MORE,0.5,0.92650817824945,2.0,1,GRADED,2026-11-27 14:00:00,nhl-shots-toi-nb-1,Model target
+NFL,Mason Rudolph,PIT,Rush Yards,MORE,6.5,0.4423084072427326,0.0,0,GRADED,2026-11-27 14:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Mason Rudolph,PIT,Pass Yards,MORE,175.5,0.22,142.0,0,GRADED,2026-11-27 14:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Mason Rudolph,PIT,Pass Yards,MORE,174.5,0.22,142.0,0,GRADED,2026-11-27 14:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Mason Rudolph,PIT,Pass TDs,MORE,0.5,0.4166666666666667,1.0,1,GRADED,2026-11-27 14:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Mason Rudolph,PIT,Pass Completions,MORE,17.5,0.22846731438705511,9.0,0,GRADED,2026-11-27 14:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Mason Rudolph,PIT,Pass Attempts,MORE,30.5,0.22,15.0,0,GRADED,2026-11-27 14:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Mason Rudolph,PIT,Pass Attempts,MORE,29.5,0.22,15.0,0,GRADED,2026-11-27 14:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Mason Rudolph,PIT,Interceptions,MORE,0.5,0.4166666666666667,0.0,0,GRADED,2026-11-27 14:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Courtland Sutton,DEN,Receptions,MORE,2.5,0.5451918894593041,1.0,0,GRADED,2026-11-27 14:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Courtland Sutton,DEN,Receiving Yards,MORE,28.5,0.5389295979914862,4.0,0,GRADED,2026-11-27 14:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Courtland Sutton,DEN,Receiving Yards,MORE,27.5,0.5496194394166681,4.0,0,GRADED,2026-11-27 14:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Courtland Sutton,DEN,Receiving Yards,MORE,26.5,0.5601977802915983,4.0,0,GRADED,2026-11-27 14:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Courtland Sutton,DEN,Receiving Yards,MORE,25.5,0.5706418978741321,4.0,0,GRADED,2026-11-27 14:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Evan Engram,DEN,Receptions,MORE,2.5,0.5072933887608622,0.0,0,GRADED,2026-11-27 14:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Evan Engram,DEN,Receiving Yards,MORE,22.5,0.5305008055818445,0.0,0,GRADED,2026-11-27 14:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Evan Engram,DEN,Receiving Yards,MORE,21.5,0.5384586945300843,0.0,0,GRADED,2026-11-27 14:00:00,nfl-public-board-upstream-v1,Model target
+NFL,Evan Engram,DEN,Receiving Yards,MORE,20.5,0.5463690942810284,0.0,0,GRADED,2026-11-27 14:00:00,nfl-public-board-upstream-v1,Model target
 NHL,Arttu Hyry,DAL,Shots on Goal,MORE,4.5,0.054533295732562714,2.0,0,GRADED,2026-11-27 13:00:00,nhl-shots-toi-nb-1,Model target
 NHL,Arttu Hyry,DAL,Shots on Goal,MORE,3.5,0.12013366230597,2.0,0,GRADED,2026-11-27 13:00:00,nhl-shots-toi-nb-1,Model target
 NHL,Arttu Hyry,DAL,Shots on Goal,MORE,2.5,0.24695726481611124,2.0,0,GRADED,2026-11-27 13:00:00,nhl-shots-toi-nb-1,Model target
@@ -4982,20 +4999,3 @@ NBA,Landry Shamet,NY,3-Pointers Made,MORE,3.5,0.2916297573139711,3.0,0,GRADED,20
 NBA,Landry Shamet,NY,3-Pointers Made,MORE,2.5,0.4596837026048113,3.0,1,GRADED,2026-11-25 18:30:00,nba-counts-minutes-nb-1,Model target
 NBA,Landry Shamet,NY,3-Pointers Made,MORE,1.5,0.6684357042470679,3.0,1,GRADED,2026-11-25 18:30:00,nba-counts-minutes-nb-1,Model target
 NBA,Landry Shamet,NY,3-Pointers Made,MORE,0.5,0.8743796834593521,3.0,1,GRADED,2026-11-25 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Mitchell,CLE,Rebounds,MORE,7.5,0.10186311306924034,4.0,0,GRADED,2026-11-25 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Mitchell,CLE,Rebounds,MORE,5.5,0.3275382067183409,4.0,0,GRADED,2026-11-25 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Mitchell,CLE,Rebounds,MORE,3.5,0.6866557387825524,4.0,1,GRADED,2026-11-25 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Mitchell,CLE,Rebounds,MORE,1.5,0.9471576876372945,4.0,1,GRADED,2026-11-25 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Mitchell,CLE,Rebounds,MORE,11.5,0.01,4.0,0,GRADED,2026-11-25 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Mitchell,CLE,Rebounds,MORE,9.5,0.021563008537195172,4.0,0,GRADED,2026-11-25 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Mitchell,CLE,Points,MORE,34.5,0.15420116353759805,30.0,0,GRADED,2026-11-25 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Mitchell,CLE,Points,MORE,29.5,0.32649407387438356,30.0,1,GRADED,2026-11-25 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Mitchell,CLE,Points,MORE,24.5,0.568793405848208,30.0,1,GRADED,2026-11-25 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Mitchell,CLE,Points,MORE,19.5,0.8069629571046373,30.0,1,GRADED,2026-11-25 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Mitchell,CLE,Points,MORE,14.5,0.9513200660071658,30.0,1,GRADED,2026-11-25 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Mitchell,CLE,Points,MORE,9.5,0.99,30.0,1,GRADED,2026-11-25 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Mitchell,CLE,Assists,MORE,7.5,0.2299697722438795,4.0,0,GRADED,2026-11-25 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Mitchell,CLE,Assists,MORE,5.5,0.5229268510755758,4.0,0,GRADED,2026-11-25 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Mitchell,CLE,Assists,MORE,3.5,0.830774292214544,4.0,1,GRADED,2026-11-25 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Mitchell,CLE,Assists,MORE,1.5,0.9795439405632281,4.0,1,GRADED,2026-11-25 18:30:00,nba-counts-minutes-nb-1,Model target
-NBA,Donovan Mitchell,CLE,Assists,MORE,9.5,0.071309754880727,4.0,0,GRADED,2026-11-25 18:30:00,nba-counts-minutes-nb-1,Model target
